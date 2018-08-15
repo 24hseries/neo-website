@@ -1,0 +1,83 @@
+/*
+Theme Name: Novelty Child
+Theme URI: http://teslathemes.com/demo/wp/novelty/
+Template: novelty
+Author: Tesla Themes
+Author URI: http://teslathemes.com/
+Description: Awesome theme for a Wordpress cretive website
+Tags: light,theme-options,creative,responsive,unique,filtered portfolio,ajax forms
+Version: 1.8.9.1486555006
+Updated: 2017-02-08 12:56:46
+
+*/
+
+h3 {
+	font-size: 21px;
+	font-weight: 400;
+	margin-bottom: 10px;
+	line-height: 1.5em;
+	color: #111;
+	text-transform: uppercase;
+}
+
+.the-slider, .tabs, .featured-posts{
+    margin-bottom: 0;
+}
+
+.home-post{
+    margin-bottom: 4rem;
+}
+
+.twitter_widget{
+    margin-bottom: 0;
+    margin-top: 0
+}
+
+.sidebar .widget .widget-title {
+	padding: 10px 15px;
+	font-weight: 700;
+	margin-bottom: 0.8rem;
+	font-size: 14px;
+    background: none;
+}
+
+.widget .widget-title {
+	font-size: 2rem;
+	font-weight: 600;
+	margin-bottom: 2rem;
+	line-height: 1.5em;
+	color: #111;
+	text-transform: uppercase;
+}
+
+/* CSS for Latest news module */
+.latest-news-item{
+    padding-bottom: 10px;
+    margin-top: 10px;
+    border-bottom: 1px solid #e7e7e7;
+}
+
+.latest-news-item-title{
+    margin: 0;
+    display: inline-block;
+    width: 80%;
+    text-overflow: ellipsis;
+    text-transform: none;
+    font-weight: normal;
+}
+
+.latest-news-item-title a{
+    color: #428bca;
+}
+
+.latest-news-item-title a:hover{
+    text-decoration: underline;
+    color: #111;
+}
+
+.latest-news-date{
+    display: inline-block;
+    color: #666;
+    font-size: 11px;
+    float: right;
+}

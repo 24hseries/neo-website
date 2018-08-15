@@ -1,0 +1,35 @@
+@charset "UTF-8";
+/* CSS Document */
+
+.nextrace-container {
+  margin-top: -20px;
+  width: 	   100%;
+  height:      100%;
+}
+
+.nextrace-title {
+  /*float: left;*/
+  border: 2px solid #0a73e5;
+  color: #111;
+  text-transform: uppercase;
+  text-align:   center;
+  padding:   10px 15px;
+  margin-bottom:  10px;
+  font-size: 	  22px;
+  border-radius:   5px;
+  font-weight:     700;
+  line-height:     1em;	
+}
+
+.nextrace p {
+  text-transform: uppercase;	
+  font-size: 14px;
+}
+
+.nextrace-text {
+	
+}
+
+.nextrace-countdown {
+  text-align: right;	
+}

@@ -1,0 +1,102 @@
+Version 1.9.0 - Update: 08.08.2016
+================================================
+Fixed :	Demo options import file
+
+Version 1.8.9 - Update: 16.02.2016
+================================================
+Added :	Instagram social for header
+
+Version 1.8.8 - Update: 01.12.2015
+================================================
+Fixed : Small bug fixes 
+
+Version 1.8.7 - Update: 17.11.2015
+================================================
+Added : Page sidebar-switch metabox
+
+Version 1.8.6 - Update: 2.11.2015
+================================================
+Update:	Framework update 1.9.3
+Fixed:	Video metabox for featured video in post
+
+Version 1.8.5 - Update: 21.10.2015
+================================================
+Update:	Framework update 
+
+Version 1.8.4 - Update: 04.09.2015
+================================================
+Fixed: Missing argument for title function
+
+Version 1.8.3 - Update: 03.09.2015
+================================================
+Fixed: Small bug fixes 
+
+Version 1.8.2 - Update: 14.08.2015
+================================================
+Added: Post featured video support 
+
+Version 1.8.1 - Update: 07.08.2015
+================================================
+Fixed: Widget titles WPML ready
+
+Version 1.8.0 - Update: 08.06.2015
+================================================
+Fixed: Minor bug fix
+
+Version 1.1.2 - Update: 20.05.2015
+================================================
+Fixed: Issue with no-space between post tags
+
+Version 1.1 - Update: 15.01.2015
+================================================
+Added: Page sidebar
+
+Version 1.07 - Update: 30.07.2014
+================================================
+Added: Added image_size attribute for [novelty_main_slider], [novelty_front_posts], [novelty_featured_posts] and [novelty_posts_comments] shortcodes
+Added: Added "Image size" option for category pages
+Added: Added "Image size" option for 'Novelty - Latest Posts', 'Novelty - Tabs' and 'Novelty - Latest Posts & Comments' widgets
+Added: Added "Delete intermediate images" option on the framework page
+Updated: Framework update
+Updated: Header and widget social icons now use an icon font
+Fixed: Removed redundant number of comments in the comment section
+Fixed: "Latest Posts" widget category fix
+
+Version 1.06 - Update: 10.07.2014
+================================================
+Added: The attribute category now also works for [novelty_team] shortcode
+Updated: Contact form is now compatible with SMTP plugins
+Updated: Contact form encoding changed to UTF-8
+Updated: Framework update
+Fixed: excerpt_length attribute for [novelty_front_posts] shortcode now works as intended
+Fixed: Social widget style corrected
+
+Version 1.05 - Update: 06.06.2014
+================================================
+Fixed: The main slider and the featured posts sections now display blog posts with featured image only
+Fixed: The featured image being displayed too small in some cases
+Fixed: News ticker first item duplication fix
+Fixed: More strings added to localization
+
+Version 1.04 - Update: 15.04.2014
+================================================
+Fixed: If an image was added to a team member then deleted, the team shortcode would stop working
+Fixed: WPML compatibility
+
+Version 1.03 - Update: 25.03.2014
+================================================
+Fixed: Import demo is now fixed
+
+Version 1.02 - Update: 17.03.2014
+================================================
+Added: Added styles for .bypostauthor
+Fixed: Fixed the footer
+
+Version 1.01 - Update: 14.03.2014
+================================================
+Added: WPML compatibility
+Added: Shortcode for news ticker
+
+Version 1.00 - Initial Release: 10.03.2014
+================================================
+-
