@@ -113,9 +113,9 @@
 
         <div class="menu site-bg-color">
             <div class="container">
-               <!-- <form class="header-search" action="<?php// echo esc_url( home_url( '/' ) ); ?>">
+				<!-- <form class="header-search" action="< ?php echo esc_url( home_url( '/' ) ); ?>">
                     <input type="submit" id="searchsubmit" value="" class="header-search-button" />
-                    <input type="text" value="" name="s" id="s" class="header-search-line" placeholder="<?php/ _ex('Search ...','search form','novelty'); ?>" />
+                    <input type="text" value="" name="s" id="s" class="header-search-line" placeholder="< ?php _ex('Search ...','search form','novelty'); ?>" />
                 </form>-->
                 <div class="responsive-menu">Menu</div>
                 <?php wp_nav_menu(array(
