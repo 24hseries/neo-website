@@ -13,16 +13,6 @@ function loadCountdownScript(){
 }
 add_action('wp_enqueue_scripts', 'loadCountdownScript');
 
-// Insert Handlebars into the pages where the entry list is
-function loadHandlebars(){
-    if(is_page('2857') || is_page('769')){
-
-        wp_register_script('load-handlebars', get_stylesheet_directory_uri().'/js/handlebars.js', array(), null, true);
-        wp_enqueue_script('load-handlebars');
-	}
-}
-add_action('wp_enqueue_scripts', 'loadHandlebars');
-
 // Load entry list
 function loadEntryList(){
 
@@ -39,7 +29,7 @@ function loadPQEntryList(){
 
     if(is_page('2875')){
 
-        wp_register_script('show-pq-registrations', get_stylesheet_directory_uri().'/js/nes4_pq_entrylist.js', array('jquery'), null, true);
+        wp_register_script('show-pq-registrations', get_stylesheet_directory_uri().'/js/nes5_pq_entrylist.js', array('jquery'), null, true);
         wp_enqueue_script('show-pq-registrations');
 	}
 }
