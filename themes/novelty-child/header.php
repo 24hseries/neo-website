@@ -63,10 +63,10 @@
                 </div>
                <div class="col-md-4">
                      <form class="subscription" id="newsletter" method="post">
-                        <span class="subscription-text"><?php/ _ex('Newsletter subscribe', 'header', 'novelty'); ?></span>
+                        <span class="subscription-text"><?php _ex('Newsletter subscribe', 'header', 'novelty'); ?></span>
                         <span class="input-cover">
                             <input type="submit" value="" class="subscription-button">
-                            <input type="text" name="email" placeholder="<?php/ _ex('Email ...', 'header', 'novelty'); ?>" class="subscription-line" data-tt-subscription-required data-tt-subscription-type="email">
+                            <input type="text" name="email" placeholder="<?php _ex('Email ...', 'header', 'novelty'); ?>" class="subscription-line" data-tt-subscription-required data-tt-subscription-type="email">
                             <div class="result_container"></div>
                         </span>
                     </form>
