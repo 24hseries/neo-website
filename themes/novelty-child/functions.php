@@ -18,7 +18,7 @@ function loadEntryList(){
 
     if(is_page('769')){
 
-        wp_register_script('show-registrations', get_stylesheet_directory_uri().'/js/nes4_entrylist.js', array('jquery'), null, true);
+        wp_register_script('show-registrations', get_stylesheet_directory_uri().'/js/nes5_entrylist.js', array('jquery'), null, true);
         wp_enqueue_script('show-registrations');
 	}
 }

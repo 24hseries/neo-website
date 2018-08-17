@@ -1,6 +1,6 @@
 jQuery( document ).ready(function() {
 	//Get URL of JSON file
-	var url_php = 'https://neo-endurance.com/php/nes5_pq_entrylist.php';
+	var url_php = 'https://neo-endurance.com/php/entry-list/nes5-pq-entrylist.php';
 	
 	//Load JSON file
 	jQuery.getJSON(url_php,function(data){
