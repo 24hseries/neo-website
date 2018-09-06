@@ -11,6 +11,14 @@ Updated: 2017-02-08 12:56:46
 
 */
 
+/* Import font */
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700');
+
+/* Article styling */
+.entry-content p{
+	font-family: 'Lora', serif;
+}
+
 h3 {
 	font-size: 21px;
 	font-weight: 400;
@@ -79,5 +87,4 @@ h3 {
     display: inline-block;
     color: #666;
     font-size: 11px;
-    float: right;
 }

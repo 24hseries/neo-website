@@ -12,18 +12,15 @@
                 <h4 class="category-page site-text-color"><?php the_category(', '); ?></h4>
 
                 <div class="blog-entry">
-                    <div class="entry-header">
-                        <h1><?php the_title(); ?></h1>
-                    </div>
-
                     <?php if(novelty_has_featured()): ?>
 
                     <div class="entry-cover">
                         <?php echo novelty_get_featured(); ?>
                     </div>
-
                     <?php endif; ?>
-
+					<div class="entry-header">
+                        <h1><?php the_title(); ?></h1>
+                    </div>
                     <div class="entry-content-details">
                         <div class="share-it">
                             <span class="share-it-span"><?php _ex('Share','single project page','novelty'); ?></span>
