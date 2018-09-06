@@ -32,8 +32,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <span><?php _ex('Posted:', 'blog', 'novelty'); ?></span> <?php echo novelty_post_time(); ?> <!--&nbsp; / &nbsp; < ?php _ex('by', 'single post', 'novelty'); ?> < ?php the_author_posts_link(); ?> &nbsp; / &nbsp; <a href="< ?php echo get_permalink(); ?>">< ?php _ex('comments', 'single post', 'novelty'); ?> (< ?php echo get_comments_number(); ?>)</a>-->
-                        <div class="entry-content-tags"><?php _e("tags: ", "novelty"); the_tags('',', '); ?></div>
+                        <span><?php _ex('Posted:', 'blog', 'novelty'); ?></span> <?php echo novelty_post_time(); ?> &nbsp;/&nbsp; <?php _ex('by', 'single post', 'novelty'); ?> <?php the_author_posts_link(); ?>
                     </div>
                     <div class="entry-content">
                         <?php the_content(); ?>

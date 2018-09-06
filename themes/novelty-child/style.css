@@ -12,11 +12,29 @@ Updated: 2017-02-08 12:56:46
 */
 
 /* Import font */
-@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700');
+/* @import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700'); */
+
+html{
+	font-size: 16px;
+}
 
 /* Article styling */
-.entry-content p{
-	font-family: 'Lora', serif;
+.blog-entry .entry-cover{
+	margin-bottom: 1.5rem;
+}
+
+.blog-entry h1 {
+	margin-bottom: 1rem;
+}
+
+.blog-entry .entry-content-details {
+	margin-bottom: 1.5rem;
+}
+
+.blog-entry .entry-content p{
+	/* font-family: 'Lora', serif; */
+	/* font-size: 15px; */
+	line-height: 1.5rem;
 }
 
 h3 {
