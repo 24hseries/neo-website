@@ -238,9 +238,9 @@ class DFADS {
 		
 			$first_last = ' ';
 			if ( $i == 1 ) {
-				$first_last = ' dfad_first ';
+				$first_last = ' neo_first ';
 			} elseif ( $i == $ad_count ) {
-				$first_last = ' dfad_last ';
+				$first_last = ' neo_last ';
 			}
 			
 			// If ad_html is not empty, get the ads's opening tag.
