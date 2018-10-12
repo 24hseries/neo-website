@@ -90,7 +90,7 @@
                 );
                 $novelty_social_filtered = array_filter($novelty_social);
                 if(!empty($novelty_social_filtered)): ?>
-                <div class="col-md-4">
+                <div class="col-md-8">
                     <ul class="header-socials">
                         <?php foreach($novelty_social_filtered as $novelty_social_key => $novelty_social_value): ?>
                             <li><a class="header-socials-<?php echo $novelty_social_key; ?>" href="<?php echo $novelty_social_value; ?>"><?php echo $novelty_social_font[$novelty_social_key]; ?></a></li>
