@@ -1,6 +1,7 @@
 <?php
-header('Content-type: application/json');
+header('Content-type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
+
 
 // Set your CSV feed
 $feed = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS3MoZWsYIwqmP2S1wDvgzcOeSlqfKv3MkjwR3Yq-QP_m4ZGzsGnXOLRBj1GLvOFElE4vxgTA7UsAFc/pub?gid=1104509942&single=true&output=csv';
