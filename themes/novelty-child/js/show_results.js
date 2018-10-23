@@ -1,25 +1,23 @@
 // JavaScript Document - show_standings.js
 jQuery( document ).ready(function() {
-	var events = {
-		'season1': [],
-		'season2': [],
-		'season3': [],
-		'season4': []
-	};
-	var season2 = [];
-	var array = ['','Sebring','Road America','Motegi','Nürburgring','Spa-Francorchamps','Le Mans powered by Racespot'];
+	var array = [
+		'',
+		'6 hours of Sebring',
+		'6 hours of Circuit of the Americas',
+		'6 hours of Interlagos',
+		'6 hours of Suzuka',
+		'6 hours of Spa-Francorchamps',
+		'Racespot 24 hours of Le Mans'];
     
 	jQuery('#select_race').change(function(){
-		console.log("check");
-		var season = jQuery('#select_season').val();
-		val = jQuery(this).val();
-	
 		//Change the title of the page
+		var val = jQuery(this).val();
 		var int = parseInt(val);
-		jQuery('#circuit').html('24 Hours of ' + array[int]);
+		jQuery('#circuit').html(array[int]);
 		
 		//load the right JSON file
-		var url = 'https://www.neo-endurance.com/php/nes' + season + '_results_race' + val + '.php';
+		// var url = 'https://www.neo-endurance.com/php/nes' + season + '_results_race' + val + '.php';
+		const url = "https://neo-endurance.com/php/results/season5/race1.php";
 		jQuery.getJSON(url,function(data){
 			
 			//empty table before loading the new data
@@ -39,6 +37,7 @@ jQuery( document ).ready(function() {
 						'<td VALIGN="top">' +  data.Interval + '</td>' +
 						'<td VALIGN="top">' +  data.avg_lap + '</td>' +
 						'<td VALIGN="top">' +  data.fastest_lap + '</td>' +
+						'<td VALIGN="top">' +  data.fastest_lap_num + '</td>' +
 						'<td VALIGN="top">' +  data.Out + '</td>' +
 						'</tr>'
 					);

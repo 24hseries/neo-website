@@ -106,3 +106,12 @@ h3 {
     color: #666;
     font-size: 11px;
 }
+
+/*** Results ***/
+#results .header{
+	background-color: transparent;
+}
+
+#results .header th{
+	vertical-align: bottom;
+}
