@@ -17,7 +17,7 @@ jQuery( document ).ready(function() {
 		
 		//load the right JSON file
 		// var url = 'https://www.neo-endurance.com/php/nes' + season + '_results_race' + val + '.php';
-		const url = "https://neo-endurance.com/php/results/season5/race1.php";
+		var url = "https://neo-endurance.com/php/results/season5/race" + val + ".php";
 		jQuery.getJSON(url,function(data){
 			
 			//empty table before loading the new data
@@ -28,17 +28,17 @@ jQuery( document ).ready(function() {
 				if(data.Cust_ID < 0){
 					jQuery('#results').append(
 						'<tr class="rows">'+
-						'<td VALIGN="top">' +  data.Pos + '</td>' +
-						'<td VALIGN="top"><span class="result'+data.Class+'">' +  data.Class_Pos + '</span></td>' +
-						'<td VALIGN="top"><span class="result'+data.Class+'">' +  data.Class + '</span></td>' +
-						'<td VALIGN="top">' +  data.Name + '</td>' + 
-						'<td VALIGN="top">' +  data.car_num + '</td>' + 
-						'<td VALIGN="top">' +  data.laps_comp + '</td>' + 
-						'<td VALIGN="top">' +  data.Interval + '</td>' +
-						'<td VALIGN="top">' +  data.avg_lap + '</td>' +
-						'<td VALIGN="top">' +  data.fastest_lap + '</td>' +
-						'<td VALIGN="top">' +  data.fastest_lap_num + '</td>' +
-						'<td VALIGN="top">' +  data.Out + '</td>' +
+						'<td>' +  data.Pos + '</td>' +
+						'<td><span class="result'+data.Class+'">' +  data.Class_Pos + '</span></td>' +
+						'<td><span class="result'+data.Class+'">' +  data.Class + '</span></td>' +
+						'<td>' +  data.Name + '</td>' + 
+						'<td>' +  data.car_num + '</td>' + 
+						'<td>' +  data.laps_comp + '</td>' + 
+						'<td>' +  data.Interval + '</td>' +
+						'<td>' +  data.avg_lap + '</td>' +
+						'<td>' +  data.fastest_lap + '</td>' +
+						'<td>' +  data.fastest_lap_num + '</td>' +
+						'<td>' +  data.Out + '</td>' +
 						'</tr>'
 					);
 				}

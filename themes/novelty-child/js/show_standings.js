@@ -11,57 +11,38 @@ jQuery( document ).ready(function() {
 	var url_p = 'https://www.neo-endurance.com/php/show_S3standingsP.php';
 	var url_gt = 'https://www.neo-endurance.com/php/show_S3standingsGT.php';
 	var url_gts = 'https://www.neo-endurance.com/php/show_S3standingsGTS.php';
-*/
+
     var url_p = 'https://www.neo-endurance.com/php/nes4_standings_p.php';
 	var url_gt = 'https://www.neo-endurance.com/php/nes4_standings_gt.php';
+*/
+	var url_p1 = "https://www.neo-endurance.com/php/standings/season5/p1.php";
+	var url_p2 = "https://www.neo-endurance.com/php/standings/season5/p2.php";
+	var url_gt = "https://www.neo-endurance.com/php/standings/season5/gt.php";
 	
-	jQuery.getJSON(url_p,function(data){
-
-			//Open second level
-			jQuery.each(data, function(index, data){
-			
-			if(data.Pos !== ""){
-				jQuery('#standingsP').append(
-				'<tr>'+
-					'<td VALIGN="top">' + data.Pos + '</td>' +
-					'<td VALIGN="top">' + data.Num + '</td>' +
-					'<td VALIGN="top">' + data.Team_name + '</td>' +
-					'<td VALIGN="top">' + data.Sebring + '</td>' + 
-					'<td VALIGN="top">' + data.RoadAmerica + '</td>' + 
-					'<td VALIGN="top">' + data.Motegi + '</td>' +
-					'<td VALIGN="top">' + data.Nurburgring + '</td>' + 
-					'<td VALIGN="top">' + data.Spa + '</td>' + 
-					'<td VALIGN="top">' + data.LeMans + '</td>' +
-					'<td VALIGN="top">' + data.Points_total + '</td>' + 
-				'</tr>'
-				);
-			}
-				
-			});//2nd level
-	});
-	
-	jQuery.getJSON(url_gt,function(data){
-	
-			//Open second level
-			jQuery.each(data, function(index, data){
-			
-			if(data.Pos !== ""){
-				jQuery('#standingsGT').append(
-				'<tr>'+
-					'<td VALIGN="top">' + data.Pos + '</td>' +
-					'<td VALIGN="top">' + data.Num + '</td>' +
-					'<td VALIGN="top">' + data.Team_name + '</td>' +
-					'<td VALIGN="top">' + data.Sebring + '</td>' + 
-					'<td VALIGN="top">' + data.RoadAmerica + '</td>' + 
-					'<td VALIGN="top">' + data.Motegi + '</td>' +
-					'<td VALIGN="top">' + data.Nurburgring + '</td>' + 
-					'<td VALIGN="top">' + data.Spa + '</td>' + 
-					'<td VALIGN="top">' + data.LeMans + '</td>' +
-					'<td VALIGN="top">' + data.Points_total + '</td>' + 
-				'</tr>'
-				);
-			}
-				
-			});//2nd level
-	});
+	loadStandingsData("P1", url_p1);
+	loadStandingsData("P2", url_p2);
+	loadStandingsData("GT", url_gt);
 });
+
+function loadStandingsData(category, url) {
+	jQuery.getJSON(url, function (data) {
+		//Open second level
+		jQuery.each(data, function (index, data) {
+			if (data.Pos !== "") {
+				var selectElement = "#standings" + category;
+				jQuery(selectElement).append('<tr>' +
+					'<td>' + data.pos + '</td>' +
+					'<td>' + data.num + '</td>' +
+					'<td>' + data.team_name + '</td>' +
+					'<td>' + data.sebring + '</td>' +
+					'<td>' + data.cota + '</td>' +
+					'<td>' + data.interlagos + '</td>' +
+					'<td>' + data.suzuka + '</td>' +
+					'<td>' + data.spa + '</td>' +
+					'<td>' + data.lemans + '</td>' +
+					'<td>' + data.total + '</td>' +
+					'</tr>');
+			}
+		});
+	});
+}
