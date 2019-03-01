@@ -19,31 +19,8 @@ function gillion_child_enqueue() {
 /**
  * Add your custom functions below
  */
-
-add_action('wp_enqueue_scripts', 'loadEntryList');
-add_action('wp_enqueue_scripts', 'loadPQEntryList');
 add_action('wp_enqueue_scripts', 'loadStandings');
 add_action('wp_enqueue_scripts', 'loadResults');
-
-/**
- * Load entry list JavaScript file on the right page.
- */
-function loadEntryList(){
-	if(is_page('769')){
-		wp_register_script('show-registrations', get_stylesheet_directory_uri().'/js/nes5_entrylist.js', array('jquery'), null, true);
-		wp_enqueue_script('show-registrations');
-	}
-}
-
-/**
- * Load pre-qualifying entry list JavaScript file on the right page.
- */
-function loadPQEntryList(){
-	if(is_page('2875')){
-		wp_register_script('show-pq-registrations', get_stylesheet_directory_uri().'/js/nes5_pq_entrylist.js', array('jquery'), null, true);
-		wp_enqueue_script('show-pq-registrations');
-	}
-}
 
 /**
  * Load standings JavaScript file on the right page.
