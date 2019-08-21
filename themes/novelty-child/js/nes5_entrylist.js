@@ -12,9 +12,9 @@ jQuery( document ).ready(function() {
 			var extraDrivers = "";
 			var extraNat = "";	
 			var iRatings = "";
-			var driver3, driver4, driver5, driver6, driver7; //driver8;
-			var nat3, nat4, nat5, nat6, nat7;//, nat8;
-			var iR3, iR4, iR5, iR6, iR7;//, iR8;
+			var driver3, driver4, driver5, driver6, driver7;
+			var nat3, nat4, nat5, nat6, nat7;
+			var iR3, iR4, iR5, iR6, iR7;
 			var imgPre = '<img class="flag" src="/op-images/flags/';
 			var imgPost = '.png" width="18" title="' + data.country.toUpperCase() + '" />';
 			var teamNat = imgPre + data.country.toLowerCase() + imgPost;
@@ -139,4 +139,3 @@ jQuery( document ).ready(function() {
         });
     });
 });
-
