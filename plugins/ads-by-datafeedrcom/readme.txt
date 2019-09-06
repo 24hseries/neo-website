@@ -3,8 +3,8 @@
 Contributors: datafeedr.com
 Tags: ads, random ads, rotating ads, datafeedr, advertisements, advertising, banner ads, banners, adsense, google adsense
 Requires at least: 3.5
-Tested up to: 4.9.2
-Stable tag: 1.0.13
+Tested up to: 5.2
+Stable tag: 1.0.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,7 +99,16 @@ View the full video tutorial playlist [here](http://www.youtube.com/playlist?lis
 
 == Changelog ==
 
-= 1.0.12 - 2018-01-17 =
+= 1.0.16 - 2019/05/06 =
+* Updated readme.
+
+= 1.0.15 - 2019/02/19 =
+* Updated readme.
+
+= 1.0.14 - 2018-12-28 =
+* Added new `dfads_ad_post_content` and `dfads_ads_html_block` filters. [Thanks spatsatzis](https://github.com/datafeedr/ads-by-datafeedrcom/pull/2)
+
+= 1.0.13 - 2018-01-17 =
 * Updated readme.txt and added new README.md.
 
 = 1.0.12 - 2017-06-02 =
