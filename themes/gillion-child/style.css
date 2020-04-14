@@ -7,7 +7,7 @@ Template: gillion
 */
 
 /* Add your custom CSS below */
-/* h1, h2, h3, h4, h5, h6{ 
+/* h1, h2, h3, h4, h5, h6{
 	margin: 32px 0 8px 0;
 } */
 
@@ -25,6 +25,7 @@ Template: gillion
 	margin-bottom: 15px;
 }
 
+.vcg-text-block-content p:last-child,
 .post-content p:last-child{
 	margin-bottom: 30px;
 }
