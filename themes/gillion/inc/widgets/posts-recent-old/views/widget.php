@@ -65,5 +65,5 @@
 			<?php endif; ?>
 		</div>
 	</div>
-	<?php echo wp_kses_post( $after_widget ); ?>
+	<?php echo wp_kses_post( $after_widget ); wp_reset_postdata(); ?>
 <?php endif; ?>

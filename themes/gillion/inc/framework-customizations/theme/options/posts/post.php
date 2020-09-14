@@ -2,8 +2,14 @@
 	die( 'Forbidden' );
 }
 
-$options = array(
 
+// Check current framework
+if( gillion_framework() == 'redux' ) :
+	return false;
+endif;
+
+
+$options = array(
 	'post-settings' => array(
         'type'     => 'box',
         'title'    => esc_html__('Post Settings', 'gillion'),
@@ -193,7 +199,7 @@ $options = array(
                 ),
             ),
 
-            'header_tab' => array(
+			'header_tab' => array(
                 'title'   => esc_html__( 'Header', 'gillion' ),
                 'type'    => 'tab',
                 'options' => array(
@@ -214,6 +220,47 @@ $options = array(
                         ),
                     ),
 
+					'header_sticky' => array(
+                        'type'  => 'select',
+                        'label' => esc_html__('Header Sticky', 'gillion'),
+                        'desc'  => esc_html__('Enable or disable sticky header', 'gillion'),
+                        'choices' => array(
+                            'default' => esc_html__( 'Default (from theme options)', 'gillion' ),
+                            'on' => esc_html__( 'On', 'gillion' ),
+                            'off' => esc_html__( 'Off', 'gillion' ),
+                        ),
+                        'value' => 'default',
+                        'inline' => false,
+                    ),
+
+					'header_bottom_border' => array(
+                        'type' => 'switch',
+                        'label' => esc_html__( 'Header Bottom Border', 'gillion' ),
+                        'desc' => esc_html__( 'Enable or disable header bottom border', 'gillion' ),
+                        'value' => 'on',
+                        'left-choice' => array(
+                            'value' => 'off',
+                            'label' => esc_html__('Off', 'gillion'),
+                        ),
+                        'right-choice' => array(
+                            'value' => 'on',
+                            'label' => esc_html__('On', 'gillion'),
+                        ),
+                    ),
+
+					'topbar_status' => array(
+                        'type'  => 'select',
+                        'label' => esc_html__('Header Topbar', 'gillion'),
+                        'desc'  => esc_html__('Enable or disable header topbar', 'gillion'),
+                        'choices' => array(
+                            'default' => esc_html__( 'Default (from theme options)', 'gillion' ),
+                            'on' => esc_html__( 'On', 'gillion' ),
+                            'off' => esc_html__( 'Off', 'gillion' ),
+                        ),
+                        'value' => 'default',
+                        'inline' => false,
+                    ),
+
                     'header_layout' => array(
                         'type'  => 'select',
                         'value' => 'default',
@@ -223,7 +270,8 @@ $options = array(
                             'default' => esc_html__( 'Default (from theme options)', 'gillion' ),
 							'2' => esc_html__( 'Standard', 'gillion' ),
 							'1' => esc_html__( 'Menu Center', 'gillion' ),
-							'4' => esc_html__( 'Logo/menu center', 'gillion' ),
+							'4' => esc_html__( 'Logo/menu center (icons in menu area)', 'gillion' ),
+							'5' => esc_html__( 'Logo/menu center (icons in logo area)', 'gillion' ),
 							'3' => esc_html__( 'With Ad place', 'gillion' ),
                         ),
                     ),
@@ -244,12 +292,14 @@ $options = array(
                             'header_style' => array(
                                 'type'  => 'select',
                                 'value' => '1',
-                                'label' => esc_html__('Header and Titlebar Style', 'gillion'),
-                                'desc'  => esc_html__('Choose main header and titlebar style', 'gillion'),
+								'label' => esc_html__('Above Content', 'gillion'),
+                                'desc'  => esc_html__('Enable or disable header above content', 'gillion'),
                                 'choices' => array(
                                     'default' => esc_html__( 'Default', 'gillion' ),
-                                    'light' => esc_html__( 'Light (Header + Titlebar)', 'gillion' ),
-                                    'light_mobile_off' => esc_html__( 'Light (Header + Titlebar) - Mobile Off', 'gillion' ),
+                                    'light' => esc_html__( 'Light Text Large', 'gillion' ),
+                                    'light_mobile_off' => esc_html__( 'Light Text Large (default mobile version)', 'gillion' ),
+									'dark' => esc_html__( 'Dark Text Large', 'gillion' ),
+									'dark_mobile_off' => esc_html__( 'Dark Text Large (default mobile version)', 'gillion' ),
                                 ),
                             ),
                         ),
@@ -257,7 +307,7 @@ $options = array(
                             'light' => array(
                                 'description' => array(
                                     'type'  => 'text',
-                                    'value' => '',
+                                    'value' => esc_html__('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'gillion'),
                                     'label' => esc_html__('Description', 'gillion'),
                                     'desc'  => esc_html__('Enter this page description', 'gillion'),
                                 ),
@@ -266,7 +316,7 @@ $options = array(
                                     'type' => 'switch',
                                     'label' => esc_html__( 'Breadcrumbs', 'gillion' ),
                                     'desc' => esc_html__( 'Enable or disable dreadcrumbs', 'gillion' ),
-                                    'value' => true,
+                                    'value' => false,
                                     'left-choice' => array(
                                         'value' => false,
                                         'label' => esc_html__('Off', 'gillion'),
@@ -281,7 +331,7 @@ $options = array(
                                     'type' => 'switch',
                                     'label' => esc_html__( 'Scroll Down Button', 'gillion' ),
                                     'desc' => esc_html__( 'Enable or disable scroll down button', 'gillion' ),
-                                    'value' => true,
+                                    'value' => false,
                                     'left-choice' => array(
                                         'value' => false,
                                         'label' => esc_html__('Off', 'gillion'),
@@ -291,6 +341,123 @@ $options = array(
                                         'label' => esc_html__('On', 'gillion'),
                                     ),
                                 ),
+                            ),
+							'light_mobile_off' => array(
+                                'description' => array(
+                                    'type'  => 'text',
+                                    'value' => esc_html__('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'gillion'),
+                                    'label' => esc_html__('Description', 'gillion'),
+                                    'desc'  => esc_html__('Enter this page description', 'gillion'),
+                                ),
+
+                                'breadcrumbs' => array(
+                                    'type' => 'switch',
+                                    'label' => esc_html__( 'Breadcrumbs', 'gillion' ),
+                                    'desc' => esc_html__( 'Enable or disable dreadcrumbs', 'gillion' ),
+                                    'value' => false,
+                                    'left-choice' => array(
+                                        'value' => false,
+                                        'label' => esc_html__('Off', 'gillion'),
+                                    ),
+                                    'right-choice' => array(
+                                        'value' => true,
+                                        'label' => esc_html__('On', 'gillion'),
+                                    ),
+                                ),
+
+                                'scroll_button' => array(
+                                    'type' => 'switch',
+                                    'label' => esc_html__( 'Scroll Down Button', 'gillion' ),
+                                    'desc' => esc_html__( 'Enable or disable scroll down button', 'gillion' ),
+                                    'value' => false,
+                                    'left-choice' => array(
+                                        'value' => false,
+                                        'label' => esc_html__('Off', 'gillion'),
+                                    ),
+                                    'right-choice' => array(
+                                        'value' => true,
+                                        'label' => esc_html__('On', 'gillion'),
+                                    ),
+                                ),
+
+                            ),
+							'dark' => array(
+                                'description' => array(
+                                    'type'  => 'text',
+                                    'value' => esc_html__('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'gillion'),
+                                    'label' => esc_html__('Description', 'gillion'),
+                                    'desc'  => esc_html__('Enter this page description', 'gillion'),
+                                ),
+
+                                'breadcrumbs' => array(
+                                    'type' => 'switch',
+                                    'label' => esc_html__( 'Breadcrumbs', 'gillion' ),
+                                    'desc' => esc_html__( 'Enable or disable dreadcrumbs', 'gillion' ),
+                                    'value' => false,
+                                    'left-choice' => array(
+                                        'value' => false,
+                                        'label' => esc_html__('Off', 'gillion'),
+                                    ),
+                                    'right-choice' => array(
+                                        'value' => true,
+                                        'label' => esc_html__('On', 'gillion'),
+                                    ),
+                                ),
+
+                                'scroll_button' => array(
+                                    'type' => 'switch',
+                                    'label' => esc_html__( 'Scroll Down Button', 'gillion' ),
+                                    'desc' => esc_html__( 'Enable or disable scroll down button', 'gillion' ),
+                                    'value' => false,
+                                    'left-choice' => array(
+                                        'value' => false,
+                                        'label' => esc_html__('Off', 'gillion'),
+                                    ),
+                                    'right-choice' => array(
+                                        'value' => true,
+                                        'label' => esc_html__('On', 'gillion'),
+                                    ),
+                                ),
+
+                            ),
+							'dark_mobile_off' => array(
+                                'description' => array(
+                                    'type'  => 'text',
+                                    'value' => esc_html__('Lorem ipsum dolor sit amet, consectetur adipiscing elit', 'gillion'),
+                                    'label' => esc_html__('Description', 'gillion'),
+                                    'desc'  => esc_html__('Enter this page description', 'gillion'),
+                                ),
+
+                                'breadcrumbs' => array(
+                                    'type' => 'switch',
+                                    'label' => esc_html__( 'Breadcrumbs', 'gillion' ),
+                                    'desc' => esc_html__( 'Enable or disable dreadcrumbs', 'gillion' ),
+                                    'value' => false,
+                                    'left-choice' => array(
+                                        'value' => false,
+                                        'label' => esc_html__('Off', 'gillion'),
+                                    ),
+                                    'right-choice' => array(
+                                        'value' => true,
+                                        'label' => esc_html__('On', 'gillion'),
+                                    ),
+                                ),
+
+                                'scroll_button' => array(
+                                    'type' => 'switch',
+                                    'label' => esc_html__( 'Scroll Down Button', 'gillion' ),
+                                    'desc' => esc_html__( 'Enable or disable scroll down button', 'gillion' ),
+                                    'value' => false,
+                                    'left-choice' => array(
+                                        'value' => false,
+                                        'label' => esc_html__('Off', 'gillion'),
+                                    ),
+                                    'right-choice' => array(
+                                        'value' => true,
+                                        'label' => esc_html__('On', 'gillion'),
+                                    ),
+                                ),
+
                             ),
                         ),
                     ),
@@ -327,6 +494,20 @@ $options = array(
                         'inline' => false,
                     ),
 
+					'transparent_everything' => array(
+                        'type' => 'switch',
+                        'label' => esc_html__( 'Transparent body/header/titlebar', 'gillion' ),
+                        'desc' => esc_html__( 'Enable or disable transparent body/header/titlebar', 'gillion' ),
+                        'value' => 'off',
+                        'left-choice' => array(
+                            'value' => 'off',
+                            'label' => esc_html__('Off', 'gillion'),
+                        ),
+                        'right-choice' => array(
+                            'value' => 'on',
+                            'label' => esc_html__('On', 'gillion'),
+                        ),
+                    ),
 
                 ),
             ),
@@ -336,9 +517,21 @@ $options = array(
                 'type'    => 'tab',
                 'options' => array(
 
+					'instagram_widgets' => array(
+                        'type' => 'select',
+                        'label' => esc_html__( 'Instagram Widget', 'gillion' ),
+                        'desc' => esc_html__( 'Enable or disable footer widgets', 'gillion' ),
+                        'choices' => array(
+                            'on' => esc_html__( 'On', 'gillion' ),
+                            'off' => esc_html__( 'Off', 'gillion' ),
+                        ),
+                        'value' => 'on',
+                        'inline' => false,
+                    ),
+
                     'footer_widgets' => array(
                         'type' => 'select',
-                        'label' => esc_html__( 'Widgets', 'gillion' ),
+                        'label' => esc_html__( 'Footer Widgets', 'gillion' ),
                         'desc' => esc_html__( 'Enable or disable footer widgets', 'gillion' ),
                        'choices' => array(
                             'default' => esc_html__( 'Default (from theme options)', 'gillion' ),
@@ -351,7 +544,7 @@ $options = array(
 
                     'copyright_bar' => array(
                         'type' => 'select',
-                        'label' => esc_html__( 'Copyrights', 'gillion' ),
+                        'label' => esc_html__( 'FooterCopyrights', 'gillion' ),
                         'desc' => esc_html__( 'Enable or disable footer copyrights', 'gillion' ),
                         'choices' => array(
                             'default' => esc_html__( 'Default (from theme options)', 'gillion' ),
@@ -361,6 +554,7 @@ $options = array(
                         'value' => '',
                         'inline' => false,
                     ),
+
 
                 ),
             ),
@@ -490,8 +684,16 @@ $options = array(
             'post-video' => array(
                 'type' => 'text',
                 'label' => esc_html__( 'Video URL', 'gillion' ),
-                'desc' => esc_html__( 'Enter WordPress supported link', 'gillion' ),
+                'desc' => esc_html__( 'Enter WordPress supported link (like Youtube or Vimeo)', 'gillion' ),
             ),
+
+			'post-video-file' => array(
+				'label' => esc_html__( 'Video File URL', 'gillion' ),
+				'desc'  => esc_html__( 'Enter video file URL (MP4 or WebM)', 'gillion' ),
+				'help' => esc_html__( 'Please note that not all WordPress installation supports media file upload by default', 'gillion' ),
+				'type'  => 'upload',
+				'images_only' => false,
+			),
 
         )
     ),
@@ -506,7 +708,34 @@ $options = array(
             'post-audio' => array(
                 'type' => 'text',
                 'label' => esc_html__( 'Audio URL', 'gillion' ),
-                'desc' => esc_html__( 'Enter WordPress supported link', 'gillion' ),
+                'desc' => esc_html__( 'Enter WordPress supported link (like Soundcloud)', 'gillion' ),
+            ),
+
+			'post-audio-file' => array(
+				'label' => esc_html__( 'Audio File URL', 'gillion' ),
+				'desc'  => esc_html__( 'Enter audio file URL (MP3 or OGG)', 'gillion' ),
+				'help' => esc_html__( 'Please note that not all WordPress installation supports media file upload by default', 'gillion' ),
+				'type'  => 'upload',
+				'images_only' => false,
+			),
+
+        )
+    ),
+
+
+	'post-media-copyrights-section' => array(
+        'type'     => 'box',
+        'title'    => esc_html__('Media Copyrights Settings', 'jevelin'),
+        'priority' => 'low',
+        'options'  => array(
+
+            'post-copyrights' => array(
+                'type' => 'wp-editor',
+				'teeny'  => true,
+				'reinit' => true,
+				'size'   => 'large',
+                'label' => esc_html__( 'Copyrights Text', 'jevelin' ),
+                'desc' => esc_html__( 'Enter copyrights text for your main featured image, video or media', 'jevelin' ),
             ),
 
         )

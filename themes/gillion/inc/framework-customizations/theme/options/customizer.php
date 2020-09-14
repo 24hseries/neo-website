@@ -13,6 +13,7 @@ if ( is_customize_preview() || ( is_admin() && defined( 'DOING_AJAX' ) && DOING_
     include get_template_directory() . '/inc/framework-customizations/theme/options/blog.php';
     include get_template_directory() . '/inc/framework-customizations/theme/options/page_loader.php';
     include get_template_directory() . '/inc/framework-customizations/theme/options/404_page.php';
+    include get_template_directory() . '/inc/framework-customizations/theme/options/amp.php';
 
     $options = array(
         'customizer_general' => array(

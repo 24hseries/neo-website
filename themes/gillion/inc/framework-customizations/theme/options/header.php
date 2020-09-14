@@ -3,83 +3,26 @@
 }
 
 $header_options = array(
+
 	'logo' => array(
 		'label' => esc_html__( 'Standard Logo', 'gillion' ),
-		'desc'  => esc_html__( 'Upload a logo image (max height 250px) ', 'gillion' ),
-		'type'  => 'upload',
-		'images_only' => true,
-	),
-
-	'logo_sticky' => array(
-		'label' => esc_html__( 'Sticky Header Logo (optional)', 'gillion' ),
-		'desc'  => esc_html__( 'Upload a sticky logo image (max height 250px) ', 'gillion' ),
+		'desc'  => esc_html__( 'Upload a logo image (max height 250px) used in posts, portfolio and other pages', 'jevelin' ),
 		'type'  => 'upload',
 		'images_only' => true,
 	),
 
 	'logo_light' => array(
 		'label' => esc_html__( 'Light Logo Version (optional)', 'gillion' ),
-		'desc'  => esc_html__( 'Upload a light logo version (max height 250px) ', 'gillion' ),
+		'desc'  => esc_html__( 'Upload a light logo version (max height 250px) used only when light style is activated or is above slide', 'jevelin' ),
 		'type'  => 'upload',
 		'images_only' => true,
 	),
 
-	'header_settings' => array(
-		'type'  => 'html-full',
-		'value' => '',
-		'label' => false,
-		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Header Settings', 'gillion').'</span></h3>',
-	),
-
-	'header_layout' => array(
-		'type'  => 'radio',
-		'value' => '2',
-		'label' => esc_html__('Layout', 'gillion'),
-		'desc'  => esc_html__('Choose main header layout', 'gillion'),
-		'choices' => array(
-			'2' => esc_html__( 'Standard', 'gillion' ),
-			'1' => esc_html__( 'Menu Center', 'gillion' ),
-			'4' => esc_html__( 'Logo/menu center', 'gillion' ),
-			'3' => esc_html__( 'With Ad place', 'gillion' ),
-		),
-		'inline' => false,
-	),
-
-	'header_width' => array(
-		'type' => 'switch',
-		'label' => esc_html__( 'Width', 'gillion' ),
-		'desc' => esc_html__( 'Select header width', 'gillion' ),
-		'value' => 'default',
-		'left-choice' => array(
-			'value' => 'default',
-			'label' => esc_html__('Default', 'gillion'),
-		),
-		'right-choice' => array(
-			'value' => 'full',
-			'label' => esc_html__('Full', 'gillion'),
-		),
-	),
-
-	'header_additional_padding' => array(
-		'type'  => 'text',
-		'value' => '',
-		'label' => esc_html__('Additional Padding', 'gillion'),
-		'desc'  => esc_html__('Add additional padding around not sticky header (top right bottom left). For example: 30px 0px 30px 0px', 'gillion'),
-	),
-
-	'ipad_landscape_full_navigation' => array(
-		'label' => esc_html__( 'iPad landscape navigation', 'gillion' ),
-		'desc'  => esc_html__( 'Enable or disable iPad landscape to use desktop navigation (expermetal feature)', 'gillion' ),
-		'type'  => 'switch',
-		'value' => false,
-		'left-choice' => array(
-			'value' => false,
-			'label' => esc_html__('Off', 'gillion'),
-		),
-		'right-choice' => array(
-			'value' => true,
-			'label' => esc_html__('On', 'gillion'),
-		),
+	'logo_sticky' => array(
+		'label' => esc_html__( 'Sticky Header Logo (optional)', 'gillion' ),
+		'desc'  => esc_html__( 'Upload a sticky logo image (max height 250px) used only when sticky header is activated', 'jevelin' ),
+		'type'  => 'upload',
+		'images_only' => true,
 	),
 
 	'header_logo_sizes' => array(
@@ -97,12 +40,12 @@ $header_options = array(
 		'picker' => array(
 			'header_logo_sizes' => array(
 				'type' => 'switch',
-				'label' => esc_html__( 'Header Logo Sizes', 'gillion' ),
-				'desc' => esc_html__( 'Switch between orgianl and manual header logo sizing', 'gillion' ),
+				'label' => esc_html__( 'Custom Logo Sizes', 'gillion' ),
+				'desc' => esc_html__( 'Switch between original and manual header logo sizing', 'gillion' ),
 				'value' => true,
 				'left-choice' => array(
 					'value' => 'orginal',
-					'label' => esc_html__('Orginal', 'gillion'),
+					'label' => esc_html__('Original', 'gillion'),
 				),
 				'right-choice' => array(
 					'value' => 'manual',
@@ -154,6 +97,82 @@ $header_options = array(
 		),
 	),
 
+
+
+
+		'title_header_content_above' => array( 'type'  => 'html-full', 'value' => '', 'label' => false, 'html'  =>
+			'<h3 class="hndle sh-custom-group-divder"><span>'.
+				esc_html__('Content Above Header', 'gillion')
+			.'</span></h3>',
+		),
+
+	'header_top_template' => array(
+	    'type'  => 'select',
+	    'value' => 'disabled',
+	    'label' => esc_html__('Content Above Header', 'jevelin'),
+	    'desc'  => esc_html__('Choose WPBakery page builder created page template and add any information above the header you like', 'jevelin'),
+	    'choices' => gillion_get_page_templates( 'disabled' ),
+	),
+
+
+
+
+		'header_settings' => array( 'type'  => 'html-full', 'value' => '', 'label' => false, 'html'  =>
+			'<h3 class="hndle sh-custom-group-divder"><span>'.
+				esc_html__('Header Settings', 'gillion')
+			.'</span></h3>',
+		),
+
+	'header_layout' => array(
+		'type'  => 'radio',
+		'value' => '2',
+		'label' => esc_html__('Layout', 'gillion'),
+		'desc'  => esc_html__('Choose main header layout', 'gillion'),
+		'choices' => array(
+			'2' => esc_html__( 'Standard', 'gillion' ),
+			'1' => esc_html__( 'Menu center', 'gillion' ),
+			'4' => esc_html__( 'Logo/menu center (icons in menu area)', 'gillion' ),
+			'5' => esc_html__( 'Logo/menu center (icons in logo area)', 'gillion' ),
+			'3' => esc_html__( 'With ad place', 'gillion' ),
+			'6' => esc_html__( 'Logo With Background / Navigation at bottom', 'gillion' ),
+		),
+		'inline' => false,
+	),
+
+	'header_width' => array(
+		'type'  => 'radio',
+		'value' => 'default',
+		'label' => esc_html__( 'Width', 'gillion' ),
+		'desc' => esc_html__( 'Select header width', 'gillion' ),
+		'choices' => array(
+			'default' => esc_html__( 'Standard (1200px wide)', 'gillion' ),
+			'full' => esc_html__( 'Full (92% wide)', 'gillion' ),
+		),
+		'inline' => false,
+	),
+
+	'header_additional_padding' => array(
+		'type'  => 'text',
+		'value' => '',
+		'label' => esc_html__('Additional Padding', 'gillion'),
+		'desc'  => esc_html__('Add additional padding around non-sticky header (top right bottom left). For example: 30px 0px 30px 0px', 'gillion'),
+	),
+
+	'ipad_landscape_full_navigation' => array(
+		'label' => esc_html__( 'iPad Landscape Navigation', 'gillion' ),
+		'desc'  => esc_html__( 'Enable or disable iPad landscape to use desktop navigation (experimental feature)', 'gillion' ),
+		'type'  => 'switch',
+		'value' => false,
+		'left-choice' => array(
+			'value' => false,
+			'label' => esc_html__('Off', 'gillion'),
+		),
+		'right-choice' => array(
+			'value' => true,
+			'label' => esc_html__('On', 'gillion'),
+		),
+	),
+
 	'header_sticky' => array(
 		'type' => 'switch',
 		'label' => esc_html__( 'Sticky Header', 'gillion' ),
@@ -169,6 +188,21 @@ $header_options = array(
 		),
 	),
 
+	'header_mobile_sticky' => array(
+		'type' => 'switch',
+		'label' => esc_html__( 'Sticky Mobile Header', 'jevelin' ),
+		'desc' => esc_html__( 'Enable or disable sticky mobile header', 'jevelin' ),
+		'value' => false,
+		'left-choice' => array(
+			'value' => false,
+			'label' => esc_html__('Off', 'jevelin'),
+		),
+		'right-choice' => array(
+			'value' => true,
+			'label' => esc_html__('On', 'jevelin'),
+		),
+	),
+
 	'header_elements' => array(
 		'type'  => 'checkboxes',
 		'value' => array(
@@ -181,14 +215,29 @@ $header_options = array(
 		'label' => esc_html__('Elements', 'gillion'),
 		'desc'  => esc_html__('Select header elements you want to see', 'gillion'),
 		'choices' => array(
-			'social' => esc_html__('Social Media', 'gillion'),
-			'social_mobile' => esc_html__('Social Media (mobile)', 'gillion'),
 			'search' => esc_html__('Search', 'gillion'),
-			'login' => esc_html__('Login/Register button (button in topbar)', 'gillion'),
-			'login_icon' => esc_html__('Login/Register button (icon next to navigation)', 'gillion'),
-			'sidemenu' => esc_html__('Side Menu', 'gillion'),
+			'login' => esc_html__('Login/register button (button in topbar)', 'gillion'),
+			'login_icon' => esc_html__('Login/tegister button (icon next to navigation)', 'gillion'),
+			'sidemenu' => esc_html__('Side menu', 'gillion'),
+			'social' => esc_html__('Social media (topbar)', 'gillion'),
+			'social_mobile' => esc_html__('Social media (mobile)', 'gillion'),
 		),
 		'inline' => false,
+	),
+
+	'header_elements_social_share' => array(
+		'type' => 'switch',
+		'label' => esc_html__( 'Elements - Social Media (header)', 'gillion' ),
+		'desc' => esc_html__( 'Enable or disable social media icons in header', 'gillion' ),
+		'value' => 'on',
+		'left-choice' => array(
+			'value' => 'off',
+			'label' => esc_html__('Off', 'gillion'),
+		),
+		'right-choice' => array(
+			'value' => 'on',
+			'label' => esc_html__('On', 'gillion'),
+		),
 	),
 
 	'header_elements_shop' => array(
@@ -230,37 +279,35 @@ $header_options = array(
 	),
 
 
-	'title_topbar' => array(
-		'type'  => 'html-full',
+
+
+		'title_header_logo_settings' => array( 'type'  => 'html-full', 'value' => '', 'label' => false, 'html'  =>
+			'<h3 class="hndle sh-custom-group-divder"><span>'.
+				esc_html__('Header Logo Section (for some header styles) and Mobile Header', 'gillion')
+			.'</span></h3>',
+		),
+
+	'header_logo_background_color' => array(
+		'type'  => 'rgba-color-picker',
 		'value' => '',
-		'label' => false,
-		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Top Bar Settings', 'gillion').'</span></h3>',
+		'label' => esc_html__('Background Color', 'gillion'),
+		'desc'  => esc_html__('Select logo section background color', 'gillion'),
 	),
 
-	'topbar_status' => array(
-		'type' => 'switch',
-		'label' => esc_html__( 'Topbar', 'gillion' ),
-		'desc' => esc_html__( 'Enable or disable header topbar', 'gillion' ),
-		'value' => 'on',
-		'left-choice' => array(
-			'value' => 'off',
-			'label' => esc_html__('Off', 'gillion'),
+	'header_logo_background_image' => array(
+		'label' => esc_html__( 'Background Image', 'gillion' ),
+		'desc'  => esc_html__( 'Upload a logo section background image', 'gillion' ),
+		'type'  => 'upload'
+	),
+
+
+
+
+		'title_header_animations' => array( 'type'  => 'html-full', 'value' => '', 'label' => false, 'html'  =>
+			'<h3 class="hndle sh-custom-group-divder"><span>'.
+				esc_html__('Header Animations', 'gillion')
+			.'</span></h3>',
 		),
-		'right-choice' => array(
-			'value' => 'on',
-			'label' => esc_html__('On', 'gillion'),
-		),
-	),
-
-
-	'title_header_animations' => array(
-		'type'  => 'html-full',
-		'label' => false,
-		'html'  => '
-		<h3 class="hndle sh-custom-group-divder">
-			<span>'.esc_html__('Header Animations', 'gillion').'</span>
-		</h3>',
-	),
 
 	'header_animation_dropdown_delay' => array(
 		'type'  => 'slider',

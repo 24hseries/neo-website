@@ -290,6 +290,7 @@ if (class_exists('FW_Ext_Mega_Menu_Walker')) {
 
 
 		protected function dynamic_elements( $id = '', $type = '' ) {
+			$totalpages = 0;
 			if( $id > 0 && $type != 'none' ) :
 				$get_dynamic_elements = fw_ext_mega_menu_get_db_item_option( $id, 'row/dynamic_elements' );
 				if( isset( $get_dynamic_elements ) && $get_dynamic_elements && $get_dynamic_elements != 'none' ) :

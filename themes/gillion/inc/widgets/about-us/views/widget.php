@@ -1,4 +1,6 @@
-<?php if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); } ?>
+<?php if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); }
+$image_size = ( isset( $atts['image_size'] ) && $atts['image_size'] ) ? $atts['image_size'] : 'large';
+?>
 
 <?php echo wp_kses_post( $before_widget ); ?>
 
@@ -13,7 +15,7 @@
 	?>
 
 		<a href="<?php echo esc_url( $url ); ?>">
-			<img src="<?php echo gillion_get_small_thumb( $atts['image']['attachment_id'], 'large' ); ?>" alt="<?php echo esc_attr( $atts['title'] ); ?>" />
+			<img src="<?php echo gillion_get_small_thumb( $atts['image']['attachment_id'], esc_attr( $image_size ) ); ?>" alt="<?php echo esc_attr( $atts['title'] ); ?>" />
 		</a>
 
 	<?php endif; ?>
@@ -55,12 +57,6 @@
     if( $atts['social_facebook'] ) :
         $o.= '<a href="'.esc_url( ltrim( $atts['social_facebook'] ) ).'" '.$new_tab.' class="sh-widget-socialv2-item social-media-facebook">
             <i class="fa fa-facebook"></i>
-        </a>';
-    endif;
-
-    if( $atts['social_googleplus'] ) :
-        $o.= '<a href="'.esc_url( ltrim( $atts['social_googleplus'] ) ).'" '.$new_tab.' class="sh-widget-socialv2-item social-media-gplus">
-            <i class="fa fa-google-plus"></i>
         </a>';
     endif;
 

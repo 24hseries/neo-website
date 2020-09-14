@@ -37,7 +37,7 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 
 			<?php elseif( get_the_post_thumbnail() || (is_array($gallery) && count($gallery) > 0)  ) : ?>
 				<div class="post-gallery">
-					<div class="post-gallery-pagination sh-heading-font">1/<?php echo count( $gallery ); ?></div>
+					<div class="post-gallery-pagination sh-heading-font">1/<?php echo ( is_array( $gallery ) && count( $gallery ) ) ? count( $gallery ) : 0; ?></div>
 					<div class="post-gallery-list">
 						<?php
 							if( is_array($gallery) && count($gallery) > 0 ) : $i= 0;
@@ -150,7 +150,7 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 
 						<?php echo gillion_post_review( get_the_ID() ); ?>
 						<?php if( get_the_post_thumbnail() || (is_array($gallery) && count($gallery) > 0)  ) : ?>
-							<div class="post-gallery-pagination post-gallery-pagination-inside-cover sh-heading-font">1/<?php echo count($gallery); ?></div>
+							<div class="post-gallery-pagination post-gallery-pagination-inside-cover sh-heading-font">1/<?php echo ( is_array( $gallery ) && count( $gallery ) ) ? count( $gallery ) : 0; ?></div>
 						<?php endif; ?>
 						<div class="post-cover-container">
 
@@ -195,7 +195,7 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 					$gallery = gillion_post_option( get_the_ID(), 'post-gallery' );
 					if( get_the_post_thumbnail() || (is_array($gallery) && count($gallery) > 0)  ) : ?>
 						<div class="post-gallery">
-							<div class="post-gallery-pagination sh-heading-font">1/<?php echo count( $gallery ); ?></div>
+							<div class="post-gallery-pagination sh-heading-font">1/<?php echo ( is_array( $gallery ) && count( $gallery ) ) ? count( $gallery ) : 0; ?></div>
 							<div class="post-gallery-list">
 								<?php
 									if( is_array($gallery) && count($gallery) > 0 ) :
@@ -252,7 +252,7 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 				$gallery = gillion_post_option( get_the_ID(), 'post-gallery' );
 				if( get_the_post_thumbnail() || (is_array($gallery) && count($gallery) > 0)  ) : ?>
 					<div class="post-gallery">
-						<div class="post-gallery-pagination sh-heading-font">1/<?php echo count( $gallery ); ?></div>
+						<div class="post-gallery-pagination sh-heading-font">1/<?php echo ( is_array( $gallery ) && count( $gallery ) ) ? count( $gallery ) : 0; ?></div>
 						<div class="post-gallery-list">
 							<?php
 								if( is_array($gallery) && count($gallery) > 0 ) :
@@ -322,7 +322,7 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 			$gallery = gillion_post_option( get_the_ID(), 'post-gallery' );
 			if( get_the_post_thumbnail() || (is_array($gallery) && count($gallery) > 0)  ) : ?>
 				<div class="post-gallery">
-					<div class="post-gallery-pagination sh-heading-font">1/<?php echo count( $gallery ); ?></div>
+					<div class="post-gallery-pagination sh-heading-font">1/<?php echo ( is_array( $gallery ) && count( $gallery ) ) ? count( $gallery ) : 0; ?></div>
 					<div class="post-gallery-list">
 						<?php
 							if( is_array($gallery) && count($gallery) > 0 ) : $i= 0;
@@ -380,7 +380,7 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 	$gallery = gillion_post_option( get_the_ID(), 'post-gallery' );
 	if( get_the_post_thumbnail() || (is_array($gallery) && count($gallery) > 0)  ) : ?>
 		<div class="post-gallery">
-			<div class="post-gallery-pagination sh-heading-font">1/<?php echo count( $gallery ); ?></div>
+			<div class="post-gallery-pagination sh-heading-font">1/<?php echo ( is_array( $gallery ) && count( $gallery ) ) ? count( $gallery ) : 0; ?></div>
 			<div class="post-gallery-list">
 				<?php
 					if( is_array($gallery) && count($gallery) > 0 ) : $i= 0;
@@ -390,7 +390,7 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 								<div class="sh-ratio">
 									<div class="sh-ratio-container" style="padding-bottom: 56%;">
 										<div class="sh-ratio-content" style="background-image: url( <?php echo gillion_get_image_size($image, 'gillion-landscape-large'); ?>);">
-											<?php echo gillion_ligtbox( gillion_get_image_size($image, 'full'), get_the_ID() ); ?>
+											<?php echo gillion_ligtbox( gillion_get_image_size( $image, 'full' ), get_the_ID() ); ?>
 										</div>
 									</div>
 								</div>

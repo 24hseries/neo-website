@@ -1,57 +1,54 @@
-<?php if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); } ?>
+<?php if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); }
+// Functions
+if( ! function_exists( 'gillion_facebook_followers' ) ) :
+	function gillion_facebook_followers( $fbid = '', $app_id = '', $app_secret = '' ) {
+		if( $fbid && $app_id && $app_secret ) :
 
-<?php echo wp_kses_post( $before_widget ); ?>
+			$url = 'https://graph.facebook.com/'. $fbid . '?fields=fan_count&access_token='. $app_id . '|' . $app_secret;
+			$instagram_data = json_decode( wp_remote_retrieve_body( wp_remote_get( $url ) ) );
+			$followers = isset( $instagram_data->fan_count ) ? $instagram_data->fan_count : false;
 
-<?php
-	if( $atts['title'] ) :
-		echo '<div class="sh-widget-title-styling"><h3 class="widget-title">'.esc_attr( $atts['title'] ).'</h3></div>';
-	endif;
-?>
+			if( is_numeric( $followers ) ) :
+				return $followers;
+			else :
+				$followers = false;
+			endif;
+		endif;
+	}
+endif;
 
-<?php
+if( ! function_exists( 'gillion_twitter_followers' ) ) :
+function gillion_twitter_followers( $twitter_username = ''/*, $twitter_consumer_key = '', $twitter_consumer_secret = '', $twitter_access_token = '', $twitter_access_token_secret = ''*/ ) {
+		$data = file_get_contents( 'https://cdn.syndication.twimg.com/widgets/followbutton/info.json?screen_names='.$twitter_username );
+		$parsed =  json_decode( $data, true );
+		$followers = ( isset( $parsed[0]['followers_count'] ) ) ? $parsed[0]['followers_count'] : false;
+		return $followers;
+	}
+endif;
 
-function gillion_instagram_followers( $client_id = '', $access_token = '' ) {
-	$cache_name = esc_attr( 'instagram_x_'.$client_id.'_'.$access_token );
-	$client_id = (( !$client_id && $access_token )) ? (int)$access_token : $client_id;
+if( ! function_exists( 'gillion_instagram_followers' ) ) :
+	function gillion_instagram_followers( $client_id = '', $access_token = '' ) {
+		$client_id = (( !$client_id && $access_token )) ? (int)$access_token : $client_id;
 
-	if( $client_id && $access_token ) :
-		if ( false === ( $instagram_follows = get_transient( esc_attr( $cache_name ) ) ) ) {
+		if( $client_id && $access_token ) :
 			$instagram = "https://api.instagram.com/v1/users/$client_id/?access_token=$access_token";
-			$instagram_follows = json_decode( wp_remote_retrieve_body( wp_remote_get( $instagram ) ) )->data->counts->followed_by;
-			set_transient( esc_attr( $cache_name ), $instagram_follows, 8 * 60 * 60 );
-		}
+			$instagram_data = json_decode( wp_remote_retrieve_body( wp_remote_get( $instagram ) ) );
+			$instagram_follows = isset( $instagram_data->data->counts->followed_by ) ? $instagram_data->data->counts->followed_by : '';
 
-		if( count($instagram_follows) ) :
-			return $instagram_follows;
-		else :
-			$followers = false;
+			if( is_numeric( $instagram_follows ) ) :
+				return $instagram_follows;
+			else :
+				$followers = false;
+			endif;
 		endif;
-	endif;
-}
+	}
+endif;
 
-function gillion_facebook_followers( $fbid = '', $app_id = '', $app_secret = '' ) {
-	$cache_name = esc_attr( 'facebook_x_'.$fbid.'_'.$app_id.'_'.$app_secret );
-	if( $fbid && $app_id && $app_secret ) :
+if( ! function_exists( 'gillion_youtube_followers' ) ) :
+	function gillion_youtube_followers( $youtube_channel_id = '', $google_api_key = '' ) {
+		$cache_name = esc_attr( 'youtube_x_'.$youtube_channel_id.'_'.$google_api_key );
+		if( $youtube_channel_id && $google_api_key ) :
 
-		if ( false === ( $followers = get_transient( esc_attr( $cache_name ) ) ) ) {
-			$url = 'https://graph.facebook.com/v2.7/'. $fbid . '?fields=fan_count&access_token='. $app_id . '|' . $app_secret;
-			$followers = json_decode( wp_remote_retrieve_body( wp_remote_get( $url ) ) )->fan_count;
-			set_transient( esc_attr( $cache_name ), $followers, 8 * 60 * 60 );
-		}
-
-		if( is_numeric( $followers ) ) :
-			return $followers;
-		else :
-			$followers = false;
-		endif;
-	endif;
-}
-
-function gillion_youtube_followers( $youtube_channel_id = '', $google_api_key = '' ) {
-	$cache_name = esc_attr( 'youtube_x_'.$youtube_channel_id.'_'.$google_api_key );
-	if( $youtube_channel_id && $google_api_key ) :
-
-		if ( false === ( $followers = get_transient( esc_attr( $cache_name ) ) ) ) {
 			$url = "https://www.googleapis.com/youtube/v3/channels?part=statistics&id=".$youtube_channel_id."&key=".$google_api_key;
 			$followers = json_decode( wp_remote_retrieve_body( wp_remote_get( $url ) ) );
 
@@ -61,80 +58,178 @@ function gillion_youtube_followers( $youtube_channel_id = '', $google_api_key = 
 				$followers = false;
 			endif;
 
-			set_transient( esc_attr( $cache_name ), $followers, 8 * 60 * 60 );
-		}
-
-		if( is_numeric( $followers ) ) :
-			return $followers;
-		endif;
-	endif;
-}
-
-function gillion_googleplus_followers( $googleplus_id = '', $google_api_key = '' ) {
-	$cache_name = esc_attr( 'gplus_xz_'.$googleplus_id.'_'.$google_api_key );
-	if( $googleplus_id && $google_api_key ) :
-
-		if ( false === ( $followers = get_transient( esc_attr( $cache_name ) ) ) ) {
-			$url = "https://www.googleapis.com/plus/v1/people/".$googleplus_id."?key=".$google_api_key;
-			$followers = json_decode( wp_remote_retrieve_body( wp_remote_get( $url ) ) );
-
-			if( isset( $followers->circledByCount ) ) :
-				$followers = intval( $followers->circledByCount );
-			else :
-				$followers = false;
+			if( is_numeric( $followers ) ) :
+				return $followers;
 			endif;
+		endif;
+	}
+endif;
 
-			var_dump( $followers );
 
-			set_transient( esc_attr( $cache_name ), $followers, 8 * 60 * 60 );
-		}
+// Variables
+$title = ( isset( $atts['title'] ) && $atts['title'] ) ? $atts['title'] : '';
+$style = ( isset( $atts['style'] ) && $atts['style'] ) ? $atts['style'] : 'style1';
+$demo_mode = ( isset( $atts['demo_mode'] ) ) ? $atts['demo_mode'] : '';
 
-		if( is_numeric( $followers ) ) :
-			return $followers;
+$facebook_username = ( isset( $atts['facebook_username'] ) ) ? $atts['facebook_username'] : '';
+$facebook_app_id = ( isset( $atts['facebook_app_id'] ) ) ? $atts['facebook_app_id'] : '';
+$facebook_app_secret = ( isset( $atts['facebook_app_secret'] ) ) ? $atts['facebook_app_secret'] : '';
+$facebook_key = 'facebook-'.$facebook_app_id.'-'.$facebook_app_secret;
+
+$twitter_username = ( isset( $atts['twitter_username'] ) ) ? $atts['twitter_username'] : '';
+$twitter_consumer_key = ( isset( $atts['twitter_consumer_key'] ) ) ? $atts['twitter_consumer_key'] : '';
+$twitter_consumer_secret = ( isset( $atts['twitter_consumer_secret'] ) ) ? $atts['twitter_consumer_secret'] : '';
+$twitter_access_token = ( isset( $atts['twitter_access_token'] ) ) ? $atts['twitter_access_token'] : '';
+$twitter_access_token_secret = ( isset( $atts['twitter_access_token_secret'] ) ) ? $atts['twitter_access_token_secret'] : '';
+$twitter_key = 'twitter-'.$twitter_username;
+
+$instagram_username = ( isset( $atts['instagram_username'] ) ) ? $atts['instagram_username'] : '';
+$instagram_access_token = ( isset( $atts['instagram_access_token'] ) ) ? $atts['instagram_access_token'] : '';
+$instagram_client_id = ( isset( $atts['instagram_client_id'] ) ) ? $atts['instagram_client_id'] : '';
+$instagram_key = 'instagram-'.$instagram_access_token;
+
+$youtube_channel_id = ( isset( $atts['youtube_channel_id'] ) ) ? $atts['youtube_channel_id'] : '';
+$youtube_api_key = ( isset( $atts['youtube_api_key'] ) ) ? $atts['youtube_api_key'] : '';
+$youtube_key = 'youtube-'.$youtube_channel_id.'-'.$youtube_api_key;
+
+
+// Start
+echo wp_kses_post( $before_widget );
+if( $title ) :
+	echo '<div class="sh-widget-title-styling"><h3 class="widget-title">'.esc_attr( $title ).'</h3></div>';
+endif;
+
+
+// Check if demo mode
+if( $demo_mode == false ) :
+
+	// Get cached social counter variables & remove old
+	$social_global = get_option( 'gillion_widget_social_counter' );
+
+	// Cleanup
+	if( is_array( $social_global ) ) :
+		foreach( $social_global as $key => $item ) :
+			if( isset( $item['created_at'] ) && isset( $item['count'] ) ) :
+
+				if( time() - $item['created_at'] > ( 8 * 60 * 60 ) ) :
+					unset( $social_global[$key] );
+				endif;
+
+			else :
+				unset( $social_global[$key] );
+			endif;
+		endforeach;
+	else :
+		$social_global = array();
+	endif;
+
+
+	/*
+	** Get Social Networks likes/followers
+	*/
+	// Facebook
+	if( $facebook_username && $facebook_app_id && $facebook_app_secret ) :
+		if( isset( $social_global[$facebook_key] ) && isset( $social_global[$facebook_key]['count'] ) ) :
+			$facebook = $social_global[$facebook_key]['count'];
+		else :
+			$facebook = gillion_facebook_followers( $facebook_username, $facebook_app_id, $facebook_app_secret );
+			if( is_numeric( $facebook ) ) :
+				$social_global[$facebook_key] = array(
+					'created_at' => time(),
+					'count' => $facebook,
+				);
+			endif;
 		endif;
 	endif;
-}
-?>
 
-<?php
-if( $atts['demo_mode'] != true ) :
-	$facebook = ( $atts['facebook_username'] && $atts['facebook_app_id'] && $atts['facebook_app_secret'] ) ? gillion_facebook_followers( $atts['facebook_username'], $atts['facebook_app_id'], $atts['facebook_app_secret'] ) : false;
-	$youtube = ( $atts['youtube_channel_id'] && $atts['youtube_api_key'] ) ? gillion_youtube_followers( $atts['youtube_channel_id'], $atts['youtube_api_key'] ) : false;
-	$googleplus = ( $atts['googleplus_id'] && $atts['googleplus_api_key'] ) ? gillion_googleplus_followers( $atts['googleplus_id'], $atts['googleplus_api_key'] ) : false;
-	$instagram = ( $atts['instagram_access_token'] ) ? gillion_instagram_followers( $atts['instagram_client_id'], $atts['instagram_access_token'] ) : false;
+
+	// Twitter
+	if( $twitter_username /*&& $twitter_consumer_key && $twitter_consumer_secret && $twitter_access_token && $twitter_access_token_secret*/ ) :
+		if( isset( $social_global[$twitter_key] ) && isset( $social_global[$twitter_key]['count'] ) ) :
+			$twitter = $social_global[$twitter_key]['count'];
+		else :
+			$twitter = gillion_twitter_followers( $twitter_username/*, $twitter_consumer_key, $twitter_consumer_secret, $twitter_access_token, $twitter_access_token_secret*/ );
+			if( is_numeric( $twitter ) ) :
+				$social_global[$twitter_key] = array(
+					'created_at' => time(),
+					'count' => $twitter,
+				);
+			endif;
+		endif;
+	endif;
+
+
+	// Instagram
+	if( $instagram_access_token ) :
+		if( isset( $social_global[$instagram_key] ) && isset( $social_global[$instagram_key]['count'] ) ) :
+			$instagram = $social_global[$instagram_key]['count'];
+		else :
+			$instagram = gillion_instagram_followers( $instagram_client_id, $instagram_access_token );
+			if( is_numeric( $instagram ) ) :
+				$social_global[$instagram_key] = array(
+					'created_at' => time(),
+					'count' => $instagram,
+				);
+			endif;
+		endif;
+	endif;
+
+
+	// Youtube
+	if( $youtube_channel_id && $youtube_api_key ) :
+		if( isset( $social_global[$youtube_key] ) && isset( $social_global[$youtube_key]['count'] ) ) :
+			$youtube = $social_global[$youtube_key]['count'];
+		else :
+			$youtube = gillion_youtube_followers( $youtube_channel_id, $youtube_api_key );
+			if( is_numeric( $youtube ) ) :
+				$social_global[$youtube_key] = array(
+					'created_at' => time(),
+					'count' => $youtube,
+				);
+			endif;
+		endif;
+	endif;
+
+
+	// Update options
+	update_option( 'gillion_widget_social_counter', $social_global );
+
 else :
-	$facebook = 1243;
-	$youtube = 256;
-	$googleplus = 176;
-	$instagram = 365;
+	$facebook = 1423;
+	$twitter = 727;
+	$instagram = 386;
+
+	$content_width = gillion_option( 'content_width', 1200 );
+	if( $content_width >= 1200 ) :
+		$youtube = 284;
+	endif;
 endif;
-$style = ( isset( $atts['style'] ) && $atts['style'] ) ? $atts['style'] : 'style1';
+
 
 
 $items = array();
-if( is_numeric( $facebook ) ) :
+if( isset( $facebook ) && is_numeric( $facebook ) ) :
 	$items[] = array(
 		'id' => 'facebook',
 		'title' => esc_html__( 'Like', 'gillion' ),
-		'link' => 'https://www.facebook.com/'.$atts['facebook_username'].'/',
+		'link' => 'https://facebook.com/'.$facebook_username.'/',
 		'icon' => 'fa fa-facebook',
 		'count' => $facebook,
 	);
 endif;
 
-if( is_numeric( $googleplus ) ) :
-	$link = ( $atts['googleplus_id'] ) ? 'https://plus.google.com/u/0/'.esc_attr( $atts['googleplus_id'] ).'/' : 'https://plus.google.com';
+if( isset( $twitter ) && is_numeric( $twitter ) ) :
 	$items[] = array(
-		'id' => 'gplus',
-		'title' => esc_html__( 'Subscribe', 'gillion' ),
-		'link' => $link,
-		'icon' => 'fa fa-google-plus',
-		'count' => $googleplus,
+		'id' => 'twitter',
+		'title' => esc_html__( 'Follow', 'gillion' ),
+		'link' => 'https://twitter.com/'.$twitter_username.'/',
+		'icon' => 'fa fa-twitter',
+		'count' => $twitter,
 	);
 endif;
 
-if( is_numeric( $instagram ) ) :
-	$link = ( $atts['instagram_username'] ) ? 'https://www.instagram.com/'.esc_attr( $atts['instagram_username'] ).'/' : 'https://www.instagram.com';
+if( isset( $instagram ) && is_numeric( $instagram ) ) :
+	$link = ( $instagram_username ) ? 'https://instagram.com/'.esc_attr( $instagram_username ).'/' : 'https://www.instagram.com';
 	$items[] = array(
 		'id' => 'instagram',
 		'title' => esc_html__( 'Follow', 'gillion' ),
@@ -144,8 +239,8 @@ if( is_numeric( $instagram ) ) :
 	);
 endif;
 
-if( is_numeric( $youtube ) ) :
-	$link = ( $atts['youtube_channel_id'] ) ? 'https://www.youtube.com/channel/'.esc_attr( $atts['youtube_channel_id'] ).'/' : 'https://www.youtube.com';
+if( isset( $youtube ) && is_numeric( $youtube ) ) :
+	$link = ( $youtube_channel_id ) ? 'https://youtube.com/channel/'.esc_attr( $youtube_channel_id ).'/' : 'https://www.youtube.com';
 	$items[] = array(
 		'id' => 'youtube',
 		'title' => esc_html__( 'Subscribe', 'gillion' ),
@@ -154,9 +249,15 @@ if( is_numeric( $youtube ) ) :
 		'count' => $youtube,
 	);
 endif;
+
+$columns = 3;
+if( is_array( $items ) && count( $items ) >=4 ) :
+	$columns = 4;
+endif;
 ?>
 
-<div class="sh-widget-connected-list sh-widget-connected-<?php echo esc_attr( $style ); ?>">
+
+<div class="sh-widget-connected-list sh-widget-connected-columns-<?php echo esc_attr( $columns ); ?> sh-widget-connected-<?php echo esc_attr( $style ); ?>">
 	<?php foreach( $items as $item ) : ?>
 		<?php if( is_numeric( $item['count'] ) ) : ?>
 			<?php if( $style == 'style1' ) : ?>

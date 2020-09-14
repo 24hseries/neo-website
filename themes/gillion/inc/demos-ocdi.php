@@ -7,7 +7,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Blog Styles Bundle',
-            'categories'                 => array( 'Basic' ),
+            'categories'                 => array( 'Basic', 'Bundle' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/blog_style_bundle/blog_style_bundle.xml',
             'import_preview_image_url'   => 'http://api.shufflehound.com/gillion/files/blog_style_bundle.jpg',
             'preview_url'                => 'https://gillion.shufflehound.com/blog-style/masonry-style/',
@@ -15,7 +15,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Features Bundle',
-            'categories'                 => array( 'Basic' ),
+            'categories'                 => array( 'Basic', 'Bundle' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/features_bundle/features_bundle.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/carousel_slider/carousel_slider_widgets.wie',
             'import_preview_image_url'   => 'http://api.shufflehound.com/gillion/files/features_bundle.jpg',
@@ -24,7 +24,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Basic Bundle',
-            'categories'                 => array( 'Basic', 'Shop' ),
+            'categories'                 => array( 'Basic', 'Bundle' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/basic/basic_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/basic/basic_widgets.wie',
             'import_json'               => array(
@@ -145,7 +145,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Tech',
-            'categories'                 => array( 'Tech' ),
+            'categories'                 => array( 'Industries' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/tech/tech_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/tech/tech_widgets.wie',
             'import_json'               => array(
@@ -160,7 +160,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Foodie',
-            'categories'                 => array( 'Foodie' ),
+            'categories'                 => array( 'Industries' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/foodie/foodie_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/foodie/foodie_widgets.wie',
             'import_json'               => array(
@@ -175,7 +175,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Personal',
-            'categories'                 => array( 'Personal' ),
+            'categories'                 => array( 'Industries' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/personal/personal_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/personal/personal_widgets.wie',
             'import_json'               => array(
@@ -190,7 +190,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Clean',
-            'categories'                 => array( 'Clean' ),
+            'categories'                 => array( 'Basic' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/clean/clean_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/clean/clean_widgets.wie',
             'import_json'               => array(
@@ -205,7 +205,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Fashion',
-            'categories'                 => array( 'Fashion' ),
+            'categories'                 => array( 'Industries' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/fashion/fashion_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/fashion/fashion_widgets.wie',
             'import_json'               => array(
@@ -220,7 +220,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Travel',
-            'categories'                 => array( 'Travel' ),
+            'categories'                 => array( 'Industries' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/travel/travel_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/travel/travel_widgets.wie',
             'import_json'               => array(
@@ -235,7 +235,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Gizmo News',
-            'categories'                 => array( 'Tech', 'News' ),
+            'categories'                 => array( 'Industries' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/gizmo-news/gizmo_news_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/gizmo-news/gizmo_news_widgets.wie',
             'import_json'               => array(
@@ -250,7 +250,7 @@ function gillion_ocdi_import_files() {
 
         array(
             'import_file_name'           => 'Shop',
-            'categories'                 => array( 'Shop' ),
+            'categories'                 => array( 'Industries' ),
             'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/shop/shop_content.xml',
             'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/shop/shop_widgets.wie',
             'import_json'               => array(
@@ -281,6 +281,41 @@ function gillion_ocdi_import_files() {
             ),
             'import_preview_image_url'   => 'http://api.shufflehound.com/gillion/files/magazine.jpg',
             'preview_url'                => 'https://gillion.shufflehound.com/magazine/',
+        ),
+
+        array(
+            'import_file_name'           => 'News',
+            'categories'                 => array( 'Magazine' ),
+            'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/news/news_content.xml',
+            'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/news/news_widgets.wie',
+            'import_json'               => array(
+                array(
+                    'file_url'    => 'http://api.shufflehound.com/gillion/ocdi_files/news/news_options.json',
+                    'option_name' => 'fw_theme_settings_options:gillion',
+                ),
+            ),
+            'import_revslider'           => array(
+                array(
+                    'file_url'    => 'http://api.shufflehound.com/gillion/ocdi_files/news/news_slider.zip',
+                ),
+            ),
+            'import_preview_image_url'   => 'http://api.shufflehound.com/gillion/files/news.jpg',
+            'preview_url'                => 'https://gillion.shufflehound.com/news/',
+        ),
+
+        array(
+            'import_file_name'           => 'Journal',
+            'categories'                 => array( 'Basic', 'Lifestyle' ),
+            'import_file_url'            => 'http://api.shufflehound.com/gillion/ocdi_files/journal/journal_content.xml',
+            'import_widget_file_url'     => 'http://api.shufflehound.com/gillion/ocdi_files/journal/journal_widgets.wie',
+            'import_json'               => array(
+                array(
+                    'file_url'    => 'http://api.shufflehound.com/gillion/ocdi_files/journal/journal_options.json',
+                    'option_name' => 'fw_theme_settings_options:gillion',
+                ),
+            ),
+            'import_preview_image_url'   => 'http://api.shufflehound.com/gillion/files/journal.jpg',
+            'preview_url'                => 'https://gillion.shufflehound.com/journal/',
         ),
 
     );
@@ -333,12 +368,13 @@ function gillion_ocdi_after_import_setup( $selected_import ) {
     // Reset theme settings
     $upload_dir = wp_upload_dir();
     if( isset( $upload_dir['basedir'] ) ) :
-        $file_path  = $upload_dir['basedir'] . '/jevelin-dynamic-styles.css';
+        $file_path  = $upload_dir['basedir'] . '/gillion-dynamic-styles.css';
         if( function_exists( 'wp_delete_file' ) ) :
             wp_delete_file( $file_path );
         endif;
     endif;
     delete_option( 'jevelin_settings_updated' );
+    delete_option( 'gillion_settings_updated' );
 }
 add_action( 'pt-ocdi/after_import', 'gillion_ocdi_after_import_setup' );
 
@@ -346,55 +382,63 @@ add_action( 'pt-ocdi/after_import', 'gillion_ocdi_after_import_setup' );
 /**
  * OCDI Demo Installation Method - Integration for Custom Frameworks and RevSlider
  */
-if ( ! function_exists( 'gillion_prefix_after_content_import_execution' ) ) {
-  function gillion_prefix_after_content_import_execution( $selected_import_files, $import_files, $selected_index ) {
+if( !function_exists( 'gillion_prefix_after_content_import_execution' ) ) {
+    function gillion_prefix_after_content_import_execution( $selected_import_files, $import_files, $selected_index ) {
 
-    $downloader = new OCDI\Downloader();
+        // Import theme settings
+        $downloader = new OCDI\Downloader();
+        if( !empty( $import_files[$selected_index]['import_json'] ) ) :
 
-    if( ! empty( $import_files[$selected_index]['import_json'] ) ) {
+            foreach( $import_files[$selected_index]['import_json'] as $index => $import ) :
+                $file_path = $downloader->download_file( $import['file_url'], 'demo-json-import-file-'. $index . '-'. date( 'Y-m-d__H-i-s' ) .'.json' );
+                $file_raw  = OCDI\Helpers::data_from_file( $file_path );
 
-      foreach( $import_files[$selected_index]['import_json'] as $index => $import ) {
-        $file_path = $downloader->download_file( $import['file_url'], 'demo-json-import-file-'. $index . '-'. date( 'Y-m-d__H-i-s' ) .'.json' );
-        $file_raw  = OCDI\Helpers::data_from_file( $file_path );
+                $media = wp_upload_dir();
+                if( isset( $media['baseurl'] ) ) :
+                    $url = $media['baseurl'];
+                    $url = str_replace('/', '\/', $url);
+                    $url = str_replace('http:', '', $url);
+                    $url = str_replace('https:', '', $url);
+                    $file_raw = str_replace( '[SH-GILLION-DOMAIN-LINK]', $url, $file_raw );
+                    $file_raw = str_replace( '[SH-GILLION-DOMAIN-MEDIA]', $url, $file_raw );
+                endif;
 
-    	$media = wp_upload_dir();
-    	if( isset( $media['baseurl'] ) ) :
-    		$url = $media['baseurl'];
-    		$url = str_replace('/', '\/', $url);
-    		$url = str_replace('http:', '', $url);
-            $url = str_replace('https:', '', $url);
-    		$file_raw = str_replace( '[SH-GILLION-DOMAIN-LINK]', $url, $file_raw );
-    	endif;
-
-        update_option( $import['option_name'], json_decode( $file_raw, true ) );
-      }
-
-    } else if( ! empty( $import_files[$selected_index]['local_import_json'] ) ) {
-
-      foreach( $import_files[$selected_index]['local_import_json'] as $index => $import ) {
-        $file_path = $import['file_path'];
-        $file_raw  = OCDI\Helpers::data_from_file( $file_path );
-        update_option( $import['option_name'], json_decode( $file_raw, true ) );
-      }
-
-    }
-
-    $ocdi       = OCDI\OneClickDemoImport::get_instance();
-    $log_path   = $ocdi->get_log_file_path();
-
-    OCDI\Helpers::append_to_file( 'Custom Framework file loaded.', $log_path );
-
-
-    /* Revolution Slider */
-    if ( class_exists( 'RevSlider' ) ) :
-        if( !empty( $import_files[$selected_index]['import_revslider'] ) ) :
-            $slider = new RevSlider();
-            foreach( $import_files[$selected_index]['import_revslider'] as $index => $import ) :
-                $file_path = $downloader->download_file( $import['file_url'], 'demo-revslider-import-file-'. $index . '-'. date( 'Y-m-d__H-i-s' ) .'.zip' );
-                $slider->importSliderFromPost( true, true, $file_path );
+                update_option( $import['option_name'], json_decode( $file_raw, true ) );
             endforeach;
+
+        elseif( !empty( $import_files[$selected_index]['local_import_json'] ) ) :
+
+            foreach( $import_files[$selected_index]['local_import_json'] as $index => $import ) :
+                $file_path = $import['file_path'];
+                $file_raw  = OCDI\Helpers::data_from_file( $file_path );
+                update_option( $import['option_name'], json_decode( $file_raw, true ) );
+            endforeach;
+
         endif;
-   endif;
-  }
-  add_action('pt-ocdi/after_content_import_execution', 'gillion_prefix_after_content_import_execution', 3, 99 );
+
+        $ocdi       = OCDI\OneClickDemoImport::get_instance();
+        $log_path   = $ocdi->get_log_file_path();
+        OCDI\Helpers::append_to_file( 'Custom Framework file loaded.', $log_path );
+
+
+        // Revolution Slider
+        if( class_exists( 'RevSlider' ) ) :
+            if( !empty( $import_files[$selected_index]['import_revslider'] ) ) :
+                $slider = new RevSlider();
+                foreach( $import_files[$selected_index]['import_revslider'] as $index => $import ) :
+                    $file_path = $downloader->download_file( $import['file_url'], 'demo-revslider-import-file-'. $index . '-'. date( 'Y-m-d__H-i-s' ) .'.zip' );
+                    if( $file_path ) :
+                        $slider->importSliderFromPost( true, true, $file_path );
+                    endif;
+                endforeach;
+            endif;
+        endif;
+
+
+        // Run Unyson content migration to Redux (if needed)
+        if( gillion_framework() == 'redux' ) :
+            gillion_framework_migrate_redux( 'start', 1 );
+        endif;
+    }
+    add_action('pt-ocdi/after_content_import_execution', 'gillion_prefix_after_content_import_execution', 3, 99 );
 }

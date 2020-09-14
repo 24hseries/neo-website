@@ -14,19 +14,31 @@ if( !is_admin() && ( !defined('DOING_AJAX') || !DOING_AJAX ) ) :
 endif;
 
 
+// Check current framework
+if( gillion_framework() == 'redux' ) :
+	return false;
+endif;
+
+
+
 $options = array(
 	fw()->theme->get_options( 'general' ),
+	fw()->theme->get_options( 'content' ),
 	fw()->theme->get_options( 'styling' ),
 	fw()->theme->get_options( 'header' ),
-	fw()->theme->get_options( 'footer' ),
+	fw()->theme->get_options( 'topbar' ),
 	fw()->theme->get_options( 'titlebar' ),
+	fw()->theme->get_options( 'footer' ),
 	fw()->theme->get_options( 'social_media' ),
 	fw()->theme->get_options( 'blog' ),
-	fw()->theme->get_options( 'lightbox' ),
+	fw()->theme->get_options( 'post' ),
 	fw()->theme->get_options( 'woocommerce' ),
+	fw()->theme->get_options( 'amp' ),
+	fw()->theme->get_options( 'lightbox' ),
 	fw()->theme->get_options( 'page_loader' ),
 	fw()->theme->get_options( '404_page' ),
 	fw()->theme->get_options( 'ads' ),
 	fw()->theme->get_options( 'notice' ),
 	fw()->theme->get_options( 'custom_code' ),
+	fw()->theme->get_options( 'import_export' ),
 );

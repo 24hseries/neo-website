@@ -6,7 +6,7 @@ Element: Button
 class vcButton extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_button', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcButton extends WPBakeryShortCode {
                 'base' => 'vcg_button',
                 'description' => __('Simple button with simple options', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -111,6 +111,23 @@ class vcButton extends WPBakeryShortCode {
 
                     array(
             			'type' => 'dropdown',
+            			'heading' => __( 'Text Underline', 'gillion' ),
+            			'param_name' => 'underline',
+                        'value' => array(
+                            __( 'Disabled', 'gillion' ) => 'disabled',
+            				__( '1px', 'gillion' ) => '1px',
+            				__( '2px', 'gillion' ) => '2px',
+                            __( '3px', 'gillion' ) => '3px',
+                            __( '4px', 'gillion' ) => '4px',
+                            __( '5px', 'gillion' ) => '5px',
+            			),
+            			'std' => 'disabled',
+            			'description' => __( 'Choose text underline', 'gillion' ),
+                        //'group' => __( 'Styling', 'gillion' ),
+            		),
+
+                    array(
+            			'type' => 'dropdown',
             			'heading' => __( 'Text Transformation', 'gillion' ),
             			'param_name' => 'text_transform',
                         'value' => array(
@@ -147,6 +164,13 @@ class vcButton extends WPBakeryShortCode {
                         'value' => __( 'Upload Icon Image', 'gillion' ),
                         'type' => 'attach_image',
                         'admin_label' => false,
+                    ),
+
+                    array(
+                        'param_name' => 'padding',
+                        'heading' => __( 'Custom Padding', 'jevelin' ),
+                        'description' => __( 'Here you can set custom button padding (<b>top right bottom left</b>). For example: <b>5px 15px 5px 15px</b>', 'jevelin' ),
+                        'type' => 'textfield',
                     ),
 
                     array(
@@ -216,6 +240,7 @@ class vcButton extends WPBakeryShortCode {
         /* Get Values */
         $id = 'vcg-button-'.gillion_rand();
         $text = ( isset( $atts['text'] ) ) ? $atts['text'] : __( 'Text inside the button', 'gillion' );
+        $underline = ( isset( $atts['underline'] ) ) ? $atts['underline'] : 'disabled';
         $font_size = ( isset( $atts['font_size'] ) ) ? $atts['font_size'] : '';
         $icon_image = ( isset( $atts['icon_image'] ) ) ? $atts['icon_image'] : '';
         $font_size = ( is_numeric( $font_size ) ) ? $font_size.'px' : $font_size;
@@ -231,15 +256,20 @@ class vcButton extends WPBakeryShortCode {
         $background_color = ( isset( $atts['background_color'] ) ) ? $atts['background_color'] : '';
         $background_color2 = ( isset( $atts['background_color2'] ) ) ? $atts['background_color2'] : '';
         $background_color_hover = ( isset( $atts['background_color_hover'] ) ) ? $atts['background_color_hover'] : '';
-        $vc_css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
+        $padding = ( isset( $atts['padding'] ) ) ? $atts['padding'] : '';
+        $css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
 
 
         /* Set Classes and Styles */
-        $class = array(); $css = array();
-        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $vc_css, ' ' ), $this->settings['base'], $atts );
+        $class = array();
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
         $class[] = 'vcg-button-shape-'.$shape;
         $class[] = 'vcg-button-alignment-'.$alignment;
         $class[] = $id;
+
+        $css = [];
+        $css[] = ( $padding ) ? 'padding: '.$padding.'; line-height: normal' : '';
         $css[] = ( $font_weight ) ? 'font-weight: '.$font_weight : '';
         $css[] = ( $text_transform ) ? 'text-transform: '.$text_transform : '';
         $css[] = ( $text_shadow ) ? 'text-shadow: '.$text_shadow : '';
@@ -266,12 +296,22 @@ class vcButton extends WPBakeryShortCode {
                         }
                     </style>
                 <?php endif; ?>
+                <?php if( $underline != 'disabled' && $underline ) : ?>
+                    <style media="screen">
+                        .<?php echo esc_attr( $id ); ?> span {
+                            border-bottom: <?php echo $underline; ?> solid <?php echo $text_color ? $text_color : ''; ?> ;
+                        }
+                    </style>
+                <?php endif; ?>
+
 
                 <a href="<?php echo $link; ?>" class="vcg-button-container <?php echo implode( ' ', $class ); ?>" style="<?php echo implode( '; ', array_filter($css) ); ?>">
                     <?php if( $icon_image ) : ?>
                         <span class="vcg-button-icon-image" style="background-image: url(<?php echo gillion_image_by_id( $icon_image ); ?>);"></span>
                     <?php endif; ?>
-                    <?php echo esc_attr( $text ); ?>
+                    <span>
+                        <?php echo esc_attr( $text ); ?>
+                    </span>
                 </a>
             </div>
 

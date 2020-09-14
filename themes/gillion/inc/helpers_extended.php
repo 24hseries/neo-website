@@ -5,6 +5,29 @@ if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); }
  */
 
 
+ /**
+  * Check If Gutenberg is being used
+  */
+if ( ! function_exists( 'gillion_is_gutenberg_page' ) ) :
+    function gillion_is_gutenberg_page() {
+        if ( function_exists( 'is_gutenberg_page' ) && is_gutenberg_page() ) {
+            // The Gutenberg plugin is on.
+            return true;
+        }
+
+        if( function_exists( 'get_current_screen' ) ) :
+            $current_screen = get_current_screen();
+            if ( method_exists( $current_screen, 'is_block_editor' ) && $current_screen->is_block_editor() ) :
+                // Gutenberg page on 5+.
+                return true;
+            endif;
+        endif;
+
+        return false;
+    }
+endif;
+
+
 /**
  * Override toolbar margin
  */
@@ -599,17 +622,19 @@ if ( ! function_exists( 'gillion_nav_wrap_share' ) ) :
     endif;
 
 
-        return '
-        <li class="menu-item menu-item-has-children sh-nav-share sh-nav-special">
-        	<a href="#">
-        		<div>
-        			<i class="icon icon-share"></i>
-        		</div>
-        	</a>
-        	<ul class="sub-menu sh-nav-share-ul">
-        		'.$output.'
-        	</ul>
-        </li>';
+        if( gillion_option( 'header_elements_social_share', 'on' ) == 'on'  ) :
+            return '
+            <li class="menu-item menu-item-has-children sh-nav-share sh-nav-special">
+            	<a href="#">
+            		<div>
+            			<i class="icon icon-share"></i>
+            		</div>
+            	</a>
+            	<ul class="sub-menu sh-nav-share-ul">
+            		'.$output.'
+            	</ul>
+            </li>';
+        endif;
 
     }
 endif;
@@ -673,7 +698,7 @@ if ( ! function_exists( 'gillion_nav_wrap_readlater' ) ) :
                 endif;
             ?>
             <li class="menu-item menu-item-has-children sh-nav-readmore sh-nav-special">
-            	<a href="#">
+            	<a href="<?php echo home_url( '/' ); ?>?read-it-later">
             		<div>
             			<i class="ti-bookmark"></i>
             			<span class="sh-read-later-total"><?php echo count($read_later_posts); ?></span>
@@ -719,7 +744,7 @@ if ( ! function_exists( 'gillion_nav_wrap_readlater' ) ) :
                     		<?php endif; endforeach; ?>
                         <?php else : ?>
                             <li class="sh-read-later-item menu-item text-center">
-                                <a href="#">
+                                <a href="<?php echo home_url( '/' ); ?>?read-it-later">
                                     <?php esc_html_e( 'Login to add posts to your read later list', 'gillion' ); ?>
                                 </a>
                             </li>
@@ -789,33 +814,37 @@ if ( !function_exists( 'gillion_search_form' ) ) {
  */
 if ( !function_exists( 'gillion_logo_height' ) ) {
     function gillion_logo_height( $type = NULL ) {
-        $logo_sizes_val = gillion_option( 'header_logo_sizes' );
-        $logo_sizes_atts = gillion_get_picker( $logo_sizes_val );
+        if( gillion_framework() == 'redux' ) :
+            $standard_height = gillion_option( 'standard_height' );
+            $sticky_height = gillion_option( 'sticky_height' );
+            $responsive_height = gillion_option( 'responsive_height' );
+        else :
+            $logo_sizes_val = gillion_option( 'header_logo_sizes' );
+            $logo_sizes_atts = gillion_get_picker( $logo_sizes_val );
+            $standard_height = !empty( $logo_sizes_atts['standard_height'] ) ? $logo_sizes_atts['standard_height'] : 0;
+            $sticky_height = !empty( $logo_sizes_atts['sticky_height'] ) ? $logo_sizes_atts['sticky_height'] : 0;
+            $responsive_height = !empty( $logo_sizes_atts['responsive_height'] ) ? $logo_sizes_atts['responsive_height'] : 0;
+        endif;
+
 
         if( $type == 'responsive' ) :
-
-            if( isset($logo_sizes_atts['responsive_height']) && $logo_sizes_atts['responsive_height'] > 0 ) :
-                return intval( $logo_sizes_atts['responsive_height'] ).'px';
+            if( $responsive_height > 0 ) :
+                return intval( $responsive_height ).'px';
             else :
                 return 'auto';
             endif;
-
         elseif( $type == 'sticky' ) :
-
-            if( isset($logo_sizes_atts['sticky_height']) && $logo_sizes_atts['sticky_height'] > 0 ) :
-                return intval( $logo_sizes_atts['sticky_height'] ).'px';
+            if( $sticky_height > 0 ) :
+                return intval( $sticky_height ).'px';
             else :
                 return 'auto';
             endif;
-
         else :
-
-            if( isset($logo_sizes_atts['standard_height']) && $logo_sizes_atts['standard_height'] > 0 ) :
-                return intval( $logo_sizes_atts['standard_height'] ).'px';
+            if( $standard_height > 0 ) :
+                return intval( $standard_height ).'px';
             else :
                 return 'auto';
             endif;
-
         endif;
     }
 }
@@ -1078,7 +1107,7 @@ if ( !function_exists( 'gillion_breadcrumbs' ) ) {
         } // Custom Taxonomy
         elseif ( is_archive() ) {
             // get the name of the taxonomy
-            $custom_tax_name = get_queried_object()->name;
+            $custom_tax_name = !empty( get_queried_object()->label ) ? get_queried_object()->label : '';
             // Add markup for taxonomy
             $html .= '<span class="item-current item-archive"><span class="bread-current bread-archive">' . esc_attr($custom_tax_name) . '</span></span>';
         } // Search
@@ -1089,7 +1118,14 @@ if ( !function_exists( 'gillion_breadcrumbs' ) ) {
         elseif ( is_404() ) {
             // Add 404 markup
             $html .= '<span>' . esc_html__( 'Error 404', 'gillion' ) . '</span>';
+        } elseif( is_home() && isset( $_GET['read-it-later'] ) ) {
+            // Add read later markup
+            $html .= '<span>' . esc_html__( 'Read It Later', 'gillion' ) . '</span>';
+        } else {
+            $html .= '<span class="item-current"><span class="bread-current">' . esc_attr( get_the_title( gillion_page_id() ) ) . '</span></span>';
         }
+
+
         // Close breadcrumb container
         $html .= '</div>';
         apply_filters( 'ct_ignite_breadcrumbs_filter', $html );
@@ -1098,418 +1134,15 @@ if ( !function_exists( 'gillion_breadcrumbs' ) ) {
 }
 
 
-/**
- * Admin panel - load styles and scripts in theme options
- */
-if( !function_exists('gillion_admin_enqueue_styles') && is_admin() && isset( $_GET['page'] ) && $_GET['page'] == 'fw-settings' ) :
 
-    function gillion_admin_enqueue_styles() {
-        wp_enqueue_style( 'gillion-theme-options', get_template_directory_uri() . '/css/admin/theme-options.css' );
-        wp_enqueue_script( 'gillion-jquery-cookie', get_template_directory_uri() . '/js/plugins/jquery.cookie.js', array( 'jquery' ) );
-        wp_enqueue_script( 'gillion-theme-options', get_template_directory_uri() . '/js/admin/theme-options.js', array( 'jquery' ) );
-    }
-    add_action( 'admin_enqueue_scripts', 'gillion_admin_enqueue_styles' );
 
-endif;
 
-
-/**
- * Admin panel - load custom styles for revolution slider plugin
- */
-if( !function_exists('gillion_admin_enqueue_styles_revslider') && is_admin() && isset( $_GET['page'] ) && $_GET['page'] == 'revslider' ) :
-
-    function gillion_admin_enqueue_styles_revslider() {
-        wp_enqueue_style( 'gillion-theme-options', get_template_directory_uri() . '/css/admin/revslider.css' );
-    }
-    add_action( 'admin_enqueue_scripts', 'gillion_admin_enqueue_styles_revslider' );
-
-endif;
-
-
-/**
- * Admin panel - load styles in posts
- */
-global $pagenow;
-if( !function_exists('gillion_admin_enqueue_styles') && is_admin() &&
-( ( isset( $_GET['post'] ) && $_GET['post'] > 0 ) || ( isset( $_GET['post_id'] ) && $_GET['post_id'] > 0 ) || ( $pagenow == 'post-new.php' && isset( $_GET['post_type'] ) && $_GET['post_type'] == 'page' ) ) ) :
-
-    function gillion_admin_enqueue_styles() {
-        wp_enqueue_style( 'gillion-theme-options', get_template_directory_uri() . '/css/admin/theme-options-editor.css' );
-        wp_enqueue_style( 'gillion-theme-vc', get_template_directory_uri() . '/css/admin/vc.css' );
-        wp_enqueue_script( 'gillion-theme-options', get_template_directory_uri() . '/js/admin/vc.js', array( 'jquery' ) );
-    }
-    add_action( 'admin_enqueue_scripts', 'gillion_admin_enqueue_styles' );
-
-endif;
-
-
-/**
- * Admin panel - load icons
- */
-if ( ! function_exists( 'gillion_admin_styling' ) ) :
-    function gillion_load_custom_wp_admin_style() {
-        wp_enqueue_style( 'gillion-simple-icons', get_template_directory_uri() . '/css/plugins/simple-line-icons.css', false, '1.0.0' );
-        wp_enqueue_style( 'gillion-themify-icons', get_template_directory_uri() . '/css/plugins/themify-icons.css', false, '1.0.0' );
-        wp_enqueue_style( 'gillion-pixeden-icons', get_template_directory_uri() . '/css/plugins/pe-icon-7-stroke.css', false, '1.0.0' );
-    }
-    add_action( 'admin_enqueue_scripts', 'gillion_load_custom_wp_admin_style' );
-endif;
-
-
-/**
- * Admin panel - Customizer Styling
- */
-function gillion_customizer_styles() { ?>
-	<style>
-        .fw-backend-option {
-            opacity: 1!important;
-        }
-
-        .customize-control h3.sh-custom-group-divder {
-            font-size: 24px!important;
-            margin-bottom: 0px!important;
-            line-height: 1.1!important;
-        }
-
-        <?php /* Fix for Unyson Framework 2.7.9 color picker issue */
-        if( is_admin() && defined( 'FW' ) && defined('WP_PLUGIN_DIR') ) :
-            $unyson = get_plugin_data( WP_PLUGIN_DIR. '/unyson/unyson.php' );
-            if( isset( $unyson['Version'] ) && $unyson['Version'] == '2.7.9' ) : ?>
-
-                .fw-backend-option-input-type-rgba-color-picker .wp-color-result span {
-                    border: 1px solid rgba(16, 16, 16, 0.32)!important;
-                }
-
-                .fw-backend-option-input-type-rgba-color-picker .wp-color-result{
-                    display: block;
-                    width: 152px!important;
-                    max-width: 152px!important;
-                    height: 19px !important;
-                    position: relative;
-                }
-
-                .fw-backend-option-input-type-rgba-color-picker .iris-palette {
-                    height: 19.5784px!important;
-                    width: 19.5784px!important;
-                }
-
-            <?php elseif( isset( $unyson['Version'] ) && version_compare( $unyson['Version'], '2.7.9', '>' ) ) : ?>
-
-                .wp-picker-container input[type=text].wp-color-picker {
-                    display: inline-block!important;
-                }
-
-                .wp-picker-container .wp-color-result {
-                    vertical-align: top;
-                }
-
-            <?php endif;
-        endif; ?>
-	</style>
-	<?php
-
-}
-add_action( 'customize_controls_print_styles', 'gillion_customizer_styles', 999 );
-
-
-/**
- * Admin panel - TinyMCE Styling
- */
-function gillion_tiny_mce_styling( $mceInit ) {
-    $body_font = gillion_option_value('styling_body','family');
-    $body_color = gillion_option_value('styling_body','color');
-    $single_content_size = gillion_option('styling_single_content_size', '15');
-    ob_start(); ?>
-
-    html body {
-        font-family: <?php echo esc_attr( $body_font ); ?>;
-        color: <?php echo esc_attr( $body_color ); ?>;
-        font-size: <?php echo esc_attr( $single_content_size ); ?>px;
-    }
-
-    <?php if( isset( $headings ) ) : ?>
-        body h1,
-    	body h2,
-    	body h3,
-    	body h4,
-    	body h5,
-    	body h6 {
-    		<?php echo wp_kses_post( $headings ); ?>
-    	}
-    <?php endif; ?>
-
-    <?php
-    $styles = gillion_compress( ob_get_clean() );
-    if( !isset( $mceInit['content_style'] ) ) :
-        $mceInit['content_style'] = $styles . ' ';
-    else :
-        $mceInit['content_style'] .= ' ' . $styles . ' ';
-    endif;
-
-    return $mceInit;
-}
-add_filter( 'tiny_mce_before_init', 'gillion_tiny_mce_styling' );
-
-
-/**
- * Admin panel - TinyMCE Fonts
- */
-function gillion_tiny_mce_fonts( $mce_css ) {
-
-    $fonts_url = '';
-    $enqueue_fonts = array();
-    $google_fonts = function_exists('fw_get_google_fonts') ? fw_get_google_fonts() : '';
-	$typography1 = gillion_option('styling_body');
-	$typography2 = gillion_option('styling_headings');
-
-	if( isset($google_fonts[$typography1['family']]) ) :
-	    $enqueue_fonts[$typography1['family']] = $google_fonts[$typography1['family']];
-	endif;
-	if( isset($google_fonts[$typography2['family']]) ) :
-	    $enqueue_fonts[$typography2['family']] = $google_fonts[$typography2['family']];
-	endif;
-
-	if( count( $enqueue_fonts) ) :
-		$font_families = array();
-		foreach ( $enqueue_fonts as $font => $styles ) :
-		    $font_families[] = str_replace( ' ', '+', esc_attr($font) ) . ':' . implode( ',', $styles['variants'] );
-		endforeach;
-
-		$subset = gillion_option( 'google_fonts_subset', 'gillion' );
-		if( count( $subset ) < 1 ) :
-			$subset = array( 'latin' );
-		endif;
-
-		if( count($font_families) > 0 ) {
-			$fonts_args = array(
-				'family' => implode( '%7C', $font_families ),
-				'subset' => implode( ',', array_keys($subset) ),
-			);
-			$fonts_url = esc_url( add_query_arg( $fonts_args, 'https://fonts.googleapis.com/css' ) );
-		}
-	endif;
-
-    if( $fonts_url ) :
-        $mce_css.= ', '.str_replace( ',', '%2C', $fonts_url );
-    endif;
-    return $mce_css;
-
-}
-add_filter( 'mce_css', 'gillion_tiny_mce_fonts' );
-
-
-/**
- * Admin panel - styling
- */
-if ( ! function_exists( 'gillion_admin_styling' ) ) :
-    add_action('admin_head', 'gillion_admin_styling');
-    function gillion_admin_styling() { ?>
-        <script type="text/javascript">
-
-            /* Visual Composer 5.2 Version undefined vc_js function fix */
-            function vc_js() {
-            }
-
-            function htmlDecode(value) {
-               return (typeof value === 'undefined') ? '' : jQuery('<div/>').html(value).text();
-            }
-
-            jQuery(function($){
-
-                var timeoutId;
-                $(document).on('widget-updated widget-added', function(){
-                    clearTimeout(timeoutId);
-                    timeoutId = setTimeout(function(){ // wait a few milliseconds for html replace to finish
-                        fwEvents.trigger('fw:options:init', { $elements: $('#widgets-right .fw-theme-admin-widget-wrap') });
-                    }, 100);
-                });
-
-                $('.mega-menu-column-new-row').parent().parent().remove();
-                var post_format = $('input[name=post_format]:checked', '#post-formats-select').val();
-                if( post_format != 0 ) {
-                    $('#fw-options-box-post-format-'+post_format).show();
-                }
-
-                $('input[name=post_format]').change(function() {
-                    $('#fw-options-box-post-format-0').hide();
-                    $('#fw-options-box-post-format-gallery').hide();
-                    $('#fw-options-box-post-format-quote').hide();
-                    $('#fw-options-box-post-format-link').hide();
-                    $('#fw-options-box-post-format-video').hide();
-                    $('#fw-options-box-post-format-audio').hide();
-                    $('#fw-options-box-post-format-'+$(this).val()).show();
-                });
-
-                /* Fix Visual Composer frontend Unyson compatibility issue */
-                if( $('body').hasClass('vc_editor') ) {
-                    $('.fw-options-tab').each( function() {
-                        $(this).html( $(this).attr( 'data-fw-tab-html' ));
-                    });
-                }
-
-                $(window).load(function() {
-                    $('body').removeClass( 'sh-adminbody-loading' );
-                });
-            });
-        </script>
-        <style type="text/css">
-            <?php /* Fix for Unyson Framework 2.7.9 color picker issue */
-            if( is_admin() && defined( 'FW' ) && defined('WP_PLUGIN_DIR') ) :
-            	$unyson = get_plugin_data( WP_PLUGIN_DIR. '/unyson/unyson.php' );
-            	if( isset( $unyson['Version'] ) && $unyson['Version'] == '2.7.9' ) : ?>
-
-                    .fw-backend-option-input-type-rgba-color-picker .wp-color-result span {
-                        border: 1px solid rgba(16, 16, 16, 0.32)!important;
-                    }
-
-                    .fw-backend-option-input-type-rgba-color-picker .wp-color-result{
-                    	display: block;
-                        width: 152px!important;
-                        max-width: 152px!important;
-                    	height: 19px !important;
-                    	position: relative;
-                    }
-
-                    .fw-backend-option-input-type-rgba-color-picker .iris-palette {
-                        height: 19.5784px!important;
-                        width: 19.5784px!important;
-                    }
-
-                <?php elseif( isset( $unyson['Version'] ) && version_compare( $unyson['Version'], '2.7.9', '>' ) ) : ?>
-
-                    .wp-picker-container input[type=text].wp-color-picker {
-                        display: inline-block!important;
-                    }
-
-                    .wp-picker-container .wp-color-result {
-                        vertical-align: top;
-                    }
-
-                <?php endif;
-            endif; ?>
-
-            .notice.fw-brz-dismiss {
-                display: none!important;
-            }
-
-            div[class^="wpb_vcg_"].wpb_content_element .wpb_vc_param_value {
-                display: none!important;
-            }
-
-            .widget-inside .fw-backend-option-type-multi-picker .fw-backend-option {
-                padding-left: 0px!important;
-                padding-right: 0px!important;
-            }
-
-            .fw-extensions-list .not-compatible,
-            #fw-extensions-list-available .toggle-not-compat-ext-btn-wrapper {
-                display: none!important;
-            }
-
-            .sh-demo-install-descr {
-                padding-top: 4px;
-                padding-bottom: 4px;
-            }
-
-            #fw-options-box-post-format-gallery,
-            #fw-options-box-post-format-quote,
-            #fw-options-box-post-format-link,
-            #fw-options-box-post-format-video,
-            #fw-options-box-post-format-audio,
-            .mega-menu-column-new-row {
-                display: none;
-            }
-
-            .fw-options-box-page-builder-box,
-            .fw-options-box-page-builder-box * {
-                -webkit-transform: translate3d(0, 0, 0);
-                -webkit-perspective: 1000;
-                -webkit-backface-visibility:hidden;
-                -webkit-transform-style: preserve-3d;
-                transform-style: preserve-3d;
-            }
-
-            #setting-error-tgmpa {
-                display: block!important;
-            }
-
-            #sh_post_thumbs {
-                width: 100px;
-                max-width: 100px;
-            }
-
-            .sh_post_thumbs img {
-                width: 100px;
-                height: auto;
-            }
-
-            <?php
-                $accent_color = gillion_option('accent_color');
-                if( $accent_color ) :
-            ?>
-
-                .sh-revslider-button2 {
-                    background-color: <?php echo esc_attr( $accent_color ); ?>!important;
-                }
-
-            <?php endif; ?>
-        </style>
-    <?php }
-endif;
-
-if( !function_exists( 'gillion_add_admin_body_classes' ) ) :
-    add_filter('admin_body_class', 'gillion_add_admin_body_classes');
-    function gillion_add_admin_body_classes( $classes ) {
-        $classes.= ' sh-adminbody-loading';
-        return $classes;
-    }
-endif;
-
-
-
-/**
- * Admin panel - link to theme options
- */
-if ( !function_exists( 'gillion_theme_options_link' ) && current_user_can('manage_options') && defined('FW')) :
-    add_action( 'admin_bar_menu', 'gillion_theme_options_link', 999 );
-    function gillion_theme_options_link( $wp_admin_bar ) {
-        $args = array(
-            'id'    => 'gillion-options',
-            'title' => 'Gillion Settings',
-            'href'  => get_admin_url().'/themes.php?page=fw-settings',
-        );
-        $wp_admin_bar->add_node( $args );
-    }
-endif;
-
-
-/**
- * Admin panel - add column
- */
-global $pagenow;
-if (( $pagenow == 'edit.php' ) && !isset($_GET['post_type']) ) {
-
-    add_filter('manage_posts_columns', 'gillion_posts_columns', 5);
-    add_action('manage_posts_custom_column', 'gillion_posts_custom_columns', 5, 2);
-
-    function gillion_posts_columns($defaults){
-        $defaults['sh_post_thumbs'] = esc_html__('Image', 'gillion');
-        return $defaults;
-    }
-
-    function gillion_posts_custom_columns($column_name, $id){
-        if($column_name === 'sh_post_thumbs'){
-            echo the_post_thumbnail( 'thumbnail' );
-        }
-    }
-
-}
 
 
 /**
  * Shortcode Options
 */
-if ( !function_exists( 'gillion_shortcode_options' ) && defined('FW')) :
+if( !function_exists( 'gillion_shortcode_options' ) && gillion_framework_active() ) :
     function gillion_shortcode_options($data,$shortcode){
 
         $atts = shortcode_parse_atts( $data['atts_string'] );
@@ -1637,3 +1270,22 @@ function gillion_getYoutubeId($url) {
     }
     return false;
 }
+
+
+/**
+ * Add Social Media for Author
+ */
+if ( ! function_exists( 'gillion_user_socialmedia' ) ) :
+    function gillion_user_socialmedia( $social ) {
+        $social['public_email'] = 'Public Email';
+        $social['facebook'] = 'Facebook';
+        $social['twitter'] = 'Twitter';
+        $social['instagram'] = 'Instagram';
+        $social['linkedin'] = 'LinkedIn';
+        $social['pinterest'] = 'Pinterest';
+        $social['tumblr'] = 'Tumblr';
+        $social['youtube'] = 'Youtube';
+        return $social;
+    }
+    add_filter('user_contactmethods','gillion_user_socialmedia',10,1);
+endif;

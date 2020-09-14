@@ -11,7 +11,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce/Templates
- * @version 3.5.2
+ * @version 3.5.5
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -24,7 +24,7 @@ if ( ! is_a( $product, 'WC_Product' ) ) {
 <li class="widget-product-item">
 	<div class="widget-product-item-left">
 		<a href="<?php echo esc_url( $product->get_permalink() ); ?>">
-			<?php echo $product->get_image(); ?>
+			<?php echo $product->get_image(); // PHPCS:Ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</a>
 	</div>
 	<div class="widget-product-item-right sh-heading-font">
@@ -34,10 +34,10 @@ if ( ! is_a( $product, 'WC_Product' ) ) {
 			<span class="product-title"><?php echo wp_kses_post( $product->get_name() ); ?></span>
 		</a>
 
-		<?php echo $product->get_price_html(); ?>
+		<?php echo $product->get_price_html(); // PHPCS:Ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 		<?php if ( ! empty( $show_rating ) ) : ?>
-			<?php echo wc_get_rating_html( $product->get_average_rating() ); ?>
+			<?php echo wc_get_rating_html( $product->get_average_rating() ); // PHPCS:Ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php endif; ?>
 
 		<?php do_action( 'woocommerce_widget_product_item_end', $args ); ?>

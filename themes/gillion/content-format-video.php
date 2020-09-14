@@ -104,6 +104,11 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 		$meta = ( $style == 'cover-small' ) ? '6' : '8';
 		$thumb = ( $style == 'cover-small' ) ? 'gillion-portrait' : 'large';
 		$thumb = ( isset( $custom_thumb ) && $custom_thumb ) ? $custom_thumb : $thumb;
+		$video_url  = gillion_post_option( get_the_ID(), 'post-video' );
+		$video_file = gillion_post_option( get_the_ID(), 'post-video-file' );
+		$video_file_url = ( isset( $video_file['url'] ) && $video_file['url'] ) ? $video_file['url'] : '';
+		$video_content = wp_oembed_get( $video_url );
+		$is_video_lightbox = ( ( $video_url && $video_content ) || $video_file_url ) ? 1 : 0;
 ?>
 
 	<article id="post-<?php echo esc_attr( $style ); ?>-<?php the_ID(); ?>" <?php post_class('post-item post-style-cover'); ?>>
@@ -112,19 +117,35 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 				<div class="sh-ratio-container">
 					<div class="sh-ratio-content" style="background-image: url( <?php echo esc_url( the_post_thumbnail_url( $thumb ) ); ?>);">
 
-						<div id="post-media<?php the_ID(); ?>" style="display: none;">
-							<div class="post-meta-video">
-								<div class="ratio-container">
-									<div class="ratio-content">
-										<?php echo wp_oembed_get( gillion_post_option( get_the_ID(), 'post-video' ) ); ?>
+
+						<?php if( $is_video_lightbox ) : ?>
+							<div id="post-media<?php the_ID(); ?>" class="post-media-lightbox-content" style="display: none;">
+								<div class="post-meta-video">
+									<div class="ratio-container">
+										<div class="ratio-content">
+											<?php if( $video_url && $video_content ) : ?>
+												<?php echo ( $video_content ); ?>
+											<?php elseif( $video_file_url ) : ?>
+												<video id="post-player<?php echo get_the_ID(); ?>" playsinline controls style="max-width: 100%;">
+													<source src="<?php echo ( $video_file_url ); ?>" type="video/<?php echo pathinfo( parse_url( $video_file_url, PHP_URL_PATH ), PATHINFO_EXTENSION); ?>" />
+												</video>
+												<script type="text/javascript">
+												jQuery(document).ready(function ($) {
+													$(window).load(function (){
+														const player<?php echo get_the_ID() . gillion_rand(); ?> = new Plyr('#post-player<?php echo get_the_ID(); ?>', { 'settings': [] });
+													});
+												});
+												</script>
+											<?php endif; ?>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						<?php endif; ?>
 
 						<?php echo gillion_post_review( get_the_ID() ); ?>
 						<div class="post-cover-container">
-							<a href="#post-media<?php the_ID(); ?>" data-rel="lightcase-post" class="post-button">
+							<a href="#post-media<?php the_ID(); ?>" data-rel="<?php echo ( $is_video_lightbox ) ? 'lightcase-post' : ''; ?>" class="post-button">
 								<div class="post-button-icon"><i class="icon icon-control-play"></i></div>
 								<div class="post-button-text"><?php esc_html_e( 'PLAY', 'gillion' ); ?></div>
 							</a>
@@ -292,19 +313,35 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 	/* Layout for single post style */
 	else :
 
+		$video_url  = gillion_post_option( get_the_ID(), 'post-video' );
+		$video_file = gillion_post_option( get_the_ID(), 'post-video-file' );
+		$video_file_url = ( isset( $video_file['url'] ) && $video_file['url'] ) ? $video_file['url'] : '';
+		$video_content = wp_oembed_get( $video_url );
 ?>
 
-	<?php if( gillion_post_option( get_the_ID(), 'post-video' ) ) : ?>
+	<?php if( $video_url && $video_content ) : ?>
 		<div class="post-media-play">
 			<div class="post-meta-video">
 				<div class="ratio-container">
 					<div class="ratio-content">
-						<?php echo wp_oembed_get( gillion_post_option( get_the_ID(), 'post-video' ) ); ?>
+						<?php echo ( $video_content ); ?>
 					</div>
 				</div>
 			</div>
 			<?php echo gillion_post_review( get_the_ID() ); ?>
 		</div>
+
+	<?php elseif( $video_file_url ) : ?>
+
+		<video id="post-player" playsinline controls>
+			<source src="<?php echo ( $video_file_url ); ?>" type="video/<?php echo pathinfo( parse_url( $video_file_url, PHP_URL_PATH ), PATHINFO_EXTENSION); ?>" />
+		</video>
+		<script type="text/javascript">
+			jQuery(document).ready(function ($) {
+				const player = new Plyr('#post-player', { 'settings': [] });
+			});
+		</script>
+
 	<?php endif; ?>
 
 <?php endif; ?>

@@ -6,7 +6,7 @@ Element: Blog Slider
 class vcBlogPostsFancy extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_blog_posts_fancy', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcBlogPostsFancy extends WPBakeryShortCode {
                 'base' => 'vcg_blog_posts_fancy',
                 'description' => __('Gillion blog posts', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -150,7 +150,17 @@ class vcBlogPostsFancy extends WPBakeryShortCode {
                     array(
                         'param_name' => 'categories',
                         'heading' => __( 'Show Only Specific Categories', 'gillion' ),
-                        'description' => __( 'Enter categories by names to narrow output (Note: only listed categories will be displayed, divide categories with linebreak (Enter)).', 'gillion' ),
+                        'description' => __( 'Enter categories slugs to narrow output (Note: only listed categories will be displayed, divide categories with linebreak (Enter)).', 'gillion' ),
+                        'value' => '',
+                        'type' => 'exploded_textarea',
+                        'holder' => 'div',
+                        'class' => '',
+                    ),
+
+                    array(
+                        'param_name' => 'tags',
+                        'heading' => __( 'Show Only Specific Tags', 'gillion' ),
+                        'description' => __( 'Enter tags slugs to narrow output (Note: only listed tags will be displayed, divide categories with linebreak (Enter)).', 'gillion' ),
                         'value' => '',
                         'type' => 'exploded_textarea',
                         'holder' => 'div',
@@ -239,7 +249,7 @@ class vcBlogPostsFancy extends WPBakeryShortCode {
                         'param_name' => 'title',
                         'heading' => __( 'Title', 'gillion' ),
                         'description' => __( 'Enter title', 'gillion' ),
-                        'value' => 'Fancy Posts',
+                        'value' => '',
                         'type' => 'textfield',
                         'holder' => 'div',
                         'class' => '',
@@ -281,14 +291,15 @@ class vcBlogPostsFancy extends WPBakeryShortCode {
 
 
     public function _html( $atts ) {
-        //$atts = ( is_array( $atts ) ) ? $atts : array();
+        $atts = ( isset( $atts ) && is_array( $atts ) ) ? $atts : array();
 
         $title_border_color = ( isset( $atts['title_border_color'] ) ) ? $atts['title_border_color'] : '';
         $post_title_hover_color = ( isset( $atts['post_title_hover_color'] ) && $atts['post_title_hover_color'] ) ? $atts['post_title_hover_color'] : '';
         $atts['style'] = ( isset( $atts['style'] ) ) ? $atts['style'] : 'cover';
         $atts['limit'] = ( isset( $atts['limit'] ) ) ? $atts['limit'] : 3;
         $atts['categories'] = ( isset( $atts['categories'] ) ) ? $atts['categories'] : array();
-        $atts['title'] = ( isset( $atts['title'] ) ) ? $atts['title'] : __( 'Fancy Posts', 'gillion' );
+        $atts['tags'] = ( isset( $atts['tags'] ) ) ? $atts['tags'] : array();
+        $atts['title'] = ( isset( $atts['title'] ) ) ? $atts['title'] : '';
         $atts['posts'] = ( isset( $atts['posts'] ) ) ? $atts['posts'] : '';
         $atts['alignment'] = ( isset( $atts['alignment'] ) ) ? $atts['alignment'] : '';
         $atts['autoplay'] = ( isset( $atts['autoplay'] ) ) ? $atts['autoplay'] : true;
@@ -514,6 +525,8 @@ class vcBlogPostsFancy extends WPBakeryShortCode {
                         if( $style_class == 'fancy1' && $limit > 3 ) : $limit = 3; endif;
                         if( $style_class == 'fancy2' && $limit > 5 ) : $limit = 5; endif;
                         if( $style_class == 'fancy3' && $limit > 3 ) : $limit = 3; endif;
+
+                        $tags_query = !is_array( $atts['tags'] ) ? $atts['tags'] : '';
                         $categories_query = ( isset($atts['categories']) && $atts['categories'] ) ? str_replace("post:","", $atts['categories'] ) : array();
                         $orderby = ( isset($atts['order_by']) && $atts['order_by'] ) ? esc_attr( $atts['order_by'] ) : 'post_date';
                         $order = ( isset($atts['order']) && $atts['order'] ) ? esc_attr( $atts['order'] ) : 'desc';
@@ -532,7 +545,8 @@ class vcBlogPostsFancy extends WPBakeryShortCode {
                                 'offset' => $offset,
                                 'category_name' => $categories_query,
                                 'orderby' => $orderby,
-                                'order' => $order
+                                'order' => $order,
+                                'tag' => $tags_query,
                             ));
                         endif;
 

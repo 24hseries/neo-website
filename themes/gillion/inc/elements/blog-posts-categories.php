@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcBlogPostsCategories extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_blog_posts_categories', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcBlogPostsCategories extends WPBakeryShortCode {
                 'base' => 'vcg_blog_posts_categories',
                 'description' => esc_html__('Gillion posts organized by categories', 'gillion'),
                 'category' => esc_html__('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -491,7 +491,7 @@ class vcBlogPostsCategories extends WPBakeryShortCode {
 
                                 $limit = ( is_numeric($atts['limit']) ) ? intval( $atts['limit'] )+1 : 6;
                                 $posts = new WP_Query( array( 'post_type' => 'post', 'posts_per_page' => $limit, $cat_query => $cat_id ) );
-                                if( count($posts) > 0 ) : $i = 0;
+                                if( $posts->have_posts() ) : $i = 0;
                                     while ( $posts->have_posts() ) : $posts->the_post(); $i++;
                                         if( $i == 1 ) :
 

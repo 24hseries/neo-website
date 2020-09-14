@@ -55,9 +55,10 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 						'data-large_image_height' => $full_size_image[2],
 					);
 
-					$html .= '<div><a href="'.esc_url( $full_size_image[0] ).'" data-rel="lightcase:products">';
+					$html .= '<div><a href="'.esc_url( $full_size_image[0] ).'" data-rel="lightcase:products" class="woocommerce-product-gallery__image" data-url="">';
 					$html .= get_the_post_thumbnail( $post->ID, 'shop_single', $attributes );
 					$html .= '</a></div>';
+
 				} else {
 					$html .= '<div class="woocommerce-products-thumb">';
 					$html .= sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( wc_placeholder_img_src() ), esc_html__( 'Awaiting product image', 'woocommerce' ) );
@@ -67,7 +68,6 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 				/* Gallery */
 				foreach ( $attachment_ids as $attachment_id ) :
 					$full_size_image2 = wp_get_attachment_image_src( $attachment_id, 'full' );
-					$thumbnail       = wp_get_attachment_image_src( $attachment_id, 'shop_thumbnail' );
 					$attributes      = array(
 						'data-caption'            => get_post_field( 'post_excerpt', $attachment_id ),
 						'data-src'                => $full_size_image2[0],
@@ -77,7 +77,7 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 					);
 
 					$html .= '<div><a href="'.esc_url( $full_size_image2[0] ).'" data-rel="lightcase:products">';
-					$html .= wp_get_attachment_image( $attachment_id, 'shop_single', false, $attributes );
+					$html .= wp_get_attachment_image( $attachment_id, 'gillion-square-small', false, $attributes );
 			 		$html .= '</a></div>';
 				endforeach;
 			$html .= '</div></div>';
@@ -94,7 +94,7 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 						);
 
 						$html .= '<div class="woocommerce-products-thumb">';
-						$html .= get_the_post_thumbnail( $post->ID, 'shop_single', $attributes );
+						$html .= get_the_post_thumbnail( $post->ID, 'gillion-square-small', $attributes );
 						$html .= '</div>';
 					} else {
 						$html .= '<div class="woocommerce-products-thumb">';
@@ -105,7 +105,6 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 					/* Gallery */
 					foreach ( $attachment_ids as $attachment_id ) :
 						$full_size_image2 = wp_get_attachment_image_src( $attachment_id, 'full' );
-						$thumbnail       = wp_get_attachment_image_src( $attachment_id, 'shop_thumbnail' );
 						$attributes      = array(
 							'data-caption'            => get_post_field( 'post_excerpt', $attachment_id ),
 							'data-src'                => $full_size_image2[0],
@@ -115,7 +114,7 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 						);
 
 						$html .= '<div class="woocommerce-products-thumb">';
-						$html .= wp_get_attachment_image( $attachment_id, 'shop_single', false, $attributes );
+						$html .= wp_get_attachment_image( $attachment_id, 'gillion-square-small', false, $attributes );
 				 		$html .= '</div>';
 
 						//echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $attachment_id );

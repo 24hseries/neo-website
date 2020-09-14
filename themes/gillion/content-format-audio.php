@@ -294,19 +294,36 @@ if( $style == 'masonry' || $style == 'masonry blog-style-masonry-card' || $style
 	/* Layout for single post style */
 	else :
 
+		$audio_url  = gillion_post_option( get_the_ID(), 'post-audio' );
+		$audio_file = gillion_post_option( get_the_ID(), 'post-audio-file' );
+		$audio_file_url = ( isset( $audio_file['url'] ) && $audio_file['url'] ) ? $audio_file['url'] : '';
+		$audio_content = wp_oembed_get( $audio_url );
 ?>
 
-	<?php if( gillion_post_option( get_the_ID(), 'post-audio' ) ) : ?>
+	<?php if( $audio_url && $audio_content ) : ?>
+
 		<div class="post-media-play">
 			<div class="post-meta-video">
 				<div class="ratio-container">
 					<div class="ratio-content">
-						<?php echo wp_oembed_get( gillion_post_option( get_the_ID(), 'post-audio' ) ); ?>
+						<?php echo ( $audio_content ); ?>
 					</div>
 				</div>
 			</div>
 			<?php echo gillion_post_review( get_the_ID() ); ?>
 		</div>
+
+	<?php elseif( $audio_file_url ) : ?>
+
+		<audio id="post-player">
+			<source src="<?php echo ( $audio_file_url ); ?>" type="audio/mp3" />
+		</audio>
+		<script type="text/javascript">
+			jQuery(document).ready(function ($) {
+				const player = new Plyr('#post-player', { 'settings': [] });
+			});
+		</script>
+
 	<?php endif; ?>
 
 <?php endif; ?>

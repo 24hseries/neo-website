@@ -3,33 +3,134 @@ if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); }
 /**
  * Helper functions
  */
+function wpdocs_remove_calendar_widget() {
+    unregister_widget( 'null_instagram_widget' );
+}
+add_action( 'widgets_init', 'wpdocs_remove_calendar_widget' );
 
 
- /**
-  * Change default Unyson Framework path
-  */
- add_filter(
-     'fw_framework_customizations_dir_rel_path',
-     'gillion_fw_customizations_dir_rel_path'
- );
- function gillion_fw_customizations_dir_rel_path($rel_path) {
-     /**
-      * Make the directory name shorter. Instead of
-      * {theme}/framework-customizations/theme/options/post.php
-      * will be
-      * {theme}/fw/theme/options/post.php
-      */
-     return '/inc/framework-customizations';
+
+add_action( 'login_form_middle', 'add_lost_password_link' );
+function add_lost_password_link() {
+    return '<a href="/wp-login.php?action=lostpassword" class="login-forgot-password">'
+        . esc_attr( 'Forgot Password', 'gillion' ) .
+    '</a>';
 }
 
 
- /**
-  * Load Instagram Widget template
-  */
- add_filter( 'wpiw_template_part', 'gillion_instagram_class' );
- function gillion_instagram_class( $array ) {
-     return 'inc/templates/instagram-widget.php';
- }
+
+
+
+
+
+/**
+ * Load footer items
+ */
+function gillion_get_footers() {
+    $layout_choices = array(
+    	'default' => esc_html__( 'Default (from theme settings)', 'gillion' ),
+    );
+
+    global $post;
+    $post2 = $post;
+    $footers = new WP_Query( array(
+        'post_type' => 'shufflehound_footer',
+        'post_status' => 'publish',
+        'posts_per_page' => 20
+    ));
+    if( $footers->have_posts() ) :
+        while( $footers->have_posts() ) : $footers->the_post();
+
+    		$footer_id = get_the_ID();
+            $layout_choices[ $footer_id ] = get_the_title().' (from WPbakery page builder)';
+
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+    $post = $post2;
+    return $layout_choices;
+}
+
+
+
+
+/**
+ * Load page items
+ */
+function gillion_get_page_templates( $default = 'default' ) {
+    if( $default == 'disabled' ) :
+        $layout_choices = array(
+        	'disabled' => esc_html__( 'Disabled', 'gillion' ),
+        );
+    else :
+        $layout_choices = array(
+        	'default' => esc_html__( 'Default', 'gillion' ),
+        );
+    endif;
+
+    global $post;
+    $post2 = $post;
+    $footers = new WP_Query( array(
+        'post_type' => 'shufflehound_temp',
+        'post_status' => 'publish',
+        'posts_per_page' => -1
+    ));
+    if( $footers->have_posts() ) :
+        while( $footers->have_posts() ) : $footers->the_post();
+
+    		$footer_id = get_the_ID();
+            $layout_choices[ $footer_id ] = get_the_title();
+
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+    $post = $post2;
+    return $layout_choices;
+}
+
+
+
+/**
+ * Load page items
+ */
+function gillion_get_pages() {
+    $layout_choices = array(
+    	'disabled' => esc_html__( 'Disabled', 'gillion' ),
+    );
+
+    global $post;
+    $post2 = $post;
+    $footers = new WP_Query( array(
+        'post_type' => 'page',
+        'post_status' => 'publish',
+        'posts_per_page' => -1
+    ));
+    if( $footers->have_posts() ) :
+        while( $footers->have_posts() ) : $footers->the_post();
+
+    		$footer_id = get_the_ID();
+            $layout_choices[ $footer_id ] = get_the_title();
+
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+    $post = $post2;
+    return $layout_choices;
+}
+
+
+
+
+/**
+ * Load Instagram Widget template
+ */
+add_filter( 'wpiw_template_part', 'gillion_instagram_class' );
+function gillion_instagram_class( $array ) {
+    return 'inc/templates/instagram-widget.php';
+}
 
 /**
  * Render template
@@ -173,61 +274,80 @@ endif;*/
 if ( ! function_exists( 'gillion_option' ) ) :
     function gillion_option( $id = NULL, $default = NULL) {
 
-        if( is_customize_preview() && function_exists('fw_get_db_customizer_option') ) :
+        if( function_exists( 'gillion_framework' ) && gillion_framework() == 'redux' ) :
+            if( $id ) :
+                GLOBAL $gillion_options;
+                if( isset( $gillion_options[$id] ) ) :
+                    if( isset( $gillion_options[$id]['rgba'] ) ) :
+                        return $gillion_options[$id]['rgba'];
+                    elseif( isset( $gillion_options[$id]['color'] ) ) :
+                        return $gillion_options[$id]['color'];
+                    else :
+                        return $gillion_options[$id];
+                    endif;
+                endif;
+            endif;
 
-            $customizer_option = fw_get_db_customizer_option( $id );
-            if( $customizer_option ) :
-                return $customizer_option;
-            elseif( !empty( $default ) ) :
+            if( $default ) :
                 return $default;
             endif;
+        else :
 
-        elseif( function_exists('fw_get_db_settings_option') ) :
+            if( is_customize_preview() && function_exists('fw_get_db_customizer_option') ) :
 
-            if( in_array( $id, array( 'accent_color', 'accent_hover_color', 'header_nav_active_color', 'footer_hover_color') ) ) :
-
-                if( $id == 'accent_color' && gillion_post_option( gillion_page_id(), 'accent_color' ) ) :
-                    return gillion_post_option( gillion_page_id(), 'accent_color' );
-                elseif( $id == 'accent_hover_color' && gillion_post_option( gillion_page_id(), 'accent_hover_color' ) ) :
-                    return gillion_post_option( gillion_page_id(), 'accent_hover_color' );
-                elseif( $id == 'header_nav_active_color' && gillion_post_option( gillion_page_id(), 'header_nav_active_color' ) ) :
-                    return gillion_post_option( gillion_page_id(), 'header_nav_active_color' );
-                elseif( $id == 'footer_hover_color' && gillion_post_option( gillion_page_id(), 'footer_hover_color' ) ) :
-                    return gillion_post_option( gillion_page_id(), 'footer_hover_color' );
-                else :
-                    return fw_get_db_settings_option($id);
-                endif;
-
-            else :
-
-                /*if( is_array( constant( 'gillion_options' ) ) ) :
-                    $options = constant( 'gillion_options' );
-                    $option = ( isset( $options[$id] ) ) ? $options[$id] : '';
-                    unset( $options );
-                else :*/
-                    $option = fw_get_db_settings_option( $id );
-                //endif;
-
-                //return $option;
-                if( !empty( $option ) ) :
-                    return $option;
-                elseif( $option === false ) :
-                    return $option;
+                $customizer_option = fw_get_db_customizer_option( $id );
+                if( $customizer_option ) :
+                    return $customizer_option;
                 elseif( !empty( $default ) ) :
                     return $default;
-                elseif( $default === false ) :
-                    return $default;
-                else :
-                    return false;
                 endif;
+
+            elseif( function_exists('fw_get_db_settings_option') ) :
+
+                if( in_array( $id, array( 'accent_color', 'accent_hover_color', 'header_nav_active_color', 'footer_hover_color') ) ) :
+
+                    if( $id == 'accent_color' && gillion_post_option( gillion_page_id(), 'accent_color' ) ) :
+                        return gillion_post_option( gillion_page_id(), 'accent_color' );
+                    elseif( $id == 'accent_hover_color' && gillion_post_option( gillion_page_id(), 'accent_hover_color' ) ) :
+                        return gillion_post_option( gillion_page_id(), 'accent_hover_color' );
+                    elseif( $id == 'header_nav_active_color' && gillion_post_option( gillion_page_id(), 'header_nav_active_color' ) ) :
+                        return gillion_post_option( gillion_page_id(), 'header_nav_active_color' );
+                    elseif( $id == 'footer_hover_color' && gillion_post_option( gillion_page_id(), 'footer_hover_color' ) ) :
+                        return gillion_post_option( gillion_page_id(), 'footer_hover_color' );
+                    else :
+                        return fw_get_db_settings_option($id);
+                    endif;
+
+                else :
+
+                    /*if( is_array( constant( 'gillion_options' ) ) ) :
+                        $options = constant( 'gillion_options' );
+                        $option = ( isset( $options[$id] ) ) ? $options[$id] : '';
+                        unset( $options );
+                    else :*/
+                        $option = fw_get_db_settings_option( $id );
+                    //endif;
+
+                    //return $option;
+                    if( !empty( $option ) ) :
+                        return $option;
+                    elseif( $option === false ) :
+                        return $option;
+                    elseif( !empty( $default ) ) :
+                        return $default;
+                    elseif( $default === false ) :
+                        return $default;
+                    else :
+                        return false;
+                    endif;
+                endif;
+
+            elseif( !empty( $default ) ) :
+                return $default;
+            else :
+                return false;
             endif;
-
-        elseif( !empty( $default ) ) :
-            return $default;
-        else :
-            return false;
         endif;
-
     }
 endif;
 
@@ -235,10 +355,10 @@ endif;
 /**
  * Get theme options value
  */
-if ( ! function_exists( 'gillion_option_value' ) ) :
+if( ! function_exists( 'gillion_option_value' ) ) :
     function gillion_option_value( $id = NULL, $key = NULL, $default = '' ) {
 
-        if( $id && $key && function_exists('fw_get_db_settings_option') ) :
+        if( $id && $key && gillion_framework_active() ) :
             $val = gillion_option( $id );
             if( isset( $val[$key] ) ) :
                 return esc_attr( $val[$key] );
@@ -261,7 +381,17 @@ endif;
 if ( ! function_exists( 'gillion_option_image' ) ) :
     function gillion_option_image( $id = NULL ) {
 
-        if( function_exists('fw_get_db_settings_option') ) :
+        if( function_exists( 'gillion_framework' ) && gillion_framework() == 'redux' ) :
+            $option = gillion_option( $id );
+            if( isset( $option['url'] ) ) :
+                return esc_url( $option['url'] );
+            endif;
+        elseif( is_customize_preview() && function_exists('fw_get_db_customizer_option') ) :
+            $url = fw_get_db_customizer_option( $id );
+            if( isset( $url['url'] ) ) :
+                return esc_url( $url['url'] );
+            endif;
+        elseif( function_exists('fw_get_db_settings_option') ) :
             $url = fw_get_db_settings_option( $id );
             if( isset( $url['url'] ) ) :
                 return esc_url( $url['url'] );
@@ -359,15 +489,41 @@ endif;
  */
 if ( ! function_exists( 'gillion_post_option' ) ) :
     function gillion_post_option( $id = NULL, $name = NULL, $default = NULL) {
+        if( gillion_framework() == 'redux' && $id > 0 && $name ) :
 
-        if( function_exists('fw_get_db_post_option') && $id > 0 && $name ) :
+            if( empty( $id ) ) :
+                $id = get_queried_object_id();
+            endif;
+
+            // Get value
+            GLOBAL $haste_post_options;
+            if( empty( $haste_post_options[$id] ) ) :
+                $meta_values = get_post_meta( $id );
+                $haste_post_options[$id] = $meta_values;
+            endif;
+
+            if( !empty( $haste_post_options[$id][$name][0] ) ) :
+                return maybe_unserialize( $haste_post_options[$id][$name][0] );
+            endif;
+
+            // Get default field value
+            GLOBAL $haste_post_fields;
+            $post_type = get_post_type( $id );
+            if( !isset( $haste_post_fields[$post_type] ) ) :
+                $haste_post_fields[$post_type] = Shufflehound_Metaboxes::save_fields( $post_type );
+            endif;
+
+            if( !empty( $haste_post_fields[$post_type][$name] ) ) :
+                return $haste_post_fields[$post_type][$name];
+            endif;
+
+        elseif( gillion_framework() == 'unyson' && function_exists( 'fw_get_db_post_option' ) ) :
             return fw_get_db_post_option( $id, $name, $default );
-        elseif( !empty( $default ) ) :
-            return $default;
-        else :
-            return false;
         endif;
 
+        if( $default ) :
+            return $default;
+        endif;
     }
 endif;
 
@@ -432,9 +588,19 @@ endif;
  */
 if ( ! function_exists( 'gillion_get_image_size' ) ) :
     function gillion_get_image_size( $id, $size = 'large' ) {
-        if( isset( $id['attachment_id'] ) && $id['attachment_id'] ) :
+        if( !empty( $id['attachment_id'] ) ) :
 
             $url = $id['attachment_id'];
+            $thumb = wp_get_attachment_image_src( $url, $size );
+
+            if( isset($thumb['0']) && $thumb['0'] ) :
+                return esc_url( $thumb['0'] );
+            else :
+                return $id['url'];
+            endif;
+        elseif( !empty( $id['id'] ) ) :
+
+            $url = $id['id'];
             $thumb = wp_get_attachment_image_src( $url, $size );
 
             if( isset($thumb['0']) && $thumb['0'] ) :
@@ -653,11 +819,64 @@ endif;
 
 
 /**
+ * Convert color code to rgb or rgba
+ */
+if ( !function_exists( 'gillion_hex2rgba' ) ) {
+    function gillion_hex2rgba($color, $opacity = false) {
+
+        $default = 'rgb(0,0,0)';
+
+        //Return default if already rgb
+        if (strpos($color, 'rgba(') !== false) :
+            if( $opacity ) :
+                return str_replace( ',1)', ','.$opacity.')', $color );
+            else :
+                return $color;
+            endif;
+        endif;
+
+        //Return default if no color provided
+        if(empty($color))
+            return $default;
+
+        //Sanitize $color if "#" is provided
+            if ($color[0] == '#' ) {
+                $color = substr( $color, 1 );
+            }
+
+            //Check if color has 6 or 3 characters and get values
+            if (strlen($color) == 6) {
+                    $hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
+            } elseif ( strlen( $color ) == 3 ) {
+                    $hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
+            } else {
+                    return $default;
+            }
+
+            //Convert hexadec to rgb
+            $rgb =  array_map('hexdec', $hex);
+
+            //Check if opacity is set(rgba or rgb)
+            if($opacity){
+                if(abs($opacity) > 1)
+                    $opacity = 1.0;
+                $output = 'rgba('.implode(",",$rgb).','.$opacity.')';
+            } else {
+                $output = 'rgb('.implode(",",$rgb).')';
+            }
+
+            //Return rgb(a) color string
+            return $output;
+    }
+}
+
+
+/**
  * Get header layout
  */
 if ( ! function_exists( 'gillion_header_layout' ) ) :
     function gillion_header_layout() {
-        $header_layout1 = esc_attr( gillion_post_option( gillion_page_id(), 'header_layout', '1' ) );
+        $header_layout1 = esc_attr( gillion_post_option( gillion_page_id(), 'header_layout' ) );
         $header_layout2 = esc_attr( gillion_option( 'header_layout', '1' ) );
 
         if( !is_search() && !is_singular('product') && !is_archive() && !is_home() && !is_404() && !function_exists('is_bbpress') ) :
@@ -677,7 +896,12 @@ endif;
 if ( ! function_exists( 'gillion_header_style' ) ) :
     function gillion_header_style() {
         $header_style_val = gillion_post_option( gillion_page_id(), 'header_style' );
-        return ( isset( $header_style_val['header_style'] ) ) ? esc_attr($header_style_val['header_style']) : 'default';
+        if( gillion_framework() == 'redux' ) :
+            return $header_style_val ? esc_attr( $header_style_val ) : 'default';
+        else :
+            return ( isset( $header_style_val['header_style'] ) ) ? esc_attr($header_style_val['header_style']) : 'default';
+        endif;
+
     }
 endif;
 
@@ -785,10 +1009,14 @@ endif;
  */
 if ( ! function_exists( 'gillion_footer_enabled' ) ) :
     function gillion_footer_enabled() {
-        if( defined('FW') ) :
+        if( gillion_framework_active() ) :
             $footer1 = gillion_post_option( gillion_page_id(), 'footer_widgets', 'on' );
             $footer2 = gillion_option( 'footer_widgets', 'on' );
             $footer3 = gillion_count_sidebar('footer-widgets1');
+
+            if( is_category() || is_404() || is_search() ) :
+                return $footer2;
+            endif;
 
             return ( $footer3 > 0 ? ( ( isset($footer1) && ( $footer1 == 'on' || $footer1 == 'off' )) ? $footer1 : ( (isset($footer2) && $footer2 ) ? $footer2 : false) ) : false );
         else :
@@ -803,7 +1031,7 @@ endif;
  */
 if ( ! function_exists( 'gillion_copyrights_enabled' ) ) :
     function gillion_copyrights_enabled() {
-        if( defined('FW') ) :
+        if( gillion_framework_active() ) :
             $copyright1 = gillion_post_option( gillion_page_id(), 'copyright_bar', 'on' );
             $copyright2 = gillion_option( 'copyright_bar', 'on' );
 
@@ -1020,7 +1248,7 @@ endif;
  */
 if ( !function_exists( 'gillion_pagination' ) ) {
     function gillion_pagination( $wp_query = NULL, $new = 1, $oldpagination = 0, $wishlist = 0 ) {
-        if( !defined('FW') || gillion_option('pagination') != 'off' ) :
+        if( !gillion_framework_active() || gillion_option('pagination') != 'off' ) :
 
             $prev_arrow = esc_html__( 'Previous', 'gillion' );
             $next_arrow = esc_html__( 'Next', 'gillion' );
@@ -1130,3 +1358,37 @@ function gillion_gethost($Address) {
    $parseUrl = parse_url(trim($Address));
    return trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
 }
+
+
+/**
+** WooCommerce Sales Sorting Filter
+** https://lakewood.media/woocommerce-add-sales-filter/
+**/
+if( class_exists( 'WooCommerce' ) ) :
+    if( !function_exists( 'gillion_get_catalog_ordering_args' ) ) :
+        add_filter( 'woocommerce_get_catalog_ordering_args', 'gillion_get_catalog_ordering_args' );
+        function gillion_get_catalog_ordering_args( $args ) {
+            if( gillion_option( 'wc_sort_sale' ) == 'on' ) :
+                $orderby_value = isset( $_GET['orderby'] ) ? wc_clean( $_GET['orderby'] ) : apply_filters( 'woocommerce_default_catalog_orderby', get_option( 'woocommerce_default_catalog_orderby' ) );
+
+                if ( 'on_sale' == $orderby_value ) {
+                    $args['orderby'] = 'meta_value_num';
+                    $args['order'] = 'DESC';
+                    $args['meta_key'] = '_sale_price';
+                }
+            endif;
+            return $args;
+        }
+    endif;
+
+    if( !function_exists( 'gillion_catalog_orderby' ) ) :
+        add_filter( 'woocommerce_default_catalog_orderby_options', 'gillion_catalog_orderby' );
+        add_filter( 'woocommerce_catalog_orderby', 'gillion_catalog_orderby' );
+        function gillion_catalog_orderby( $sortby ) {
+            if( gillion_option( 'wc_sort_sale' ) == 'on' ) :
+                $sortby['on_sale'] = 'Sort by on sale';
+            endif;
+            return $sortby;
+        }
+    endif;
+endif;

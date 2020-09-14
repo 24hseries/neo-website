@@ -38,6 +38,32 @@ $general_options = array(
         'inline' => false,
     ),
 
+	'categories-page-layout' => array(
+		'type'  => 'radio',
+		'value' => 'sidebar-right',
+		'label' => esc_html__( 'Categories Page Layout', 'gillion' ),
+		'desc'  => esc_html__( 'Choose categories page layout', 'gillion' ),
+		'choices' => array(
+			'default' => esc_html__( 'Default (without sidebar)', 'gillion' ),
+			'sidebar-left' => esc_html__( 'Sidebar Left', 'gillion' ),
+			'sidebar-right' => esc_html__( 'Sidebar Right', 'gillion' ),
+		),
+		'inline' => false,
+	),
+
+	'author-page-layout' => array(
+		'type'  => 'radio',
+		'value' => 'sidebar-right',
+		'label' => esc_html__( 'Author Page Layout', 'gillion' ),
+		'desc'  => esc_html__( 'Choose author page layout', 'gillion' ),
+		'choices' => array(
+			'default' => esc_html__( 'Default (without sidebar)', 'gillion' ),
+			'sidebar-left' => esc_html__( 'Sidebar Left', 'gillion' ),
+			'sidebar-right' => esc_html__( 'Sidebar Right', 'gillion' ),
+		),
+		'inline' => false,
+	),
+
 
 	'page_layout' => array(
 		'type'  => 'multi-picker',
@@ -48,12 +74,12 @@ $general_options = array(
 		),
 		'picker' => array(
 			'page_layout' => array(
-				'label'   => esc_html__('Whole Page Layout', 'gillion'),
+				'label'   => esc_html__('Boxed Layout', 'gillion'),
 				'desc'    => esc_html__('Choose main page layout. Boxed layout will not work together with left header', 'gillion'),
 				'type'    => 'radio',
 				'choices' => array(
-					'full' => esc_html__('Full Width', 'gillion'),
-					'boxed' => esc_html__('Boxed Layout', 'gillion'),
+					'full' => esc_html__('Disabled', 'gillion'),
+					'boxed' => esc_html__('Enabled', 'gillion'),
 				),
 			)
 		),
@@ -141,9 +167,79 @@ $general_options = array(
 		),
 	),
 
-	'responsive_layout' => array(
-		'label' => esc_html__( 'Responsive Layout', 'gillion' ),
-		'desc'  => esc_html__( 'Enable or disable responsive layout for mobile devices', 'gillion' ),
+	'content_width' => array(
+		'label'   => esc_html__( 'Content Width', 'gillion' ),
+		'desc'    => esc_html__( 'Choose content width', 'gillion' ),
+		'type'    => 'radio',
+		'choices' => array(
+			'1000' => esc_html__('1000px', 'gillion'),
+			'1100' => esc_html__('1100px', 'gillion'),
+			'1200' => esc_html__('1200px', 'gillion'),
+			'1400' => esc_html__('1400px', 'gillion'),
+			'1600' => esc_html__('1600px', 'gillion'),
+		),
+		'value' => '1200'
+	),
+
+
+
+
+		'general_title1' => array( 'type' => 'html-full', 'value' => '', 'label' => false, 'html'  =>
+			'<h3 class="hndle sh-custom-group-divder"><span>
+				'.esc_html__( 'Back to Top Button', 'gillion' ).'
+			</span></h3>',
+		),
+
+	'back_to_top' => array(
+		'type'  => 'select',
+		'value' => '1',
+		'label' => esc_html__('Style', 'gillion'),
+		'desc'  => esc_html__('Choose style for "Back to top" button or disable it', 'gillion'),
+		'choices' => array(
+			'disabled' => esc_html__( 'Disabled', 'gillion' ),
+			'1' => esc_html__( 'Style 1', 'gillion' ),
+		),
+	),
+
+	'back_to_top_radius' => array(
+		'label' => esc_html__('Border Radius', 'gillion'),
+		'desc'  => esc_html__( 'Choose "Back to top" button radius', 'gillion' ),
+		'type'  => 'select',
+		'value' => '8px',
+		'choices' => array(
+			'0px' => esc_html__( 'None (0px)', 'gillion' ),
+			'8px' => esc_html__( 'Small (8px)', 'gillion' ),
+			'100%' => esc_html__( 'Full (100%)', 'gillion' ),
+		),
+	),
+
+
+
+
+		'general_title2' => array( 'type' => 'html-full', 'value' => '', 'label' => false, 'html'  =>
+			'<h3 class="hndle sh-custom-group-divder"><span>
+				'.esc_html__( 'Miscellaneous', 'gillion' ).'
+			</span></h3>',
+		),
+
+	'enhanced_post_gallery' => array(
+		'label' => esc_html__( 'Enhanced Post Gallery', 'gillion' ),
+		'desc'  => esc_html__( 'Enable or disable enhanced gillion post gallery. Should be disabled for Jetpack carousel to work in posts', 'gillion' ),
+		'type'  => 'switch',
+		'value' => 'on',
+		'left-choice' => array(
+			'value' => 'off',
+			'label' => esc_html__('Off', 'gillion'),
+		),
+		'right-choice' => array(
+			'value' => 'on',
+			'label' => esc_html__('On', 'gillion'),
+		),
+	),
+
+	'page_comments' => array(
+		'label' => esc_html__( 'Comments', 'gillion' ),
+		'desc'  => esc_html__( 'Enable or disable post comments and page comments', 'gillion' ),
 		'type'  => 'switch',
 		'value' => true,
 		'left-choice' => array(
@@ -156,8 +252,23 @@ $general_options = array(
 		),
 	),
 
+	'rtl' => array(
+		'label' => esc_html__( 'RTL Support', 'gillion' ),
+		'desc'  => esc_html__( 'Enable or disable RTL (Right to Left) support', 'gillion' ),
+		'type'  => 'switch',
+		'value' => false,
+		'left-choice' => array(
+			'value' => false,
+			'label' => esc_html__('Off', 'gillion'),
+		),
+		'right-choice' => array(
+			'value' => true,
+			'label' => esc_html__('On', 'gillion'),
+		),
+	),
+
 	'smooth-scrooling' => array(
-		'label' => esc_html__( 'Smooth Scrooling', 'gillion' ),
+		'label' => esc_html__( 'Smooth Scrolling', 'gillion' ),
 		'desc'  => esc_html__( 'Enable or disable smooth scrolling for webkit browers like Chrome', 'gillion' ),
 		'type'  => 'switch',
 		'value' => true,
@@ -171,34 +282,11 @@ $general_options = array(
 		),
 	),
 
-	'back_to_top' => array(
-		'type'  => 'select',
-		'value' => '1',
-		'label' => esc_html__('Back To Top Button', 'gillion'),
-		'desc'  => esc_html__('Choose style for "Back to top" button or disable it', 'gillion'),
-		'choices' => array(
-			'disabled' => esc_html__( 'Disabled', 'gillion' ),
-			'1' => esc_html__( 'Style 1', 'gillion' ),
-		),
-	),
-
-	'back_to_top_radius' => array(
-		'label' => esc_html__('Back To Top Button Radius', 'gillion'),
-		'desc'  => esc_html__( 'Choose back to top button radius', 'gillion' ),
-		'type'  => 'select',
-		'value' => '8px',
-		'choices' => array(
-			'0px' => esc_html__( 'None (0px)', 'gillion' ),
-			'8px' => esc_html__( 'Little (8px)', 'gillion' ),
-			'100%' => esc_html__( 'Full (100%)', 'gillion' ),
-		),
-	),
-
-	'rtl' => array(
-		'label' => esc_html__( 'RTL Support', 'gillion' ),
-		'desc'  => esc_html__( 'Enable or disable RTL(Right to Left) support', 'gillion' ),
+	'responsive_layout' => array(
+		'label' => esc_html__( 'Responsive Layout', 'gillion' ),
+		'desc'  => esc_html__( 'Enable or disable responsive layout for mobile devices', 'gillion' ),
 		'type'  => 'switch',
-		'value' => false,
+		'value' => true,
 		'left-choice' => array(
 			'value' => false,
 			'label' => esc_html__('Off', 'gillion'),
@@ -239,176 +327,16 @@ $general_options = array(
 		),
 	),
 
-	'page_comments' => array(
-		'label' => esc_html__( 'Comments', 'gillion' ),
-		'desc'  => esc_html__( 'Enable or disable post comments and page comments', 'gillion' ),
-		'type'  => 'switch',
-		'value' => true,
-		'left-choice' => array(
-			'value' => false,
-			'label' => esc_html__('Off', 'gillion'),
-		),
-		'right-choice' => array(
-			'value' => true,
-			'label' => esc_html__('On', 'gillion'),
-		),
+	'theme_options_stored' => array(
+	    'type'  => 'radio',
+	    'value' => 'file',
+	    'label' => esc_html__('Themes Options Stored In', 'jevelin'),
+	    'desc'  => esc_html__('Choose how theme options are stored', 'jevelin'),
+	    'choices' => array(
+	        'file' => esc_html__( 'Stored in CSS file (inside wp-content/uploads) - faster', 'jevelin' ),
+	        'inline' => esc_html__( 'Generated on fly in HTML HEAD tag as dynamic CSS - slower', 'jevelin' ),
+	    ),
 	),
-
-
-
-
-
-	'global_carousel_buttons' => array(
-        'type'  => 'radio',
-        'value' => 'style1',
-        'label' => esc_html__( 'Carousel Buttons Style', 'gillion' ),
-        'desc'  => esc_html__( 'Choose global carousel buttons style', 'gillion' ),
-        'choices' => array(
-			'style1' => esc_html__( '2 Round Circles with Arrows', 'gillion' ),
-			'style2' => esc_html__( '1 Round Box with Arrows', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_carousel_buttons_position' => array(
-        'type'  => 'radio',
-        'value' => 'title',
-        'label' => esc_html__( 'Carousel Buttons Position in Widgets', 'gillion' ),
-        'desc'  => esc_html__( 'Choose global carousel position in widgets', 'gillion' ),
-        'choices' => array(
-			'title' => esc_html__( 'In Title', 'gillion' ),
-			'bottom' => esc_html__( 'Bellow Content', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_title' => array(
-        'type'  => 'radio',
-        'value' => 'style1',
-        'label' => esc_html__( 'Section Title Style', 'gillion' ),
-        'desc'  => esc_html__( 'Choose global section title style', 'gillion' ),
-        'choices' => array(
-			'style1' => esc_html__( 'Line in Middle', 'gillion' ),
-			'style2' => esc_html__( 'Line Under Title', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_title_transform' => array(
-		'type'  => 'select',
-        'value' => 'none',
-		'label' => esc_html__( 'Section Title Transform', 'gillion' ),
-		'desc' => esc_html__( 'Choose section title transform', 'gillion' ),
-		'choices' => array(
-			'none' => esc_html__( 'None', 'gillion' ),
-			'uppercase' => esc_html__( 'Uppercase (transforms all characters to uppercase)', 'gillion' ),
-			'lowercase' => esc_html__( 'Lowercase (transforms all characters to lowercase)', 'gillion' ),
-			'capitalize' => esc_html__( 'Capitalize (transforms the first character of each word to uppercase)', 'gillion' ),
-        ),
-	),
-
-	'global_title_weight' => array(
-		'type'  => 'select',
-        'value' => 'default',
-		'label' => esc_html__( 'Section Title Weight', 'gillion' ),
-		'desc' => esc_html__( 'Choose section title weight', 'gillion' ),
-		'choices' => array(
-			'default' => esc_html__( 'Default (from heading settings)', 'gillion' ),
-			'100' => esc_html__( '100 - Extra Light', 'gillion' ),
-			'300' => esc_html__( '300 - Light', 'gillion' ),
-			'400' => esc_html__( '400 - Regular', 'gillion' ),
-			'600' => esc_html__( '600 - SemiBold', 'gillion' ),
-			'700' => esc_html__( '700 - Bold', 'gillion' ),
-			'900' => esc_html__( '900 - Extra Bold', 'gillion' ),
-        ),
-	),
-
-	'global_categories' => array(
-        'type'  => 'radio',
-        'value' => 'style1',
-        'label' => esc_html__( 'Categories Style', 'gillion' ),
-        'desc'  => esc_html__( 'Choose global categories style', 'gillion' ),
-        'choices' => array(
-			'style1' => esc_html__( 'Standard Text', 'gillion' ),
-			'style2' => esc_html__( 'Fancy Button', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_review' => array(
-        'type'  => 'radio',
-        'value' => 'style1',
-        'label' => esc_html__( 'Review Icon Style', 'gillion' ),
-        'desc'  => esc_html__( 'Choose global review icon style', 'gillion' ),
-        'choices' => array(
-			'style1' => esc_html__( 'Standard', 'gillion' ),
-			'style2' => esc_html__( 'Transparent', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_post_meta_order' => array(
-        'type'  => 'radio',
-        'value' => 'bottom',
-        'label' => esc_html__( 'Post Meta and Description Order', 'gillion' ),
-        'desc'  => esc_html__( 'Choose global post meta (information) and description (excerpt) order', 'gillion' ),
-        'choices' => array(
-			'bottom' => esc_html__( '1. Description 2. Meta data', 'gillion' ),
-			'top' => esc_html__( '1. Meta data 2. Description', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_instagram_widget_columns' => array(
-        'type'  => 'radio',
-        'value' => 'columns2',
-        'label' => esc_html__( 'Instagram Widget Image Columns', 'gillion' ),
-        'desc'  => esc_html__( 'Choose global instagram widget image columns in sidebar', 'gillion' ),
-        'choices' => array(
-			'columns2' => esc_html__( '2 columns ', 'gillion' ),
-			'columns3' => esc_html__( '3 columns', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_instagram_widget_button' => array(
-		'label' => esc_html__( 'Instagram Widget Button', 'gillion' ),
-		'desc'  => esc_html__( 'Enable or disable instagram widget button in sidebar', 'gillion' ),
-		'type'  => 'switch',
-		'value' => 'off',
-		'left-choice' => array(
-			'value' => 'off',
-			'label' => esc_html__('Off', 'gillion'),
-		),
-		'right-choice' => array(
-			'value' => 'on',
-			'label' => esc_html__('On', 'gillion'),
-		),
-	),
-
-	'global_categories_position' => array(
-        'type'  => 'radio',
-        'value' => 'title',
-        'label' => esc_html__( 'Categories Position', 'gillion' ),
-        'desc'  => esc_html__( 'Choose post categories position', 'gillion' ),
-        'choices' => array(
-			'title' => esc_html__( 'Above Title ', 'gillion' ),
-			'image' => esc_html__( 'Inside Image', 'gillion' ),
-        ),
-        'inline' => false,
-    ),
-
-	'global_slider_icon_style' => array(
-        'type'  => 'radio',
-        'value' => 'title',
-        'label' => esc_html__( 'Slider/Gallery Icon Style', 'gillion' ),
-        'desc'  => esc_html__( 'Choose post categories position', 'gillion' ),
-        'choices' => array(
-			'style1' => esc_html__('Bullets in circle', 'gillion'),
-			'style2' => esc_html__('Bullets without circle', 'gillion'),
-        ),
-        'inline' => false,
-    ),
 
 );
 
@@ -419,7 +347,7 @@ $options = array(
 		'type'    => 'tab',
 		'options' => array(
 			'general-box' => array(
-				'title'   => esc_html__( 'General Settings', 'gillion' ),
+				'title'   => esc_html__( 'Layouts', 'gillion' ),
 				'type'    => 'box',
 				'options' => $general_options
 			),

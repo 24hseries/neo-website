@@ -336,7 +336,25 @@
 }
 
 
+/* Single page - Variations */
+.woocommerce-variation-price span.price {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 24px!important;
+    font-weight: 5600;
+}
+
+
 /* Single page - Quantity */
+.woocommerce-grouped-product-list.group_table {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.woocommerce div.product form.cart .group_table td:first-child {
+    width: auto!important;
+}
+
 label.sh-quantity-number {
 	display: none!important;
 }
@@ -401,6 +419,12 @@ label.sh-quantity-number {
 	opacity: 0;
 	height: 0;
 	overflow: hidden;
+}
+
+.gillion-woocommerce div.product form.cart .variations .label {
+    display: table-cell;
+    color: inherit;
+    font-size: inherit;
 }
 
 
@@ -520,6 +544,25 @@ label.sh-quantity-number {
     content: "#";
     clear: both;
 }
+
+.gillion-woocommerce div.product .product_meta .product_stock .stock {
+    padding-left: 4px;
+    color: inherit;
+}
+
+.gillion-woocommerce div.product .product_meta .product_stock .out-of-stock {
+    color: #f63a4c;
+}
+
+.gillion-woocommerce div.product form.variations_form.cart[current-image=""] a.reset_variations {
+    display: none!important;
+}
+
+.gillion-woocommerce div.product form.cart .variations,
+.gillion-woocommerce div.product .woocommerce-variation-price span.price {
+    margin-bottom: 28px;
+}
+
 
 
 /* Single page - Images */

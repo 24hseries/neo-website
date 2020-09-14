@@ -6,7 +6,7 @@ Element: Button
 class vcImageContainer extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_image_container', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcImageContainer extends WPBakeryShortCode {
                 'base' => 'vcg_image_container',
                 'description' => __('Image with additional information', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -87,7 +87,8 @@ class vcImageContainer extends WPBakeryShortCode {
 
         /* Set Classes */
         $class = array();
-        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
         ob_start();
         ?>
 

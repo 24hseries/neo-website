@@ -28,12 +28,6 @@
         </a>';
     endif;
 
-    if( $atts['social_googleplus'] ) :
-        $o.= '<a href="'.esc_url( ltrim( $atts['social_googleplus'] ) ).'" '.$new_tab.' class="sh-widget-socialv2-item social-media-gplus">
-            <i class="fa fa-google-plus"></i>
-        </a>';
-    endif;
-
     if( $atts['social_instagram'] ) :
         $o.= '<a href="'.esc_url( ltrim( $atts['social_instagram'] ) ).'" '.$new_tab.' class="sh-widget-socialv2-item social-media-instagram">
             <i class="fa fa-instagram"></i>

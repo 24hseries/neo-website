@@ -18,6 +18,14 @@ wp_enqueue_script( 'gillion-plugins', get_template_directory_uri() . '/js/plugin
 wp_enqueue_script( 'gillion-scripts', get_template_directory_uri() . '/js/scripts.js', array( 'jquery' ) );
 wp_localize_script( 'gillion-scripts', 'gillion_loadmore_posts', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ));
 
+if(
+	( function_exists( 'fw_get_db_customizer_option' ) && fw_get_db_customizer_option('smooth-scrooling') == true ) ||
+	( function_exists( 'fw_get_db_settings_option' ) && fw_get_db_settings_option('smooth-scrooling') == true ) &&
+	!function_exists( 'shufflehound_disable_smooth_scrolling' )
+) :
+	wp_enqueue_script( 'smoothscroll', get_template_directory_uri() . '/js/plugins/smoothscroll.js', array( ), '1.4.4', true );
+endif;
+
 /* Unminified files
 wp_enqueue_script( 'jquery-effects-core' );
 wp_enqueue_script( 'hoverIntent', get_template_directory_uri() . '/js/plugins/hoverIntent.js', array( 'jquery' ), 'r7', true );
@@ -64,14 +72,17 @@ $upload_dir = wp_upload_dir();
 $file_dir   = $upload_dir['basedir'] . '/gillion-dynamic-styles.css';
 $file_path  = $upload_dir['baseurl'] . '/gillion-dynamic-styles.css';
 $updated = get_option( 'gillion_settings_updated' );
-if( !is_customize_preview() && file_exists( $file_dir ) && $updated > 0 ) :
+if( !is_customize_preview() && file_exists( $file_dir ) && $updated > 0 && gillion_option( 'theme_options_stored', 'file' ) == 'file' ) :
 	if ( is_ssl() ) :
 		$file_path = str_replace( 'http://', 'https://', $file_path );
 	endif;
 
 	wp_enqueue_style( 'gillion-theme-settings', $file_path, array(), ''.intval( $updated ).'' );
 else :
-	wp_add_inline_style( 'gillion-responsive', gillion_render_css() );
+	$css = gillion_render_css();
+	if( $css ) :
+		wp_add_inline_style( 'gillion-responsive', $css );
+	endif;
 endif;
 wp_add_inline_style( 'gillion-responsive', gillion_render_css_mini() );
 
@@ -91,6 +102,12 @@ wp_enqueue_style( 'gillion-styles', get_template_directory_uri() . '/style.css',
 wp_enqueue_style( 'gillion-responsive', get_template_directory_uri() . '/css/responsive.css', array(), '1.0' );
 */
 
+
+// Post video player
+wp_enqueue_style( 'plyr', get_template_directory_uri() . '/css/plugins/plyr.css' );
+wp_enqueue_script( 'plyr', get_template_directory_uri() . '/js/plugins/plyr.min.js' );
+
+
 if( class_exists( 'woocommerce' ) ) :
 	wp_enqueue_style( 'gillion-woocommerce', get_template_directory_uri() . '/css/woocommerce.css' );
 endif;
@@ -100,19 +117,24 @@ if( gillion_option('rtl', false) == true ) :
 endif;
 
 if( gillion_option('custom_css') ) :
-	wp_add_inline_style( 'gillion-responsive', gillion_compress( do_shortcode( gillion_option('custom_css') ) ) );
+	$custom_css = gillion_compress( do_shortcode( gillion_option('custom_css') ) );
+	if( $custom_css ) :
+		wp_add_inline_style( 'gillion-responsive', $custom_css );
+	endif;
 endif;
 
-add_action( 'wp_footer', 'gillion_render_js' , 100);
-function gillion_render_js() { ?>
-	<script type="text/javascript"><?php get_template_part('inc/templates/render-js' ); ?></script>
-<?php }
+if( !function_exists( 'gillion_render_js' ) ) :
+	add_action( 'wp_footer', 'gillion_render_js' , 100);
+	function gillion_render_js() { ?>
+		<script type="text/javascript"><?php get_template_part('inc/templates/render-js' ); ?></script>
+	<?php }
+endif;
 
 
 /**
  * Load Google Fonts
  */
-if ( function_exists( 'fw_get_db_settings_option' ) ) :
+if ( function_exists( 'fw_get_db_settings_option' ) && gillion_framework() != 'redux' ) :
 	if ( 'off' !== _x( 'on', 'Google fonts: on or off', 'gillion' ) ) :
 		$enqueue_fonts = array(); $o = '';
 		$google_fonts = function_exists('fw_get_google_fonts') ? fw_get_google_fonts() : '';
@@ -134,16 +156,16 @@ if ( function_exists( 'fw_get_db_settings_option' ) ) :
 		}
 
 
-		if( isset($google_fonts[$typography1['family']]) ) :
+		if( isset( $typography1['family'] ) && isset($google_fonts[$typography1['family']]) ) :
 		    $enqueue_fonts[$typography1['family']] =  $google_fonts[$typography1['family']];
 		endif;
-		if( isset($google_fonts[$typography2['family']]) ) :
+		if( isset( $typography2['family'] ) && isset($google_fonts[$typography2['family']]) ) :
 		    $enqueue_fonts[$typography2['family']] = $google_fonts[$typography2['family']];
 		endif;
-		if( isset($google_fonts[$typography5['family']]) ) :
+		if( isset( $typography5['family'] ) && isset($google_fonts[$typography5['family']]) ) :
 		    $enqueue_fonts[$typography5['family']] = $google_fonts[$typography5['family']];
 		endif;
-		if( isset($google_fonts[$typography6['family']]) ) :
+		if( isset( $typography6['family'] ) && isset($google_fonts[$typography6['family']] ) ) :
 		    $enqueue_fonts[$typography6['family']] = $google_fonts[$typography6['family']];
 		endif;
 
@@ -185,7 +207,7 @@ endif;
  */
 
 $gillion_notice = false;
-if( defined('FW') && gillion_option( 'notice_status', true ) == true && gillion_option( 'notice_close', 'enable' ) != 'disable' ) :
+if( gillion_framework_active() && gillion_option( 'notice_status', true ) == true && gillion_option( 'notice_close', 'enable' ) != 'disable' ) :
 	$gillion_notice = esc_js( gillion_option( 'notice_close', 'enable' ) );
 endif;
 
@@ -202,7 +224,9 @@ if( gillion_option('page_loader', 'off') != 'off' ) :
 	endif;
 endif;
 
-if( is_array( gillion_option( 'social_share' ) ) && count( gillion_option( 'social_share' ) ) ) :
+if( !gillion_framework_active() ) :
+	$social_share = '{"twitter":true,"facebook":true,"googleplus":true,"pinterest":true}';
+elseif( is_array( gillion_option( 'social_share' ) ) && count( gillion_option( 'social_share' ) ) ) :
 	$social_share = array();
 	foreach( gillion_option( 'social_share' ) as $icon => $key ) :
 		if( $key == true ) :
@@ -210,7 +234,7 @@ if( is_array( gillion_option( 'social_share' ) ) && count( gillion_option( 'soci
 		endif;
 	endforeach;
 else :
-	$social_share = '{"twitter":true,"facebook":true,"googleplus":true,"pinterest":true}';
+	$social_share = '';
 endif;
 
 $scripts_array = array(
@@ -225,7 +249,7 @@ $scripts_array = array(
 	'lightbox_transition' => ( ( gillion_option('lightbox_transition') > 0 ) ? esc_js( gillion_option('lightbox_transition') ) : 'elastic' ),
 	'page_numbers_prev' => esc_html__( 'Previous', 'gillion' ),
 	'page_numbers_next' => esc_html__( 'Next', 'gillion' ),
-	'rtl_support' => ( ( gillion_option('rtl_support') ) ? esc_js( gillion_option('rtl_support') ) : false ),
+	'rtl_support' => ( ( gillion_option('rtl') ) ? true : false ),
 	'footer_parallax' => ( ( gillion_option( 'footer_parallax', 'off' ) == 'on' ) ? true : false ),
 	'social_share' => json_encode( $social_share ),
 	'text_show_all' => esc_html__( 'Show All', 'gillion' ),

@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcTextSeparator2 extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_text_seperator', array( $this, '_html' ) );
     }
 
@@ -34,7 +34,7 @@ class vcTextSeparator2 extends WPBakeryShortCode {
                 'base' => 'vcg_text_seperator',
                 'description' => __('Horizontal separator line with heading', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -147,7 +147,7 @@ class vcTextSeparator2 extends WPBakeryShortCode {
 
     public function _html( $atts/*, $content*/ ) {
         $atts = ( isset( $atts ) && is_array( $atts ) ) ? $atts : array();
-        
+
         $title = ( isset( $atts['title'] ) ) ? $atts['title'] : 'Title';
         $weight = ( isset( $atts['weight'] ) ) ? $atts['weight'] : '';
         $align = ( isset( $atts['align'] ) ) ? $atts['align'] : 'center';
@@ -162,7 +162,8 @@ class vcTextSeparator2 extends WPBakeryShortCode {
         $title_style[] = ( $weight && $weight != 'default' ) ? 'font-weight: '.$weight : '';
 
         $css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
-        $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
 
         $class = array();
         $class[] = $css_class;

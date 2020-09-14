@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcBlogCategories extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_blog_categories', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcBlogCategories extends WPBakeryShortCode {
                 'base' => 'vcg_blog_categories',
                 'description' => __('Links to categories', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(

@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcWooCommerceProducts extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_woocommerce_products', array( $this, '_html' ) );
     }
 
@@ -19,7 +19,7 @@ class vcWooCommerceProducts extends WPBakeryShortCode {
                 'base' => 'vcg_woocommerce_products',
                 'description' => __('Gillion WooCommerce products', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                'icon' => get_template_directory_uri().'/img/VC_WC_icon.svg',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(

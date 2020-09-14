@@ -1,4 +1,6 @@
-<?php if( is_cart() || is_checkout() ) :
+<?php
+$step = '';
+if( is_cart() || is_checkout() ) :
     if( is_wc_endpoint_url( 'order-received' ) ) :
         $step = 'step1 step2 step3';
     elseif( is_checkout() ) :

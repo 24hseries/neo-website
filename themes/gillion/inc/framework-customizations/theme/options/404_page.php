@@ -2,6 +2,14 @@
 	die( 'Forbidden' );
 }
 
+$gillion_get_pages = gillion_get_pages();
+$get_page_templates = gillion_get_page_templates();
+if( is_array( $get_page_templates ) && isset( $get_page_templates['default'] ) ) :
+	unset( $get_page_templates['default'] );
+	$gillion_get_pages = array_merge( $gillion_get_pages, $get_page_templates );
+endif;
+
+
 $page_404_options = array(
 	'404_status' => array(
 		'type' => 'switch',
@@ -16,6 +24,14 @@ $page_404_options = array(
 			'value' => true,
 			'label' => esc_html__('On', 'gillion'),
 		),
+	),
+
+	'404_wpbakery_page' => array(
+	    'type'  => 'select',
+	    'value' => 'disabled',
+	    'label' => esc_html__('Replace with page content', 'jevelin'),
+	    'desc'  => esc_html__('Choose any WPbakery page builder page and set it to 404 page', 'jevelin'),
+	    'choices' => $gillion_get_pages,
 	),
 
 	'404_title' => array(

@@ -26,7 +26,7 @@ $options = array(
 
 					'google_analytics'   => array(
 						'label' => esc_html__( 'Google Analytics ID', 'gillion' ),
-						'desc'  => esc_html__( 'Enter your Google Analytics ID like UA-XXXXX-Y to enable Google Analytics statistic', 'gillion' ),
+						'desc'  => esc_html__( 'Enter your Google Analytics ID like UA-XXXXX-Y to enable Google Analytics statistics', 'gillion' ),
 						'type'  => 'text',
 						'attr'  => array( 'style' => 'max-width: 150px' ),
 					),

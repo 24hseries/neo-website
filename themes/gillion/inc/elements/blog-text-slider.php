@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcBlogTextSlider extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_blog_text_slider', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcBlogTextSlider extends WPBakeryShortCode {
                 'base' => 'vcg_blog_text_slider',
                 'description' => __('Text Slider', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -88,6 +88,7 @@ class vcBlogTextSlider extends WPBakeryShortCode {
                             esc_html__('Style 3', 'gillion') => 'style3',
                             esc_html__('Style 4', 'gillion') => 'style4',
                             esc_html__('Style 5', 'gillion') => 'style5',
+                            esc_html__('Style 6 (with load more button instead of next/prev arrows)', 'gillion') => 'style6',
                         ),
                         'type' => 'dropdown',
                         'group' => __( 'Styling', 'gillion' ),
@@ -167,11 +168,13 @@ class vcBlogTextSlider extends WPBakeryShortCode {
                 });
             </script>
             <div class="blog-textslider <?php echo $id; ?> blog-textslider-<?php echo $style; ?> sh-table">
-                <div class="sh-table-cell">
-                    <div class="blog-textslider-title sh-heading-font<?php echo ( $style == 'style5') ? ' sh-heading-color sh-heading-weight' : ''; ?>">
-                        <?php echo ( $title ); ?>
+                <?php if( $title ) : ?>
+                    <div class="sh-table-cell">
+                        <div class="blog-textslider-title sh-heading-font<?php echo ( $style == 'style5' || $style == 'style6' ) ? ' sh-heading-color sh-heading-weight' : ''; ?>">
+                            <?php echo ( $title ); ?>
+                        </div>
                     </div>
-                </div>
+                <?php endif; ?>
                 <div class="sh-table-cell" style="width: 100%;">
                     <div class="blog-textslider-posts">
                         <?php
@@ -184,15 +187,31 @@ class vcBlogTextSlider extends WPBakeryShortCode {
                         if( $posts->have_posts() ) : $i=0;
                             while ( $posts->have_posts() ) : $posts->the_post(); $i++; ?>
 
-                                <div class="blog-textslider-post<?php echo ( $uppercase == true) ? ' sh-uppercase' : ''; echo ( $style == 'style5') ? ' sh-heading-font' : ''; ?>">
+                                <div class="blog-textslider-post<?php echo ( $uppercase == true) ? ' sh-uppercase' : ''; echo ( $style == 'style5' ) ? ' sh-heading-font' : ''; ?>">
                                     <?php if( $style == 'style5' ) : ?>
                                         <div class="sh-table">
                                             <div class="sh-table-cell">
                                                 <div class="blog-textslider-post-thumnail" style="background-image: url( <?php echo esc_url( the_post_thumbnail_url( 'gillion-square-micro' ) ); ?>);"></div>
                                             </div>
                                             <div class="sh-table-cell" style="width: 100%;">
-                                                <a href="<?php echo esc_url( get_permalink() ); ?>">
+                                                <a href="<?php echo esc_url( get_permalink() ); ?>" class="blog-textslider-post-title">
                                                     <?php the_title(); ?>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    <?php elseif(  $style == 'style6' ) : ?>
+                                        <div class="sh-table">
+                                            <div class="sh-table-cell">
+                                                <div class="blog-textslider-post-thumnail" style="background-image: url( <?php echo esc_url( the_post_thumbnail_url( 'gillion-square-micro' ) ); ?>);"></div>
+                                            </div>
+                                            <div class="sh-table-cell" style="width: 100%;">
+                                                <a href="<?php echo esc_url( get_permalink() ); ?>" class="blog-textslider-post-title sh-post-title-font">
+                                                    <?php the_title(); ?>
+                                                </a>
+                                            </div>
+                                            <div class="sh-table-cell">
+                                                <a href="<?php echo esc_url( get_permalink() ); ?>" class="blog-textslider-post-load-more sh-accent-color-background sh-accent-color-background-hover">
+                                                    <?php esc_attr_e( 'Read more', 'gillion' ); ?>
                                                 </a>
                                             </div>
                                         </div>

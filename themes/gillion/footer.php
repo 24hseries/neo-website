@@ -2,9 +2,15 @@
 /**
  * Footer
  */
-$page_layout_val = gillion_option('page_layout');
-$page_layout = ( isset( $page_layout_val['page_layout'] ) ) ? esc_attr($page_layout_val['page_layout']) : 'line';
-$page_layout_atts = gillion_get_picker( $page_layout_val );
+if( gillion_framework() == 'redux' ) :
+	$page_layout = gillion_option( 'page_layout' );
+	$boxed_footer_width = gillion_option( 'boxed_footer_width' );
+else :
+	$page_layout_val = gillion_option('page_layout');
+	$page_layout = ( isset( $page_layout_val['page_layout'] ) ) ? esc_attr($page_layout_val['page_layout']) : 'line';
+	$page_layout_atts = gillion_get_picker( $page_layout_val );
+	$boxed_footer_width = !empty( $page_layout_atts['footer_width'] ) ? $page_layout_atts['footer_width'] : '';
+endif;
 wp_reset_postdata();
 
 $footer_template = ( gillion_option( 'footer_template' ) != 'default' ) ? gillion_option( 'footer_template' ) : 'default';
@@ -21,11 +27,11 @@ $footer_template_id = intval( str_replace( 'footer-', '', $footer_template ) );
 			get_template_part('inc/templates/footer-instagram' );
 		?>
 
-	<?php if( $page_layout == 'boxed' && $page_layout_atts['footer_width'] == 'full' ) : ?>
+	<?php if( $page_layout == 'boxed' && $boxed_footer_width == 'full' ) : ?>
 		</div></div>
 	<?php endif; ?>
 
-		<?php if( !in_array( get_post_type( get_the_ID() ), array( 'shufflehound_header', 'shufflehound_footer' ) ) ) : ?>
+		<?php if( !in_array( get_post_type( get_the_ID() ), array( 'shufflehound_header', 'shufflehound_footer', 'shufflehound_temp' ) ) ) : ?>
 			<?php if( is_numeric( $footer_template ) && get_post_status( $footer_template ) == 'publish' ) : ?>
 
 				<div class="sh-footer-template">
@@ -37,9 +43,28 @@ $footer_template_id = intval( str_replace( 'footer-', '', $footer_template ) );
 							</a>
 						<?php endif; ?>
 						<?php
+						/* Footer Builder Output */
+						if( class_exists( 'Vc_Manager' ) ) :
+							ob_start();
+
 							Vc_Manager::getInstance()->vc()->addShortcodesCustomCss( $footer_template );
-						    $the_post = get_post( $footer_template );
+							$footer_css = ob_get_contents();
+							ob_end_clean();
+
+							if( $footer_css ) :
+								echo $footer_css;
+							else :
+								$footer_custom_css = get_post_meta( $footer_template, '_wpb_shortcodes_custom_css', true );
+								if( !empty( $footer_custom_css ) ) :
+									echo '<style type="text/css">';
+									echo $footer_custom_css;
+									echo '</style>';
+								endif;
+							endif;
+
+							$the_post = get_post( $footer_template );
 							echo do_shortcode(  apply_filters( 'the_content', $the_post->post_content ) );
+						endif;
 						?>
 					</div>
 				</div>
@@ -64,7 +89,7 @@ $footer_template_id = intval( str_replace( 'footer-', '', $footer_template ) );
 		<?php endif; ?>
 
 
-		<?php if( $page_layout != 'boxed' || $page_layout_atts['footer_width'] != 'full' ) : ?>
+		<?php if( $page_layout != 'boxed' || $boxed_footer_width != 'full' ) : ?>
 			</div>
 		<?php endif; ?>
 
@@ -78,7 +103,7 @@ $footer_template_id = intval( str_replace( 'footer-', '', $footer_template ) );
 			get_template_part('inc/templates/login_popup' );
 		endif; ?>
 
-	<?php if( $page_layout != 'boxed' || $page_layout_atts['footer_width'] != 'full' ) : ?>
+	<?php if( $page_layout != 'boxed' || $boxed_footer_width != 'full' ) : ?>
 		</div>
 	<?php endif; ?>
 

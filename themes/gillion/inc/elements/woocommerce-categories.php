@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcWooCommerceCategories extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_woocommerce_categories', array( $this, '_html' ) );
     }
 
@@ -19,7 +19,7 @@ class vcWooCommerceCategories extends WPBakeryShortCode {
                 'base' => 'vcg_woocommerce_categories',
                 'description' => __('Link to WooCommerce categories', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                'icon' => get_template_directory_uri().'/img/VC_WC_icon.svg',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -80,7 +80,7 @@ class vcWooCommerceCategories extends WPBakeryShortCode {
                         endif;
 
                         $id = $category->term_taxonomy_id;
-                        $thumbnail_id = get_woocommerce_term_meta( $id, 'thumbnail_id', true );
+                        $thumbnail_id = get_term_meta( $id, 'thumbnail_id', true );
                         $image = wp_get_attachment_image_src( $thumbnail_id, 'large' ); ?>
 
                         <div class="vcg-woocommerce-categories-item<?php echo $class; ?>">

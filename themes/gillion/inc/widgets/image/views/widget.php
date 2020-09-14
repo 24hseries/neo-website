@@ -3,7 +3,7 @@
 <?php echo wp_kses_post( $before_widget ); ?>
 
 	<?php
-		if( $atts['title'] ) :
+		if( isset( $atts['title'] ) && $atts['title'] ) :
 			echo '<div class="sh-widget-title-styling"><h3 class="widget-title">'.esc_attr( $atts['title'] ).'</h3></div>';
 		endif;
 	?>

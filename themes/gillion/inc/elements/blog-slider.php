@@ -6,7 +6,7 @@ Element: Blog Slider
 class vcBlogSlider extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_blog_slider', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcBlogSlider extends WPBakeryShortCode {
                 'base' => 'vcg_blog_slider',
                 'description' => __('Gillion blog posts slider', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -38,6 +38,8 @@ class vcBlogSlider extends WPBakeryShortCode {
                             __('Style 8 (grid slide with 4 posts)', 'gillion') => 'style8',
                             __('Style 9 (mosaic slide with 4 posts)', 'gillion') => 'style9',
                             __('Style 10 (carousel - centered)', 'gillion') => 'style2 style10',
+                            __('Style 11 (minimalistic)', 'gillion') => 'style11',
+                            __('Style 12 (mosaic slide with 5 posts)', 'gillion') => 'style12',
                         ),
                         'type' => 'dropdown',
                         'holder' => 'div',
@@ -224,22 +226,24 @@ class vcBlogSlider extends WPBakeryShortCode {
                 <?php /* Slider Settings */ ?>
                 <?php if( $style != 'style4' ) : ?>
                     if( $.isFunction( $.fn.slick ) ) {
-                        <?php if( $style != 'style5' && $style != 'style8' && $style != 'style9' ) : ?>
+                        <?php if( $style != 'style5' && $style != 'style8' && $style != 'style9' && $style != 'style12' ) : ?>
                         $('.<?php echo esc_js( $id ); ?> .blog-slider-list').slick({
                         <?php else : ?>
                         $('.<?php echo esc_js( $id ); ?>').slick({
                         <?php endif; ?>
 
+                            /* rtl: <?php ( gillion_option( 'rtl' ) ? 'true' : 'false' ); ?>, */
+
                             autoplay: <?php echo esc_js( $autoplay ); ?>,
                             autoplaySpeed: <?php echo esc_js( $autoplay_speed ); ?>,
 
                             dots: <?php echo esc_js( $dots ); ?>,
-                            arrows: <?php echo ( in_array( $style, array( 'style1', 'style2', 'style2 style10', 'style5', 'style8', 'style9' ) ) ) ? 'true' : 'false'; ?>,
+                            arrows: <?php echo ( in_array( $style, array( 'style1', 'style2', 'style2 style10', 'style5', 'style8', 'style9', 'style11' ) ) ) ? 'true' : 'false'; ?>,
                             swipe:  <?php echo ( !in_array( $style, array( 'style1', 'style6') ) ) ? 'true' : 'false'; ?>,
                             swipeToSlide: true,
                             cssEase: 'cubic-bezier(0.445, 0.05, 0.55, 0.95)',
                             appendDots: $('.<?php echo esc_js( $id ); ?> .blog-slider-dots'),
-                            fade: <?php echo ( in_array( $style, array( 'style3') ) ) ? 'true' : 'false'; ?>,
+                            fade: <?php echo ( in_array( $style, array( 'style3', 'style11' ) ) ) ? 'true' : 'false'; ?>,
                             speed: <?php echo ( in_array( $style, array( 'style2', 'style2 style10' ) ) ) ? '1100' : '500'; ?>,
                             slidesToScroll: <?php echo ( in_array( $style, array( 'style1', 'style6', 'style7') ) ) ? '1' : '0'; ?>,
 
@@ -249,7 +253,7 @@ class vcBlogSlider extends WPBakeryShortCode {
                                 nextArrow: '<div class="slick-next"></div>',
                             <?php endif; ?>
 
-                            <?php if( in_array( $style, array( 'style5', 'style8', 'style9' ) ) ) : ?>
+                            <?php if( in_array( $style, array( 'style5', 'style8', 'style9', 'style11' ) ) ) : ?>
                                 prevArrow: '<div class="slick-prev"><i class="icon icon-arrow-left-circle"></i></div>',
                                 nextArrow: '<div class="slick-next"><i class="icon icon-arrow-right-circle"></i></div>',
                             <?php endif; ?>
@@ -321,7 +325,7 @@ class vcBlogSlider extends WPBakeryShortCode {
                         $('.<?php echo esc_js( $id ); ?> .blog-slider-list .slick-next').html( '<i class="icon icon-arrow-right-circle"></i><p class="sh-heading-font">' + slider_info.next().find('.post-categories').html() + '</p><h5>' + slider_info.next().find('h2').html() + '</h5>' ).fadeIn('slow');
                     });
 
-                <?php elseif( in_array( $style, array( 'style1', 'style6') ) ) : ?>
+                <?php elseif( in_array( $style, array( 'style1', 'style6' ) ) ) : ?>
 
                     $('.<?php echo esc_attr( $id ); ?> .blog-slider-list').on('setPosition', function(event, slick, currentSlide, nextSlide){
                         var slider_info_prev = $('.<?php echo esc_attr( $id ); ?> .blog-slider-item.slick-active').prev();
@@ -380,10 +384,12 @@ class vcBlogSlider extends WPBakeryShortCode {
                 </div>
 
 
-            <?php elseif( $style == 'style3' ) : ?>
+            <?php elseif( $style == 'style3' || $style == 'style11' ) :
+                $style_class = ( $style == 'style3' ) ? ' blog-slider-style3 ' : ' blog-slider-style3 blog-slider-style11 ';
+            ?>
 
 
-                <div class="blog-slider blog-slider-style3 <?php echo esc_attr( $id.$class ); ?>" style="position: relative;">
+                <div class="blog-slider <?php echo esc_attr( $style_class.$id.$class ); ?>" style="position: relative;">
                     <div class="blog-slider-list">
                         <?php
                         if( $posts->have_posts() ) :
@@ -627,7 +633,10 @@ class vcBlogSlider extends WPBakeryShortCode {
                 </div>
 
 
-            <?php elseif( $style == 'style8' || $style == 'style9' ) : ?>
+            <?php elseif( $style == 'style8' || $style == 'style9' || $style == 'style12' ) :
+                $items_per_page = ( $style == 'style12' ) ? 5 : 4;
+                $style = ( $style == 'style12' ) ? 'style9 blog-slider-'.$style : $style;
+            ?>
 
                 <div class="blog-slider-container-<?php echo esc_attr( $style ); ?>">
                     <div class="blog-slider blog-slider-<?php echo esc_attr( $style ); ?> <?php echo esc_attr( $id.$class ); ?>">
@@ -636,6 +645,7 @@ class vcBlogSlider extends WPBakeryShortCode {
                                 while ( $posts->have_posts() ) : $posts->the_post(); $j++; $n++;
                                 if( $style == 'style8' ) :
                                     $size = ( $j == 1 || $j == 4 ) ? 'large' : 'small';
+
                                 elseif( $style == 'style9' ) :
                                     if( $j == 1 ) :
                                         $size = 'large';
@@ -644,7 +654,17 @@ class vcBlogSlider extends WPBakeryShortCode {
                                     else :
                                         $size = 'medium';
                                     endif;
+
+                                elseif( $style == 'style9 blog-slider-style12' ) :
+                                    $size = ( $j == 3 ) ? 'large' : 'small';
                                 endif; ?>
+
+                                <?php if( $j == 1 && $style == 'style9 blog-slider-style12' ) : ?>
+                                    <div class="blog-grid-small-container">
+                                <?php endif; ?>
+                                <?php if( $j == 3 && $style == 'style9 blog-slider-style12' ) : ?>
+                                    </div>
+                                <?php endif; ?>
 
                                     <div class="blog-grid-<?php echo esc_attr( $size ); ?> blog-grid-item<?php echo esc_attr( $j ); ?>">
                                         <div class="blog-grid-item-container blog-slider-item" style="background-image: url( <?php echo esc_url( the_post_thumbnail_url( 'large' ) ); ?> );">
@@ -672,7 +692,7 @@ class vcBlogSlider extends WPBakeryShortCode {
                                         </div>
                                     </div>
 
-                                    <?php if( $j == 4 && $n != $posts->post_count ) : $j = 0 ?>
+                                    <?php if( $j == $items_per_page && $n != $posts->post_count ) : $j = 0 ?>
                                         </div><div class="blog-grid-list">
                                     <?php endif; ?>
 

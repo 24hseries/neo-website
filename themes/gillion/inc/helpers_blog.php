@@ -8,6 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); }
 add_filter( 'post_gallery', 'gillion_post_gallery', 10, 2 );
 function gillion_post_gallery( $string, $attr ){
 
+    // Disable if enhanced post gallery option is off
+    if( gillion_option( 'enhanced_post_gallery', 'on' ) != 'on' ) :
+        return ;
+    endif;
+
+
     $justify_height_class = ( isset( $attr['gillion_justify_height'] ) && $attr['gillion_justify_height'] ) ? $attr['gillion_justify_height'] : 'medium';
     $style = ( isset( $attr['gillion_style'] ) && $attr['gillion_style'] ) ? $attr['gillion_style'] : 'justify';
     $columns = ( isset( $attr['columns'] ) && $attr['columns'] >= 1 && $attr['columns'] <= 4 ) ? $attr['columns'] : '3';
@@ -375,12 +381,14 @@ if ( ! function_exists( 'gillion_post_review' ) ) :
                 $min = 124;
             	$offset = $min - ( 1.24 * $percent );
 
+                $store = ( $color ) ? 'stroke: '.gillion_hex2rgba( $color, '0.6' ).';' : '';
+
                 $large = '
                 <div class="post-review-svg">
                     <div class="sh-pie" data-score="'.number_format( (float)($percent / 10), 1, '.', '').'" data-offset="'.$offset.'">
             			<svg width="46" height="46" class="sh-pie-svg">
             				<circle r="21" cx="23" cy="23" fill="transparent" stroke-dasharray="128" stroke-dashoffset="0"
-            				style="stroke-dashoffset: '.$min.'px;"></circle>
+            				style="'.$store.'stroke-dashoffset: '.$min.'px;"></circle>
             			</svg>
             		</div>
                 </div>';
@@ -415,6 +423,16 @@ endif;
  */
 if ( ! function_exists( 'gillion_post_meta' ) ) :
 function gillion_post_meta( $layout = '' ) {
+
+    /* Set single post meta from theme settings */
+    $is_single_post = 0;
+    if( $layout == 10 ) :
+        $layout = gillion_option( 'blog_meta_single_post', '50' );
+        $is_single_post++;
+    endif;
+
+
+    /* Get elements */
     $elements = gillion_option( 'post_elements' );
     $id = get_the_ID();
 
@@ -468,10 +486,40 @@ function gillion_post_meta( $layout = '' ) {
     elseif( $layout == 56 ) : $items = array( 'author', 'comments' );
     elseif( $layout == 80 ) : $items = array( 'added', 'readtime' );
     elseif( $layout == 100 ) : $items = array( 'views', 'comments' );
+    elseif( $layout == 500 ) : $items = array();
 
     /* Masonry and grid posts */
     else :
         $items = array( 'author', 'comments', 'readtime' );
+    endif;
+
+
+    /* Enable/disable meta information from theme settings */
+    if( !$is_single_post ) :
+        // remove author (without image) + date if needed
+        if( gillion_option( 'blog_meta_author', 'on' ) == 'off' ) :
+            $items = array_diff( $items, array( 'author' ) );
+        endif;
+
+        // remove author (with image) + date if needed
+        if( gillion_option( 'blog_meta_authorfull', 'on' ) == 'off' ) :
+            $items = array_diff( $items, array( 'authorfull' ) );
+        endif;
+
+        // remove comments if needed
+        if( gillion_option( 'blog_meta_comments', 'on' ) == 'off' ) :
+            $items = array_diff( $items, array( 'comments' ) );
+        endif;
+
+        // remove page views if needed
+        if( gillion_option( 'blog_meta_pageviews', 'on' ) == 'off' ) :
+            $items = array_diff( $items, array( 'views' ) );
+        endif;
+
+        // remove read time if needed
+        if( gillion_option( 'blog_meta_readtime', 'on' ) == 'off' ) :
+            $items = array_diff( $items, array( 'readtime' ) );
+        endif;
     endif;
 ?>
 
@@ -495,11 +543,11 @@ function gillion_post_meta( $layout = '' ) {
                 <span>
                 <a href="<?php echo get_author_posts_url( $author_id ); ?>" class="post-author"><?php
                     echo esc_attr( $author );
-                ?></a></span><?php if( !defined('FW') || ( isset($elements['date']) && $elements['date'] == true ) ) :
+                ?></a></span><?php if( !gillion_framework_active() || ( isset($elements['date']) && $elements['date'] == true ) ) :
                     echo ',';
                 endif; ?>
 
-                <?php if( !defined('FW') || ( isset($elements['date']) && $elements['date'] == true ) ) : ?>
+                <?php if( !gillion_framework_active() || ( isset($elements['date']) && $elements['date'] == true ) ) : ?>
                     <a href="<?php echo esc_url( get_permalink() ); ?>" class="post-date">
                         <?php if( $layout == 2 ) : ?>
                             <i class="icon icon-calendar"></i>
@@ -516,7 +564,7 @@ function gillion_post_meta( $layout = '' ) {
 
         <?php /* Date Only */ ?>
         <?php if( array_search( 'added', $items ) !== false ) : ?>
-            <?php if( !defined('FW') || ( isset($elements['date']) && $elements['date'] == true ) ) : ?>
+            <?php if( !gillion_framework_active() || ( isset($elements['date']) && $elements['date'] == true ) ) : ?>
                 <span class="post-auhor-date">
                     <a href="<?php echo esc_url( get_permalink() ); ?>" class="post-date">
                         <?php if( gillion_option( 'post_date_format', 'friendly' ) == 'friendly' ) : ?>
@@ -531,7 +579,7 @@ function gillion_post_meta( $layout = '' ) {
 
         <?php /* Date Only with Icon */ ?>
         <?php if( array_search( 'added2', $items ) !== false ) : ?>
-            <?php if( !defined('FW') || ( isset($elements['date']) && $elements['date'] == true ) ) : ?>
+            <?php if( !gillion_framework_active() || ( isset($elements['date']) && $elements['date'] == true ) ) : ?>
                 <span class="post-auhor-date">
                     <a href="<?php echo esc_url( get_permalink() ); ?>" class="post-date">
                         <i class="icon icon-clock"></i>
@@ -546,7 +594,7 @@ function gillion_post_meta( $layout = '' ) {
         <?php endif; ?>
 
         <?php /* Comments */ ?>
-        <?php if( ( !defined('FW') && comments_open() ) || ( isset($elements['comments']) && $elements['comments'] == true && comments_open() ) && ( array_search( 'comments', $items ) !== false ) ) : ?>
+        <?php if( ( !gillion_framework_active() && comments_open() ) || ( isset($elements['comments']) && $elements['comments'] == true && comments_open() ) && ( array_search( 'comments', $items ) !== false ) ) : ?>
             <a href="<?php echo esc_url( get_permalink() ); ?>#comments" class="post-comments">
                 <i class="icon icon-bubble"></i>
                 <?php echo esc_attr( get_comments_number( '0', '1', '%' ) ); ?>
@@ -557,7 +605,7 @@ function gillion_post_meta( $layout = '' ) {
         <?php if( array_search( 'readtime', $items ) !== false ) : ?>
             <span class="post-readtime">
                 <i class="icon icon-clock"></i>
-                <?php echo gillion_read_time( get_the_content() ); ?>
+                <?php echo gillion_read_time( get_post_field( 'post_content', get_the_ID() ) ); ?>
             </span>
         <?php endif; ?>
 
@@ -608,7 +656,7 @@ endif;
 /**
  * Get Review Rating for Post
  */
-if ( ! function_exists( 'gillion_post_single_review' ) ) :
+if( ! function_exists( 'gillion_post_single_review' ) ) :
     function gillion_post_single_review( $id, $score, $review_layout ) {
 
         $pros = gillion_post_option( $id, 'review_pros' );
@@ -631,7 +679,7 @@ if ( ! function_exists( 'gillion_post_single_review' ) ) :
                 </h4>
                 <div class="post-content-review-score-pattern"<?php echo wp_kses_post( $color_out ); ?>></div>
             </div>
-            <?php if( $verdict || count($pros) || count($cons) || count($criteria) ) : ?>
+            <?php if( $verdict || ( is_array( $pros ) && count( $pros ) ) || ( is_array( $cons ) && count( $cons ) ) || ( is_array( $criteria ) && count( $criteria ) ) ) : ?>
                 <div class="post-content-review-details">
                     <?php if( count( $pros ) > 0 || count( $cons ) > 0 ) : ?>
                         <div class="post-content-review-pros-cons">
@@ -656,7 +704,8 @@ if ( ! function_exists( 'gillion_post_single_review' ) ) :
                         </div>
                     <?php endif; ?>
                     <div class="post-content-review-progressbar">
-                        <?php foreach( $criteria as $item ) :
+                        <?php
+                        foreach( $criteria as $item ) :
                             $item_score = ( isset( $item['score'] ) ) ? $item['score'] : 0;
                             if( $item_score > 10) {
                                 $item_score = 10;
@@ -863,4 +912,29 @@ $position = gillion_option( 'global_post_meta_order', 'bottom' ); ?>
     <?php endif; ?>
 
 <?php }
+endif;
+
+
+/**
+** Read it later page
+**/
+if ( ! function_exists( 'gillion_readlater_page_var' ) ) :
+    function gillion_readlater_page_var( $vars ) {
+        array_push( $vars, 'read-it-later' );
+        return $vars;
+    }
+    add_action( 'query_vars', 'gillion_readlater_page_var' );
+endif;
+
+if ( ! function_exists( 'gillion_readlater_page_template' ) ) :
+    function gillion_readlater_page_template( $template ){
+        if( !is_admin() && is_home() && isset( $_GET['read-it-later'] ) ) :
+            $new_template = trailingslashit( get_template_directory() ) . '/page-readlater.php';
+            if( file_exists( $new_template ) ) :
+                $template = $new_template;
+            endif;
+        endif;
+        return $template;
+    }
+    add_filter('template_include', 'gillion_readlater_page_template', 1000, 1);
 endif;

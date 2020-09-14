@@ -45,7 +45,7 @@
 					<?php if ( $banner_code ) :
 							echo apply_filters( 'the_content', $banner_code );
 						elseif ( $banner ) : ?>
-						<?php if( $banner_url ) : ?><a href="<?php echo esc_url($banner_url); ?>"><?php endif; ?>
+						<?php if( $banner_url ) : ?><a href="<?php echo esc_url($banner_url); ?>" target="_blank"><?php endif; ?>
 							<img src="<?php echo gillion_option_image('header_banner'); ?>" alt="" />
 						<?php if( $banner_url ) : ?></a><?php endif; ?>
 					<?php endif; ?>

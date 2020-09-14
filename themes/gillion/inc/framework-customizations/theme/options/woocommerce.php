@@ -33,6 +33,21 @@ $woocommerce_options = array(
         ),
     ),
 
+	'wc_sort_sale' => array(
+		'type' => 'switch',
+		'label' => esc_html__( 'WooCommerce Sort by Sale', 'gillion' ),
+		'desc' => esc_html__( 'Enable or disable opaction to sort by sale', 'gillion' ),
+		'value' => 'off',
+		'left-choice' => array(
+			'value' => 'off',
+			'label' => esc_html__('Off', 'gillion'),
+		),
+		'right-choice' => array(
+			'value' => 'on',
+			'label' => esc_html__('On', 'gillion'),
+		),
+	),
+
     'wc_columns' => array(
         'type'  => 'radio',
         'value' => '4',
@@ -73,7 +88,7 @@ $woocommerce_options = array(
     'wc_related' => array(
         'type' => 'switch',
         'label' => esc_html__( 'Related Products', 'gillion' ),
-        'desc' => esc_html__( 'Enable or disable "Related products" in single product page', 'gillion' ),
+        'desc' => esc_html__( 'Enable or disable "Related Products" in single product page', 'gillion' ),
         'value' => true,
         'left-choice' => array(
             'value' => false,
@@ -125,7 +140,7 @@ $woocommerce_options = array(
 	'wc_labels' => array(
         'type' => 'switch',
         'label' => esc_html__( 'Show Labels', 'gillion' ),
-        'desc' => esc_html__( 'Enable or disable to show labels insted of the input placeholder', 'gillion' ),
+        'desc' => esc_html__( 'Enable or disable to show labels instead of the input placeholder', 'gillion' ),
         'value' => 'off',
         'left-choice' => array(
             'value' => 'off',

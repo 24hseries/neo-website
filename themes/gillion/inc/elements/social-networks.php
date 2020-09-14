@@ -6,7 +6,7 @@ Element: Button
 class vcSocialNetworks extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_social_networks', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcSocialNetworks extends WPBakeryShortCode {
                 'base' => 'vcg_social_networks',
                 'description' => __('Links to your social networks', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -35,13 +35,6 @@ class vcSocialNetworks extends WPBakeryShortCode {
             			'heading' => __( 'Twitter', 'gillion' ),
             			'param_name' => 'twitter',
             			'description' => __( 'Enter URL to your Twitter profile', 'gillion' ),
-            		),
-
-                    array(
-            			'type' => 'textfield',
-            			'heading' => __( 'Google+', 'gillion' ),
-            			'param_name' => 'googleplus',
-            			'description' => __( 'Enter URL to your Google+ profile', 'gillion' ),
             		),
 
                     array(
@@ -103,27 +96,28 @@ class vcSocialNetworks extends WPBakeryShortCode {
     }
 
 
-    public function _html( $atts, $content ) {
-        $atts = ( isset( $atts ) && is_array( $atts ) ) ? $atts : array();
+    public function _html( $atts ) {
+        extract( shortcode_atts( array(
+            'facebook' => '',
+            'twitter' => '',
+            'tumblr' => '',
+            'pinterest' => '',
+            'alignment' => 'center',
+            'font_size' => '18px',
+            'icon_color' => '',
+            'css' => 'none',
+        ), $atts ) );
 
-        /* Get Values */
-        $id = 'vcg-button-'.gillion_rand();
-        $facebook = ( isset( $atts['facebook'] ) ) ? $atts['facebook'] : '';
-        $twitter = ( isset( $atts['twitter'] ) ) ? $atts['twitter'] : '';
-        $googleplus = ( isset( $atts['googleplus'] ) ) ? $atts['googleplus'] : '';
-        $tumblr = ( isset( $atts['tumblr'] ) ) ? $atts['tumblr'] : '';
-        $pinterest = ( isset( $atts['pinterest'] ) ) ? $atts['pinterest'] : '';
-
-        $alignment = ( isset( $atts['alignment'] ) ) ? $atts['alignment'] : 'center';
-        $font_size = ( isset( $atts['font_size'] ) ) ? $atts['font_size'] : '18px';
-        $icon_color = ( isset( $atts['icon_color'] ) ) ? $atts['icon_color'] : '';
-        $vc_css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
 
         /* Set Classes and Styles */
-        $class = array(); $css = array();
-        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $vc_css, ' ' ), $this->settings['base'], $atts );
+        $id = 'vcg-button-'.gillion_rand();
+        $class = array();
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
         $class[] = $id;
         $class[] = ( $alignment ) ? 'vcg-social-networks-alignment-'.$alignment : '';
+
+        $css = [];
         $css[] = ( $font_size ) ? 'font-size: '.$font_size : '';
         $css[] = ( $icon_color ) ? 'color: '.$icon_color : '';
         ob_start();
@@ -146,12 +140,6 @@ class vcSocialNetworks extends WPBakeryShortCode {
                     <?php if( $twitter ) : ?>
                         <a href="<?php echo esc_url( $twitter ); ?>" target = "_blank"  class="vcg-social-networks-item">
                             <i class="fa fa-twitter"></i>
-                        </a>
-                    <?php endif; ?>
-
-                    <?php if( $googleplus ) : ?>
-                        <a href="<?php echo esc_url( $googleplus ); ?>" target = "_blank"  class="vcg-social-networks-item">
-                            <i class="fa fa-google-plus"></i>
                         </a>
                     <?php endif; ?>
 

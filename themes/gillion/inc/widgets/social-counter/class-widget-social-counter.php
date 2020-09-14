@@ -1,176 +1,238 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); }
 
-class Widget_Social_counter extends WP_Widget {
+if( !class_exists( 'Widget_Social_counter' ) ) {
+    class Widget_Social_counter extends WP_Widget {
 
-    /**
-     * Widget constructor.
-     */
-    private $options;
-    private $prefix;
-    function __construct() {
+        /**
+         * Widget constructor.
+         */
+        private $options;
+        private $prefix;
+        function __construct() {
 
-        $widget_ops = array( 'description' => esc_html__( 'Get more income with ads', 'gillion' ) );
-        parent::__construct( false, esc_html__( 'Shufflehound Social Counter', 'gillion' ), $widget_ops );
-        $this->options = array(
+            $widget_ops = array( 'description' => esc_html__( 'Show your social network like/follower count', 'gillion' ) );
+            parent::__construct( false, esc_html__( 'Shufflehound Social Counter 2.0', 'gillion' ), $widget_ops );
+            $this->options = array(
 
-            'id' => array( 'type' => 'unique' ),
+                'id' => array( 'type' => 'unique' ),
 
-            'title' => array(
-                'type' => 'text',
-                'label' => esc_html__('Widget Title', 'gillion'),
-                'value' => esc_html__('Stay connected', 'gillion'),
-            ),
+                'title' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Widget Title', 'gillion'),
+                    'value' => esc_html__('Stay connected', 'gillion'),
+                ),
 
-            'demo_mode' => array(
-                'label' => esc_html__( 'Demo Mode', 'gillion' ),
-                'desc'  => esc_html__( 'Enable or disable demo mode, which will give some random numbers', 'gillion' ),
-                'type'  => 'switch',
-                'value' => false,
-                'left-choice' => array(
+                'demo_mode' => array(
+                    'label' => esc_html__( 'Demo Mode', 'gillion' ),
+                    'desc'  => esc_html__( 'Enable or disable demo mode, which will give some random numbers for each social network', 'gillion' ),
+                    'type'  => 'switch',
                     'value' => false,
-                    'label' => esc_html__('Off', 'gillion'),
+                    'left-choice' => array(
+                        'value' => false,
+                        'label' => esc_html__('Off', 'gillion'),
+                    ),
+                    'right-choice' => array(
+                        'value' => true,
+                        'label' => esc_html__('On', 'gillion'),
+                    ),
                 ),
-                'right-choice' => array(
-                    'value' => true,
-                    'label' => esc_html__('On', 'gillion'),
+
+                'style' => array(
+                    'type'  => 'select',
+                    'value' => 'style1',
+                    'label' => esc_html__('Style', 'gillion'),
+                    'desc'  => esc_html__('Select widget style', 'gillion'),
+                    'choices' => array(
+                        'style1' => esc_html__('Standard', 'gillion'),
+                        'style2' => esc_html__('Round Boxes', 'gillion'),
+                    ),
                 ),
-            ),
 
-            'style' => array(
-                'type'  => 'select',
-                'value' => 'style1',
-                'label' => esc_html__('Style', 'gillion'),
-                'desc'  => esc_html__('Select widget style', 'gillion'),
-                'choices' => array(
-                    'style1' => esc_html__('Standard', 'gillion'),
-                    'style2' => esc_html__('Round Boxes', 'gillion'),
+
+
+
+                    'facebook_title' => array( 'type' => 'html-full', 'value' => '', 'label' => false, 'html'  => '
+                        <h3 style=margin-bottom:0;>'.esc_html__( 'Facebook', 'gillion' ).'</h3>
+                    ' ),
+
+                'facebook_username' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Facebook Page ID', 'gillion'),
+                    'help' => esc_html__('Enter your facebook username', 'gillion'),
+                    'desc' => esc_html__('ID Facebook page. Must be the numeric ID or your page slug. <br>
+                         You can find this data clicking to edit your page on Facebook. <br>
+                         The URL will be similar to this:https://www.facebook.com/pages/edit/?id=464751807014499 or https://www.facebook.com/Shufflehound', 'gillion'),
                 ),
-            ),
 
-            'instagram_username' => array(
-                'type' => 'text',
-                'label' => esc_html__('Instagram Username (optional)', 'gillion'),
-            ),
+                'facebook_app_id' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Facebook App ID', 'gillion'),
+                    'desc' => esc_html__('Enter your facebook app ID', 'gillion'),
+                ),
 
-            'instagram_client_id' => array(
-                'type' => 'text',
-                'label' => esc_html__('Instagram Client ID (optional)', 'gillion'),
-            ),
-
-            'instagram_access_token' => array(
-                'type' => 'text',
-                'label' => esc_html__('Instagram Access Token', 'gillion'),
-                'help' => esc_html__('Search in Google: How to get Instagram access token', 'gillion'),
-            ),
-
-            'instagram_client_id' => array(
-                'type' => 'text',
-                'label' => esc_html__('Instagram Client ID (optional)', 'gillion'),
-            ),
+                'facebook_app_secret' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Facebook App Secret', 'gillion'),
+                    'help' => esc_html__('Enter your facebook app secret', 'gillion'),
+                    'desc'  => esc_html__('Please note To use "Page Public Content Access", your use of this endpoint must be reviewed and approved by Facebook. To submit this "Page Public Content Access" feature for review please read our documentation on reviewable features: ', 'gillion')
+                        .'<a href="https://developers.facebook.com/docs/apps/review">https://developers.facebook.com/docs/apps/review</a>',
+                ),
 
 
-            'facebook_username' => array(
-                'type' => 'text',
-                'label' => esc_html__('Facebook Username', 'gillion'),
-                'help' => esc_html__('Enter your facebook username', 'gillion'),
-            ),
-
-            'facebook_app_id' => array(
-                'type' => 'text',
-                'label' => esc_html__('Facebook App ID', 'gillion'),
-                'help' => esc_html__('Enter your facebook app ID', 'gillion'),
-            ),
-
-            'facebook_app_secret' => array(
-                'type' => 'text',
-                'label' => esc_html__('Facebook App Secret', 'gillion'),
-                'help' => esc_html__('Enter your facebook app secret', 'gillion'),
-            ),
 
 
-            'youtube_channel_id' => array(
-                'type' => 'text',
-                'label' => esc_html__('Youtube Channel ID', 'gillion'),
-                'help' => esc_html__('Enter your youtube channel ID', 'gillion'),
-            ),
+                    'twitter_title' => array( 'type' => 'html-full', 'value' => '', 'label' => false, 'html'  => '
+                        <h3 style=margin-bottom:0;>'.esc_html__( 'Twitter', 'gillion' ).'</h3>
+                    ' ),
 
-            'youtube_api_key' => array(
-                'type' => 'text',
-                'label' => esc_html__('Youtube API Key', 'gillion'),
-                'help' => esc_html__('Enter your Youtube API key', 'gillion'),
-            ),
+                'twitter_username' => array(
+                    'type' => 'text',
+                    'label' => esc_html__( 'Twitter Username', 'gillion' ),
+                    'desc' => esc_html__( 'Enter the Twitter username. Example: theshufflehound', 'gillion' ),
+                ),
+
+                /*'twitter_consumer_key' => array(
+                    'type' => 'text',
+                    'label' => esc_html__( 'Twitter Consumer key', 'gillion'),
+                    'help' => esc_html__('Create an app on Twitter in https://dev.twitter.com/apps and get this data.', 'gillion'),
+                ),
+
+                'twitter_consumer_secret' => array(
+                    'type' => 'text',
+                    'label' => esc_html__( 'Twitter Consumer secret', 'gillion'),
+                    'help' => esc_html__( 'Create an app on Twitter in https://dev.twitter.com/apps and get this data.', 'gillion'),
+                ),
+
+                'twitter_access_token' => array(
+                    'type' => 'text',
+                    'label' => esc_html__( 'Twitter Access token', 'gillion'),
+                    'help' => esc_html__( 'Create an app on Twitter in https://dev.twitter.com/apps and get this data.', 'gillion'),
+                ),
+
+                'twitter_access_token_secret' => array(
+                    'type' => 'text',
+                    'label' => esc_html__( 'Twitter Access token secret', 'gillion'),
+                    'help' => esc_html__( 'Create an app on Twitter in https://dev.twitter.com/apps and get this data.', 'gillion'),
+                ),*/
 
 
-            'googleplus_id' => array(
-                'type' => 'text',
-                'label' => esc_html__('Google Plus ID', 'gillion'),
-                'help' => esc_html__('Enter your Google Plus ID', 'gillion'),
-            ),
 
-            'googleplus_api_key' => array(
-                'type' => 'text',
-                'label' => esc_html__('Google Plus API Key', 'gillion'),
-                'help' => esc_html__('Enter your Google Plus ID key', 'gillion'),
-            ),
 
-        );
-        $this->prefix = 'online_support';
-    }
+                    'instagram_title' => array( 'type' => 'html-full', 'value' => '', 'label' => false, 'html'  => '
+                        <h3 style=margin-bottom:0;>'.esc_html__( 'Instaram', 'gillion' ).'</h3>
+                    ' ),
 
-    function widget( $args, $instance ) {
-        extract( $args );
-        $params = array();
+                'instagram_username' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Instagram Username', 'gillion'),
+                    'desc' => esc_html__('Enter the Instagram username. Example: wordpress', 'gillion'),
+                ),
 
-        foreach ( $instance as $key => $value ) {
-            $atts[ $key ] = $value;
+                /*'instagram_client_id' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Instagram Client ID (optional)', 'gillion'),
+                ),*/
+
+                'instagram_access_token' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Instagram Access Token', 'gillion'),
+                    'desc' => esc_html__('Generate access token and enter it here. We have tested - https://instagram.pixelunion.net/ , but as allways use with caution', 'gillion'),
+                ),
+
+
+
+
+                    'youtube_title' => array( 'type' => 'html-full', 'value' => '', 'label' => false, 'html'  => '
+                        <h3 style=margin-bottom:0;>'.esc_html__( 'Youtube', 'gillion' ).'</h3>
+                    ' ),
+
+                'youtube_channel_id' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Youtube Channel ID', 'gillion'),
+                    'desc' => esc_html__('Enter the YouTube Channel ID.', 'gillion'),
+                ),
+
+                'youtube_api_key' => array(
+                    'type' => 'text',
+                    'label' => esc_html__('Youtube API Key', 'gillion'),
+                    'desc' => esc_html__('Enter your Youtube API key', 'gillion'),
+                ),
+
+            );
+            $this->prefix = 'online_support';
         }
 
-        $filepath = get_template_directory().'/inc/widgets/social-counter/views/widget.php';
+        function widget( $args, $instance ) {
+            extract( $args );
+            $params = array();
 
-        $instance = $atts;
-        $before_widget = str_replace( 'class="', 'class="widget_advertise ', $before_widget );
+            foreach ( $instance as $key => $value ) {
+                $atts[ $key ] = $value;
+            }
 
-        if ( file_exists( $filepath ) ) {
-            include ( $filepath );
+            $filepath = get_template_directory().'/inc/widgets/social-counter/views/widget.php';
+
+            $instance = $atts;
+            $before_widget = str_replace( 'class="', 'class="widget_advertise ', $before_widget );
+
+            if ( file_exists( $filepath ) ) {
+                include ( $filepath );
+            }
         }
-    }
 
-    function update( $new_instance, $old_instance ) {
-        return fw_get_options_values_from_input(
-            $this->options,
-            FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
-        );
-    }
+        function update( $new_instance, $old_instance ) {
+            // Unyson metaboxes
+            if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
 
-    function form( $values ) {
+                return fw_get_options_values_from_input(
+                    $this->options,
+                    FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
+                );
 
-        $prefix = $this->get_field_id($this->prefix);
-        $id = 'fw-widget-options-'. $prefix;
+            // Shufflehound metaboxes
+            else :
+                return Shufflehound_Metaboxes::widget_update( $new_instance, $old_instance, $this->options );
+            endif;
+        }
 
-        echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
-        echo fw()->backend->render_options($this->options, $values, array(
-            'id_prefix' => $prefix .'-',
-            'name_prefix' => $this->get_field_name($this->prefix),
-        ));
-        echo '</div>';
-        $this->print_widget_javascript($id);
+        function form( $values ) {
+            // Unyson metaboxes
+            if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
 
-        return $values;
-    }
+                $prefix = $this->get_field_id($this->prefix);
+                $id = 'fw-widget-options-'. $prefix;
 
-    private function print_widget_javascript($id) {
-        ?><script type="text/javascript">
-            jQuery(function($) {
-                var selector = '#<?php echo esc_js($id) ?>', timeoutId;
+                echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
+                echo fw()->backend->render_options($this->options, $values, array(
+                    'id_prefix' => $prefix .'-',
+                    'name_prefix' => $this->get_field_name($this->prefix),
+                ));
+                echo '</div>';
+                $this->print_widget_javascript($id);
 
-                $(selector).on('remove', function(){ // ReInit options on html replace (on widget Save)
-                    clearTimeout(timeoutId);
-                    timeoutId = setTimeout(function(){ // wait a few milliseconds for html replace to finish
-                        fwEvents.trigger('fw:options:init', { $elements: $(selector) });
-                    }, 100);
+            // Shufflehound metaboxes
+            else :
+                $name_prefix = substr( $this->get_field_name(''), 0, -2 );
+                echo Shufflehound_Metaboxes::widget( $this->options, $values, $name_prefix );
+            endif;
+
+            return $values;
+        }
+
+        private function print_widget_javascript($id) {
+            ?><script type="text/javascript">
+                jQuery(function($) {
+                    var selector = '#<?php echo esc_js($id) ?>', timeoutId;
+
+                    $(selector).on('remove', function(){ // ReInit options on html replace (on widget Save)
+                        clearTimeout(timeoutId);
+                        timeoutId = setTimeout(function(){ // wait a few milliseconds for html replace to finish
+                            fwEvents.trigger('fw:options:init', { $elements: $(selector) });
+                        }, 100);
+                    });
                 });
-            });
-        </script><?php
-    }
+            </script><?php
+        }
 
+    }
 }

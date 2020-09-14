@@ -6,7 +6,7 @@ Element: Button
 class vcSeperator extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_seperator', array( $this, '_html' ) );
     }
 
@@ -20,6 +20,7 @@ class vcSeperator extends WPBakeryShortCode {
                 'base' => 'vcg_seperator',
                 'description' => __('Simple seperator with simple options', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -113,7 +114,8 @@ class vcSeperator extends WPBakeryShortCode {
         $element_class = array();
         $element_class[] = $id;
         $element_class[] = $class;
-        $element_class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $element_class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
 
         if( $alignment == 'left' ) :
             $margin = '';

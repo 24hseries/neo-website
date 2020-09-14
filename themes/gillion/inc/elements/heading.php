@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcHeading extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_heading', array( $this, '_html' ) );
     }
 
@@ -38,7 +38,7 @@ class vcHeading extends WPBakeryShortCode {
                 'base' => 'vcg_heading',
                 'description' => __('Title with various options', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -240,7 +240,7 @@ class vcHeading extends WPBakeryShortCode {
 
     public function _html( $atts/*, $content*/ ) {
         $atts = ( isset( $atts ) && is_array( $atts ) ) ? $atts : array();
-        
+
         $title = ( isset( $atts['title'] ) ) ? $atts['title'] : 'Title';
         $font = ( isset( $atts['font'] ) ) ? $atts['font'] : '';
         $weight = ( isset( $atts['weight'] ) ) ? $atts['weight'] : '';
@@ -269,7 +269,8 @@ class vcHeading extends WPBakeryShortCode {
 
         $id = 'vcg-heading-'.gillion_rand();
         $css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
-        $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
 
         $class = array();
         $class[] = $id;
@@ -282,7 +283,7 @@ class vcHeading extends WPBakeryShortCode {
             <?php if( ( $font && $font != 'default' ) || $title_hover_color ) : ?>
                 <style media="screen">
                     <?php if( $font && $font != 'default' ) : ?>
-                        .<?php echo esc_attr( $id ); ?> * { <?php
+                        .<?php echo esc_attr( $id ); ?> *:not(i) { <?php
                             if( $font == 'body' ) :
                                 echo 'font-family: "'.gillion_option_value('body','family').'"';
                             elseif( $font == 'categories' ) :

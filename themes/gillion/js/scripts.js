@@ -171,6 +171,12 @@ jQuery(document).ready(function ($) {
         if ($(document).width() < 1025) {
             $('body').removeClass('page-layout-right-fixed');
             $('.primary-desktop ul.sub-menu').css('display', 'none');
+            $('.sh-sticky-mobile-header .sh-header-mobile-dropdown').css( 'overflow', 'auto' );
+            if( $('#wpadminbar').length ) {
+                $('.sh-sticky-mobile-header .sh-header-mobile-dropdown').css( 'max-height',  $(window).height() - $('.sh-header-mobile-navigation').height() - $('#wpadminbar').height() );
+            } else {
+                $('.sh-sticky-mobile-header .sh-header-mobile-dropdown').css( 'max-height',  $(window).height() - $('.sh-header-mobile-navigation').height() );
+            }
         }
     }
     gillion_header_dropdown();
@@ -261,7 +267,7 @@ jQuery(document).ready(function ($) {
     /* Header Height Load */
     var primary_desktop = $('.sh-header-middle').actual( 'outerHeight') + $('.sh-header').actual( 'outerHeight') + $('.sh-header-top').actual( 'outerHeight');
     $('header.primary-desktop').css('height', primary_desktop );
-    $('header.primary-mobile').css('height', $('header.primary-mobile').actual( 'height' ) );
+    $('header.primary-mobile').css('height', $('.sh-header-mobile-navigation').actual( 'height' ) );
     var primary_desktop = ''
     $(window).on( 'load resize', function() {
         if( $(document).width() > 1000 ) {
@@ -416,6 +422,14 @@ jQuery(document).ready(function ($) {
                 $('.sh-header').removeClass('sh-sticky-header-active').css('top', 0);
             }
         }
+
+        if( $('.sh-sticky-mobile-header').length ) {
+            if($(document).scrollTop() > 0 ){
+                $('.sh-header-mobile').addClass('sh-sticky-mobile-header-active');
+            } else {
+                $('.sh-header-mobile').removeClass('sh-sticky-mobile-header-active');
+            }
+        }
     }
     if( $('.sh-sticky-header').length ) {
 
@@ -504,17 +518,25 @@ jQuery(document).ready(function ($) {
         });
     });
 
+    var gillion_product_increase_number_min = ( $('.woocommerce-grouped-product-list.group_table').length ) ? 0 : 1;
     $(document).on('click', '.sh-increase-number-down', function(){
-        var current_number = parseInt( $(this).parent().find('input').val() )-1;
-        if( current_number >= 1 ) {
-            $(this).parent().find('input').val( current_number );
+        var current_number_val = parseInt( $(this).parent().find('input.sh-quantity-number').val() );
+        var current_number = isNaN( current_number_val ) ? 0 : current_number_val;
+        current_number = current_number - 1;
+
+        if( current_number >= gillion_product_increase_number_min ) {
+            $(this).parent().find('input.sh-quantity-number').val( current_number );
             sh_increase_number_update();
         }
     });
+
     $(document).on('click', '.sh-increase-number-up', function(){
-        var current_number = parseInt( $(this).parent().find('input').val() )+1;
+        var current_number_val = parseInt( $(this).parent().find('input.sh-quantity-number').val() );
+        var current_number = isNaN( current_number_val ) ? 0 : current_number_val;
+        current_number = current_number + 1;
+
         if( current_number >= 0 ) {
-            $(this).parent().find('input').val( current_number );
+            $(this).parent().find('input.sh-quantity-number').val( current_number );
             sh_increase_number_update();
         }
     });
@@ -1078,7 +1100,7 @@ jQuery(document).ready(function ($) {
         autoplay: false,
         dots: false,
         appendArrows: $('.post-slide-arrows'),
-        prevArrow: '<button type="button" class="slick-next"><i class="icon icon-arrow-left-circle"></i></button>',
+        prevArrow: '<button type="button" class="slick-prev"><i class="icon icon-arrow-left-circle"></i></button>',
         nextArrow: '<button type="button" class="slick-next"><i class="icon icon-arrow-right-circle"></i></button>',
         responsive: [
             {
@@ -1150,16 +1172,31 @@ jQuery(document).ready(function ($) {
         }
 
         jQuery( document ).on( 'click', '.sh-load-more:not(.disabled)', function() {
-            gillion_loadmore();
+            gillion_loadmore( $(this).attr('data-id') );
         });
 
-        function gillion_loadmore() {
-            var lazy_self = $('.sh-load-more');
+        function gillion_loadmore( load_more_id ) {
+            if( load_more_id === undefined) {
+                load_more_id = '';
+            }
+
+
+            if( load_more_id ) {
+                var lazy_self = $('.sh-load-more[data-id="'+ load_more_id +'"]');
+            } else {
+                var lazy_self = $('.sh-load-more');
+            }
+
+
             lazy_self.addClass( 'disabled' );
             var lazy_categories = lazy_self.attr('data-categories');
             var lazy_post_style = lazy_self.attr('data-post-style');
+            var lazy_offset = lazy_self.attr('data-offset');
             var lazy_posts_per_page = lazy_self.attr('data-posts-per-page');
             var lazy_paged = lazy_self.attr('data-paged');
+            var lazy_element_id = lazy_self.attr('data-id');
+
+
             jQuery.ajax({
                 url : gillion_loadmore_posts.ajax_url,
                 type : 'post',
@@ -1167,25 +1204,25 @@ jQuery(document).ready(function ($) {
                     action : 'load_more_posts',
                     categories : lazy_categories,
                     per_page: lazy_posts_per_page,
+                    offset: lazy_offset,
                     post_style : lazy_post_style,
                     paged: lazy_paged,
                 },
                 success : function( response ) {
                     if( response == 'done' ) {
-                        $('.sh-load-more').remove();
+                        lazy_self.remove();
                     } else {
-                        $('.sh-load-more').attr('data-paged', parseInt( $('.sh-load-more').attr('data-paged') ) + 1 );
+                        lazy_self.attr('data-paged', parseInt( $('.sh-load-more').attr('data-paged') ) + 1 );
 
-                        if( lazy_self.attr( 'data-id' ) ) {
+                        if( lazy_element_id ) {
 
-                            var lazy_add_posts = $( '.content-container .'+ lazy_self.attr( 'data-id' ) +' .blog-list' );
+                            var lazy_add_posts = $( '.content-container .'+ lazy_element_id +' .blog-list' );
                             if( lazy_add_posts.hasClass('blog-style-masonry') ) {
-                                console.log('yes');
                                 lazy_add_posts.isotope( 'insert', $(response) ).imagesLoaded( function() {
                                     lazy_add_posts.isotope('layout').css( 'opacity', 1 );
                                 });
                             } else {
-                                $(response).appendTo( '.content-container .'+ lazy_self.attr( 'data-id' ) +' .blog-list' );
+                                $(response).appendTo( '.content-container .'+ lazy_element_id +' .blog-list' );
                             }
 
                         } else {
@@ -1198,9 +1235,21 @@ jQuery(document).ready(function ($) {
                             }
                         }
 
+                        lazy_add_posts.find(".post-content-share-side").each( function() {
+                            if( !$(this).html() ) {
+                                $(this).jsSocials({
+                                    showLabel: false,
+                                    showCount: false,
+                                    shares: social_share,
+                                    url: $(this).attr('data-url'),
+                                    text: $(this).attr('data-title'),
+                                });
+                            }
+                        });
+
                         lazy_self.removeClass( 'disabled' );
                         if( $(response).filter('.post-item').length < lazy_posts_per_page ) {
-                            $('.sh-load-more').remove();
+                            lazy_self.remove();
                         }
 
                         gillion_review_animation();
@@ -1269,7 +1318,7 @@ jQuery(document).ready(function ($) {
 
         /* WooCommerce- Stock */
         if( $('.woocommerce div.product p.stock' ).length ) {
-            $('.woocommerce div.product div.product_meta' ).prepend( '<span class="product_stock"><span class="product_meta_name">Stock</span>' + $('.woocommerce div.product p.stock' ).html() + '</span>' );
+            $('.woocommerce div.product div.product_meta' ).prepend( '<span class="product_stock product-stock-information"><span class="product_meta_name">Stock</span><span class="'+ $('.woocommerce div.product p.stock' ).attr('class') +'">' + $('.woocommerce div.product p.stock' ).html() + '</span></span>' );
         }
 
         $('.woocommerce-products-for').slick({

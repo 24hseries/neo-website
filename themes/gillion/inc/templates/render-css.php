@@ -1,6 +1,6 @@
 <?php
 ob_start("gillion_compress");
-if( defined('FW') ) :
+if( gillion_framework_active() ) :
 
 /*-----------------------------------------------------------------------------------*/
 /* Define Variables
@@ -12,6 +12,8 @@ $body_line_height = gillion_option_value('styling_body','line-height');
 $body_font = gillion_option_value( 'styling_body', 'family', 'Open Sans' );
 $body_background = gillion_option( 'styling_body_background' );
 $meta_color = gillion_option('styling_meta_color');
+$meta_size = gillion_option( 'meta_size', 11 );
+$meta_font = gillion_option( 'meta_font', 'default' );
 
 $meta_category_color = gillion_option('styling_meta_categories_color');
 $meta_category_hover_color = gillion_option('styling_meta_categories_hover_color');
@@ -39,6 +41,7 @@ $headings_line = gillion_option( 'styling_headings_line', 'on' );
 $widget_font_weight = gillion_option('styling_widget_font_weight');
 $accent_element_font = gillion_option('accent_element_font');
 $additional_font = gillion_option_value( 'additional_font', 'family', 'Montserrat' );
+$widget_title_font = gillion_option('widget_title_font', 'heading');
 $post_title_font = gillion_option('post_title_font', 'heading');
 $post_title_uppercase = gillion_option('post_title_uppercase', false);
 $single_content_size = gillion_option('styling_single_content_size', '15');
@@ -55,6 +58,11 @@ $topbar_background_color = gillion_option('header_top_background_color');
 $topbar_background_image = gillion_option_image('header_top_background_image');
 $topbar_color = gillion_option('header_top_color');
 $topbar_hover_color = gillion_option('header_top_hover_color');
+$topbar_nav_size = gillion_option('header_top_nav_size');
+$topbar_nav_font_weight = gillion_option('header_top_nav_font_weight');
+
+$header_logo_background_color = gillion_option('header_logo_background_color');
+$header_logo_background_image = gillion_option_image('header_logo_background_image');
 
 $header_nav_size = gillion_option('header_nav_size');
 $header_mobile_nav_size = gillion_option('header_mobile_nav_size');
@@ -70,6 +78,7 @@ endif;
 $header_nav_icon_color = gillion_option('header_nav_icon_color');
 $header_nav_icon_hover_color = gillion_option('header_nav_icon_hover_color');
 
+$menu_font_size = gillion_option('menu_font_size');
 $menu_background_color = gillion_option('menu_background_color');
 $menu_link_border_color = gillion_option('menu_link_border_color');
 $menu_link_color = gillion_option('menu_link_color');
@@ -112,8 +121,12 @@ $rtl_support = gillion_option('rtl_support', false);
 $page_404_background = ( gillion_option('404_background') ) ? gillion_option('404_background') : $accent_color;
 $page_404_background2 = gillion_option('404_background2');
 
+$global_tabs_transform = gillion_option( 'global_tabs_transform', 'default' );
 $global_title_transform = gillion_option( 'global_title_transform', 'none' );
 $global_title_weight = gillion_option( 'global_title_weight', 'none' );
+$global_title_font_size = gillion_option( 'global_title_font_size' );
+
+$border_radius_images = gillion_option( 'border_radius_images', 'enabled' );
 ?>
 
 /* Gillion CSS */
@@ -159,6 +172,30 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 		#sidebar .widget_recent_comments .recentcomments > span a,
 		#sidebar .post-meta a {
 			color: <?php echo esc_attr( $meta_color ); ?>!important;
+		}
+	<?php endif; ?>
+
+	<?php if( $meta_size && $meta_size >= 8 && $meta_size != 11 ) : ?>
+		.post-meta,
+		.post-meta a {
+			font-size: <?php echo intval( $meta_size ); ?>px;
+		}
+	<?php endif; ?>
+
+	<?php if( $meta_font && $meta_font != 'default' ) : ?>
+		.post-meta,
+		.post-meta a {
+			font-family: "<?php
+			if( $meta_font == 'body') :
+			    echo esc_attr( $body_font );
+			elseif( $meta_font == 'meta') :
+			    echo esc_attr( $meta_category_font );
+			elseif( $meta_font == 'additional') :
+			    echo esc_attr( $additional_font );
+			elseif( $meta_font == 'heading' ) :
+			    echo esc_attr( $heading_font );
+			endif;
+			?>";
 		}
 	<?php endif; ?>
 
@@ -219,16 +256,20 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 ?>
 
 	<?php if( class_exists( 'woocommerce' ) ) : ?>
-	.woocommerce-header.step1 .woocommerce-header-item-cart .woocommerce-header-icon i,
-	.woocommerce-header.step2 .woocommerce-header-item-checkout .woocommerce-header-icon i,
-	.woocommerce-header.step3 .woocommerce-header-item-complate .woocommerce-header-icon i,
+		.woocommerce-header.step1 .woocommerce-header-item-cart .woocommerce-header-icon i,
+		.woocommerce-header.step2 .woocommerce-header-item-checkout .woocommerce-header-icon i,
+		.woocommerce-header.step3 .woocommerce-header-item-complate .woocommerce-header-icon i,
 	<?php endif; ?>
 	.sh-accent-color,
 	ul.page-numbers a:hover,
 	.sh-comment-date a:hover,
 	.comment-respond #cancel-comment-reply-link,
 	.post-sticky,
-	.post-swtich-style2 h4:hover {
+	.post-swtich-style2 h4:hover,
+	.sh-unyson-frontend-test.active,
+	.plyr--full-ui input[type=range],
+	.sh-post-author-info a:hover i,
+	.sh-post-author-info h4:hover {
 		color: <?php echo esc_attr( $accent_color ); ?>!important;
 	}
 
@@ -253,22 +294,23 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 	.sh-dropcaps-full-square-border,
 	.mc4wp-form input[type=submit],
 	.mc4wp-form button[type=submit],
-	.gillion-woocommerce .woocommerce .return-to-shop a.button {
+	.gillion-woocommerce .woocommerce .return-to-shop a.button,
+	.sh-accent-color-background {
 		background-color: <?php echo esc_attr( $accent_color ); ?>;
 	}
 
 	<?php if( class_exists( 'woocommerce' ) ) : ?>
-	.woocommerce-header.step1 .woocommerce-header-item-cart .woocommerce-header-icon span,
-	.woocommerce-header.step1 .woocommerce-header-item-cart:after,
-	.woocommerce-header.step2 .woocommerce-header-item-checkout .woocommerce-header-icon span,
-	.woocommerce-header.step2 .woocommerce-header-item-checkout:before,
-	.woocommerce-header.step2 .woocommerce-header-item-checkout:after,
-	.woocommerce-header.step3 .woocommerce-header-item-complate .woocommerce-header-icon span,
-	.woocommerce-header.step3 .woocommerce-header-item-complate:before,
-	.woocommerce #payment #place_order, .woocommerce-page #payment #place_order,
-	.gillion-woocommerce div.product form.cart .button:hover,
-	.gillion-woocommerce .sh-nav .widget_shopping_cart .buttons a.checkout,
-	.gillion-woocommerce a.button.alt:hover,
+		.woocommerce-header.step1 .woocommerce-header-item-cart .woocommerce-header-icon span,
+		.woocommerce-header.step1 .woocommerce-header-item-cart:after,
+		.woocommerce-header.step2 .woocommerce-header-item-checkout .woocommerce-header-icon span,
+		.woocommerce-header.step2 .woocommerce-header-item-checkout:before,
+		.woocommerce-header.step2 .woocommerce-header-item-checkout:after,
+		.woocommerce-header.step3 .woocommerce-header-item-complate .woocommerce-header-icon span,
+		.woocommerce-header.step3 .woocommerce-header-item-complate:before,
+		.woocommerce #payment #place_order, .woocommerce-page #payment #place_order,
+		.gillion-woocommerce div.product form.cart .button:hover,
+		.gillion-woocommerce .sh-nav .widget_shopping_cart .buttons a.checkout,
+		.gillion-woocommerce a.button.alt:hover,
 	<?php endif; ?>
 	.sh-instagram-widget-with-button .null-instagram-feed .clear a:hover,
 	.sh-instagram-widget-with-button .null-instagram-feed .clear a:focus,
@@ -280,7 +322,10 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 	.comment-input-required,
 	.widget_tag_cloud a:hover,
 	.post-password-form input[type="submit"],
-	.wpcf7-form .wpcf7-submit {
+	.wpcf7-form .wpcf7-submit,
+	.plyr--audio .plyr__control.plyr__tab-focus,
+	.plyr--audio .plyr__control:hover,
+	.plyr--audio .plyr__control[aria-expanded=true] {
 		background-color: <?php echo esc_attr( $accent_color ); ?>!important;
 	}
 
@@ -310,7 +355,8 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 		.contact-form input[type="submit"]:hover,
 		.wpcf7-form .wpcf7-submit:hover,
 		.post-password-form input[type="submit"]:hover,
-		.mc4wp-form input[type=submit]:hover {
+		.mc4wp-form input[type=submit]:hover,
+		.sh-accent-color-background-hover:hover {
 			background-color: <?php echo esc_attr( $accent_hover_color ); ?>!important;
 		}
 	<?php endif; ?>
@@ -389,7 +435,8 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 	body.woocommerce-account.woocommerce-page:not(.woocommerce-edit-address) .woocommerce-MyAccount-content > p,
 	.gillion-woocommerce .woocommerce .button,
 	.gillion-woocommerce #coupon_code,
-	.sh-instagram-widget-with-button .null-instagram-feed .clear a {
+	.sh-instagram-widget-with-button .null-instagram-feed .clear a,
+	.sh-post-title-font {
 		font-family: "<?php
 		if( $accent_element_font == 'body') :
 			echo esc_attr( $body_font );
@@ -406,7 +453,22 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 		.post-title > h1,
 		.post-title > h2,
 		.post-title > h3,
-		.post-title > h5 {
+		.post-title > h5,
+		.sh-post-title-font {
+			font-family: "<?php
+			if( $post_title_font == 'body') :
+				echo esc_attr( $body_font );
+			elseif( $post_title_font == 'meta') :
+				echo esc_attr( $meta_category_font );
+			elseif( $post_title_font == 'additional') :
+				echo esc_attr( $additional_font );
+			endif;
+			?>";
+		}
+	<?php endif; ?>
+
+	<?php if( $widget_title_font && $widget_title_font != 'heading') : ?>
+		.sh-widget-title-styling .widget-title {
 			font-family: "<?php
 			if( $post_title_font == 'body') :
 				echo esc_attr( $body_font );
@@ -518,6 +580,7 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 	.gillion-woocommerce .price > ins,
 	.gillion-woocommerce ul.products li.product .price > span.amount,
 	.gillion-woocommerce p.price,
+	.gillion-woocommerce span.price,
 	.gillion-woocommerce ul.products li.product .woocommerce-loop-product__title,
 	.gillion-woocommerce ul.products li.product .outofstock,
 	.gillion-woocommerce .widget_shopping_cart .cart_list > li > a:not(.remove),
@@ -564,7 +627,17 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 		}
 	<?php endif; ?>
 
+	<?php if( $topbar_nav_size ) : ?>
+		.sh-header-top .sh-nav > li.menu-item > a {
+			font-size: <?php echo esc_attr( gillion_addpx( $topbar_nav_size ) ); ?>;
+		}
+	<?php endif; ?>
 
+	<?php if( $topbar_nav_font_weight && $topbar_nav_font_weight != 'default' ) : ?>
+		.sh-header-top .sh-nav > li.menu-item > a {
+			font-weight: <?php echo esc_attr( $topbar_nav_font_weight ); ?>;
+		}
+	<?php endif; ?>
 
 	<?php if( $header_background_image ) : ?>
 		.sh-header,
@@ -639,13 +712,16 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 
 	<?php if( $header_nav_active_color ) : ?>
 		.sh-header .sh-nav > .current_page_item > a,
-		.sh-header .sh-nav > .current-menu-ancestor > a {
+		.sh-header .sh-nav > .current-menu-ancestor > a,
+		.sh-header .sh-nav > .current-menu-item > a {
 			color: <?php echo esc_attr( $header_nav_active_color ); ?>!important;
 		}
 	<?php endif; ?>
 
 	<?php if( $header_nav_active_line_color ) : ?>
-		.sh-header-3 .sh-header-nav-container .sh-nav > li.current_page_item a:after {
+		.sh-header-3 .sh-header-nav-container .sh-nav > li.current-menu-item a:after,
+		.sh-header-4 .sh-nav-container .sh-nav > li.current-menu-item a:after,
+		.sh-header-6 .sh-nav-container .sh-nav > li.current-menu-item a:after {
 			background-color: <?php echo esc_attr( $header_nav_active_line_color ); ?>;
 		}
 	<?php endif; ?>
@@ -709,6 +785,12 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 		}
 	<?php endif; ?>
 
+	<?php if( $menu_font_size ) : ?>
+		.primary-desktop .sh-nav > li.menu-item ul a {
+			font-size: <?php echo esc_attr( gillion_addpx( $menu_font_size ) ); ?>;
+		}
+	<?php endif; ?>
+
  	<?php if( $menu_link_border_color ) : ?>
 		.sh-nav-mobile li:after,
 		.sh-nav-mobile ul:before {
@@ -745,6 +827,22 @@ $global_title_weight = gillion_option( 'global_title_weight', 'none' );
 	.sh-nav .mega-menu-row > li.menu-item {
 		border-right: 1px solid <?php echo esc_attr( $menu_link_border_color ); ?>!important;
 	}
+
+
+	<?php /* Header Logo Section */ ?>
+	<?php if( $header_logo_background_color ) : ?>
+		.sh-header-middle,
+		.sh-header-mobile-navigation {
+			background-color: <?php echo esc_attr( $header_logo_background_color ); ?>;
+		}
+	<?php endif; ?>
+
+	<?php if( $header_logo_background_image ) : ?>
+		.sh-header-middle,
+		.sh-header-mobile-navigation {
+			background-image: url(<?php echo esc_url( $header_logo_background_image ); ?>);
+		}
+	<?php endif; ?>
 
 
 <?php
@@ -1208,6 +1306,56 @@ endif;
 		}
 	<?php endif; ?>
 
+
+
+
+<?php
+/*-----------------------------------------------------------------------------------*/
+/* Border Radius
+/*-----------------------------------------------------------------------------------*/
+?>
+
+<?php if( $border_radius_images && $border_radius_images == 'disabled' ) : ?>
+	.post-thumbnail,
+	.post-thumbnail img,
+	.post-thumbnail .sh-ratio-content,
+	.post-switch-item,
+	.post-switch-item:after,
+	.sh-widget-instagram-item img,
+	.sh-widget-instagram-item-overlay,
+	body .sh-widget-instagramv2 img,
+	body .sh-widget-instagramv2 a:before,
+	.sh-read-later-thumbnail,
+	.sh-read-later-thumbnail:after,
+	.sh-overlay-style1,
+	.post-gallery-list,
+	.post-gallery-list .slick-list,
+	.sh-widget-posts-slider-thumbnail,
+	.post-content img,
+	.widget_about_us img,
+	.sh-post-author .sh-post-author-avatar img,
+	.null-instagram-feed .instagram-pics li a,
+	.post-style-cover .sh-ratio-content,
+	.post-style-cover .post-cover-link,
+	.post-style-cover .post-container:after,
+	.post-overlay-small,
+	.sh-categories.sh-categories-style2.sh-categories-round .blog-mini-post-large .blog-mini-post-thumb,
+	.post-overlay,
+	.blog-style-left-small .post-thumbnail,
+	.sh-widget-facebook-overlay,
+	.sh-widget-facebook-item,
+	.sh-widget-posts-slider-thumbnail,
+	.sh-widget-posts-slider-group-style2,
+	.sh-widget-posts-slider-group-style2 .slick-list.draggable,
+	.blog-mini-post-thumb,
+	.blog-slider .blog-slider-item {
+		border-radius: 0px;
+	}
+<?php endif; ?>
+
+
+
+
 <?php
 /*-----------------------------------------------------------------------------------*/
 /* Global
@@ -1223,12 +1371,27 @@ endif;
 	}
 <?php endif; ?>
 
+<?php if( $global_tabs_transform && $global_tabs_transform != 'default' ) : ?>
+	.sh-title-style2 .sh-tabs-stying a,
+	.sh-title-style2 ul.sh-tabs-stying.nav-tabs li a h4 {
+		text-transform: <?php echo esc_attr( $global_tabs_transform ); ?>
+	}
+<?php endif; ?>
+
 <?php if( $global_title_weight && $global_title_weight != 'default' ) : ?>
 	.sh-widget-title-styling h3,
 	.post-related-title h2,
 	.sh-categories-title h2,
 	.sh-blog-fancy-title-container h2 {
 		font-weight: <?php echo intval( $global_title_weight ); ?>
+	}
+<?php endif; ?>
+
+<?php if( $global_title_font_size ) : ?>
+	.post-related-title h2,
+	.sh-categories-title h2,
+	.sh-blog-fancy-title-container h2 {
+		font-size: <?php echo esc_attr( gillion_addpx( $global_title_font_size ) ); ?>!important;
 	}
 <?php endif; ?>
 

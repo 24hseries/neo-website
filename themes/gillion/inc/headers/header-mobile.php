@@ -1,14 +1,19 @@
 <?php
-	/* HEADER Mobile */
+/* HEADER Mobile */
+
+$class = '';
+if( gillion_option( 'header_mobile_sticky', false ) == true ) :
+	$class = ' sh-sticky-mobile-header';
+endif;
 ?>
-<div id="header-mobile" class="sh-header-mobile">
+<div id="header-mobile" class="sh-header-mobile<?php echo esc_attr( $class ); ?>">
 	<div class="sh-header-mobile-navigation">
 		<div class="container">
-			<div class="sh-table">
+			<div class="sh-table sh-header-mobile-table">
 				<div class="sh-table-cell">
 
 					<?php /* Header navigation */ ?>
-					<nav id="header-navigation-mobile" class="header-standard-position">
+					<nav id="header-navigation-mobile" class="header-standard-position sh-header-mobile-navigation-left">
 						<div class="sh-nav-container">
 							<ul class="sh-nav">
 								<li>
@@ -33,10 +38,11 @@
 				<div class="sh-table-cell">
 
 					<?php /* Header meta */ ?>
-					<nav class="header-standard-position">
+					<nav class="header-standard-position sh-header-mobile-navigation-right">
 						<div class="sh-nav-container">
 							<ul class="sh-nav">
 
+								<?php echo gillion_nav_wrap_cart(); ?>
 								<?php echo gillion_nav_wrap_readlater( 1 ); ?>
 
 							</ul>

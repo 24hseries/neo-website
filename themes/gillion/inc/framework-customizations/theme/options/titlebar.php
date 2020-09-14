@@ -23,7 +23,7 @@ $titlebar_options = array(
 		'label' => esc_html__('Titlebar Layout', 'gillion'),
 		'desc'  => esc_html__('Choose titlebar layout', 'gillion'),
 		'choices' => array(
-			'side' => esc_html__( 'Sides', 'gillion' ),
+			'side' => esc_html__( 'Side', 'gillion' ),
 			'center' => esc_html__( 'Center', 'gillion' ),
 		),
 		'value' => 'side',
@@ -41,6 +41,22 @@ $titlebar_options = array(
 		),
 		'value' => 'small',
 	),
+
+	'titlebar_breadcrumbs' => array(
+		'type' => 'switch',
+		'label' => esc_html__( 'Titlebar Breadcrumbs', 'gillion' ),
+		'desc' => esc_html__( 'Enable or disable breadcrumbs', 'gillion' ),
+		'value' => 'on',
+		'left-choice' => array(
+			'value' => 'off',
+			'label' => esc_html__('Off', 'gillion'),
+		),
+		'right-choice' => array(
+			'value' => 'on',
+			'label' => esc_html__('On', 'gillion'),
+		),
+	),
+
 
 	'titlebar_background' => array(
 		'label' => esc_html__( 'Titlebar Background Image', 'gillion' ),
@@ -94,6 +110,13 @@ $titlebar_options = array(
 		'label' => esc_html__('Post Title', 'gillion'),
 		'desc'  => esc_html__('Enter main title of post pages', 'gillion'),
 		'value' => 'Blog Post',
+	),
+
+	'titlebar-readlater-title' => array(
+		'type'  => 'text',
+		'label' => esc_html__('Read It Later Page Title', 'gillion'),
+		'desc'  => esc_html__('Enter read it later page title', 'gillion'),
+		'value' => 'Your read it later bookmarks',
 	),
 
 	'titlebar-404-title' => array(

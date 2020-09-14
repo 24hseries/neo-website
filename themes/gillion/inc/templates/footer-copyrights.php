@@ -12,8 +12,15 @@ $class = array();
 $class[] = 'sh-copyrights-align-'.$align;
 
 $logo = '';
-$dev = 'https://shufflehound.com';
 $text = '';
+
+$copyrights = '';
+$dev = 'https://shufflehound.com';
+if( gillion_option( 'copyright_deveveloper_all', true ) == true ) :
+	$copyrights = '<span class="developer-copyrights '.(( gillion_option('copyright_deveveloper', true) == false ) ? ' sh-hidden' : '' ).'">
+		'.esc_html__( 'WordPress Theme built by', 'gillion' ).' <a href="'.esc_attr( $dev ).'" target="blank"><strong>'.esc_html__( 'Shufflehound', 'gillion' ).'</strong>.</a>
+		</span>';
+endif;
 ?>
 	<div class="sh-copyrights <?php echo implode( ' ', $class ); ?>">
 		<div class="container container-padding">
@@ -28,11 +35,7 @@ $text = '';
 							</div>
 						<?php endif; ?>
 						<div class="sh-copyrights-info">
-							<span class="developer-copyrights <?php echo (( gillion_option('copyright_deveveloper', true) == false ) ? ' sh-hidden' : '' ); ?>">
-								<?php echo esc_html__( 'WordPress Theme built by', 'gillion' ); ?> <a href="<?php echo esc_attr( $dev ); ?>" target="blank">
-									<strong><?php echo esc_html__( 'Shufflehound', 'gillion' ); ?></strong>.
-								</a>
-							</span>
+							<?php echo do_shortcode( wp_kses_post( $copyrights ) ); ?>
 							<span><?php echo wp_kses_post( gillion_remove_p( gillion_option('copyright_text') ) ); ?></span>
 						</div>
 
@@ -63,11 +66,7 @@ $text = '';
 					<?php else : ?>
 
 						<div class="sh-copyrights-info">
-							<span class="developer-copyrights <?php echo (( gillion_option('copyright_deveveloper', true) == false ) ? ' sh-hidden' : '' ); ?>">
-								<?php echo esc_html__( 'WordPress Theme built by', 'gillion' ); ?> <a href="<?php echo esc_attr( $dev ); ?>" target="blank">
-									<strong><?php echo esc_html__( 'Shufflehound', 'gillion' ); ?></strong>.
-								</a>
-							</span>
+							<?php echo do_shortcode( wp_kses_post( $copyrights ) ); ?>
 							<span><?php echo wp_kses_post( gillion_remove_p( gillion_option('copyright_text') ) ); ?></span>
 						</div>
 

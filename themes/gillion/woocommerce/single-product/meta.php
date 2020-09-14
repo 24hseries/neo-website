@@ -32,9 +32,9 @@ global $product;
 
 	<?php endif; ?>
 
-	<?php echo wc_get_product_category_list( $product->get_id(), ', ', '<span class="posted_in">' . _n( '<span class="product_meta_name">Category</span>', '<span class="product_meta_name">Categories</span>', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
+	<?php echo wc_get_product_category_list( $product->get_id(), ', ', '<span class="posted_in">' . _n( '<span class="product_meta_name">'.esc_html__( 'Category', 'gillion' ).'</span>', '<span class="product_meta_name">'.esc_html__( 'Categories', 'gillion' ).'</span>', count( $product->get_category_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
 
-	<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<span class="tagged_as">' . _n( '<span class="product_meta_name">Tag</span>', '<span class="product_meta_name">Tags</span>', count( $product->get_tag_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
+	<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<span class="tagged_as">' . _n( '<span class="product_meta_name">'.esc_html__( 'Tag', 'gillion' ).'</span>', '<span class="product_meta_name">'.esc_html__( 'Tags', 'gillion' ).'</span>', count( $product->get_tag_ids() ), 'woocommerce' ) . ' ', '</span>' ); ?>
 
 	<?php do_action( 'woocommerce_product_meta_end' ); ?>
 

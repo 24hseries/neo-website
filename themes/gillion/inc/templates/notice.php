@@ -3,7 +3,7 @@
  * Notice option HTML
  */
 
-if( defined('FW') && gillion_option( 'notice_status', true ) == true ) :
+if( gillion_framework_active() && gillion_option( 'notice_status', true ) == true ) :
 ?>
 
 	<div class="sh-page-notice">

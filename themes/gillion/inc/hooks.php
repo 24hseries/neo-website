@@ -13,52 +13,6 @@ if ( ! isset($content_width)) {
 
 
 /**
- * Dynamic Styles Update
- */
-if ( defined( 'FW' ) ) :
-    function gillion_dynamic_styles_update( $old_values ) {
-
-        $css = gillion_render_css();
-        $upload_dir = wp_upload_dir();
-        if( isset( $upload_dir['basedir'] ) ) :
-            $file_path  = $upload_dir['basedir'] . '/gillion-dynamic-styles.css';
-
-            global $wp_filesystem;
-            if( empty( $wp_filesystem ) ) :
-                require_once ( ABSPATH . '/wp-admin/includes/file.php' );
-                WP_Filesystem();
-            endif;
-
-            if( !$wp_filesystem || !$wp_filesystem->put_contents( $file_path, $css ) ) :
-        		delete_option( 'gillion_settings_updated' );
-        	else :
-                update_option( 'gillion_settings_updated', rand( 10000000, 900000000 ) );
-            endif;
-        endif;
-
-    }
-    add_action( 'fw_settings_form_saved', 'gillion_dynamic_styles_update' );
-    add_action( 'fw_settings_form_reset', 'gillion_dynamic_styles_update' );
-    add_action( 'customize_save_after', 'gillion_dynamic_styles_update' );
-    add_action( 'after_switch_theme', 'gillion_dynamic_styles_update' );
-endif;
-
-
-/**
- * Load Custom Icon Option
- */
-if ( ! function_exists( 'gillion_include_custom_option_types' ) ) :
-    function gillion_include_custom_option_types() {
-        if (is_admin()) {
-            require_once get_template_directory() . '/inc/includes/option-types/new-icon/class-fw-option-type-new-icon.php';
-            // and all other option types
-        }
-    }
-    add_action('fw_option_types_init', 'gillion_include_custom_option_types');
-endif;
-
-
-/**
  * Change Header Content
  */
 if( !function_exists('gillion_before_header_nav_content') ) :
@@ -76,12 +30,10 @@ if( !function_exists('gillion_after_header_nav_content') ) :
 endif;
 
 
-
 /**
  * General Setup
  */
-
-if ( ! function_exists( 'gillion_setup' ) ) :
+if( !function_exists( 'gillion_setup' ) ) :
 	add_action('after_setup_theme', 'gillion_setup');
 	function gillion_setup(){
 
@@ -94,7 +46,6 @@ if ( ! function_exists( 'gillion_setup' ) ) :
 	}
 endif;
 
-
 if ( ! function_exists( 'gillion_general_setup' ) ) :
 	function gillion_general_setup() {
 
@@ -102,7 +53,7 @@ if ( ! function_exists( 'gillion_general_setup' ) ) :
 		add_theme_support( 'automatic-feed-links' );
 
         /* Add editor style */
-        add_editor_style(  get_template_directory_uri() . '/css/admin/editor-style.css' );
+        add_editor_style(  get_template_directory_uri() . '/assets/admin/css/admin-editor-style.css' );
 
 		/* Enable support for post thumbnails, and declare multiple sizes */
         add_theme_support( 'post-thumbnails' );
@@ -193,9 +144,12 @@ if ( ! function_exists( 'gillion_filter_theme_body_classes' ) ) :
 			$classes[] = $transparent_everything;
 		}
 
+        $classes[] = 'sh-title-'.esc_attr( gillion_option('global_title', 'style1') );
+        $section_tabs = ( gillion_option( 'global_section_tabs', 'default' ) == 'default' ) ? gillion_option( 'global_title', 'style1' ) : gillion_option( 'global_section_tabs', 'style1' );
+        $classes[] = 'sh-section-tabs-'.esc_attr( $section_tabs );
+
         $classes[] = 'sh-carousel-'.esc_attr( gillion_option('global_carousel_buttons', 'style1') );
         $classes[] = 'sh-carousel-position-'.esc_attr( gillion_option('global_carousel_buttons_position', 'title') );
-        $classes[] = 'sh-title-'.esc_attr( gillion_option('global_title', 'style1') );
         $classes[] = 'sh-post-categories-'.esc_attr( gillion_option('global_categories', 'style1') );
         $classes[] = 'sh-review-'.esc_attr( gillion_option( 'global_review', 'style1' ) );
         $classes[] = 'sh-meta-order-'.esc_attr( gillion_option( 'global_post_meta_order', 'bottom' ) );
@@ -291,7 +245,7 @@ endif;
 	function gillion_action_theme_customize_preview_js() {
 		wp_enqueue_script(
 			'gillion-theme-customizer',
-			get_template_directory_uri() . '/js/admin/customizer.js',
+			get_template_directory_uri() . '/assets/admin/js/admin-customizer.js',
 			array( 'customize-preview' ),
 			'1.0',
 			true
@@ -300,40 +254,6 @@ endif;
 
 	add_action( 'customize_preview_init', 'gillion_action_theme_customize_preview_js' );
 }
-
-
-/**
- * Theme Customizer support
- */
-if ( defined( 'FW' ) ):
-	/**
-	 * Display current submitted FW_Form errors
-	 * @return array
-	 */
-	if ( ! function_exists( 'gillion_display_form_errors' ) ):
-		function gillion_display_form_errors() {
-			$form = FW_Form::get_submitted();
-
-			if ( ! $form || $form->is_valid() ) {
-				return;
-			}
-
-			wp_enqueue_script(
-				'gillion-show-form-errors',
-				get_template_directory_uri() . '/js/form-errors.js',
-				array( 'jquery' ),
-				'1.0',
-				true
-			);
-
-			wp_localize_script( 'gillion-show-form-errors', '_localized_form_errors', array(
-				'errors'  => $form->get_errors(),
-				'form_id' => $form->get_id()
-			) );
-		}
-	endif;
-	add_action('wp_enqueue_scripts', 'gillion_display_form_errors');
-endif;
 
 
 
@@ -446,100 +366,3 @@ if ( ! function_exists( 'gillion_theme_widgets' ) ) :
 
 	add_action( 'widgets_init', 'gillion_theme_widgets' );
 endif;
-
-
-/**
- * Display current submitted FW_Form errors
- */
-if ( defined( 'FW' ) && !function_exists( 'gillion_form_errors' ) ):
-	function gillion_form_errors() {
-		$form = FW_Form::get_submitted();
-
-		if ( ! $form || $form->is_valid() ) {
-			return;
-		}
-
-		wp_enqueue_script(
-			'gillion-theme-show-form-errors',
-			get_template_directory_uri() . '/js/form-errors.js',
-			array( 'jquery' ),
-			'1.0',
-			true
-		);
-
-		wp_localize_script( 'fw-theme-show-form-errors', '_localized_form_errors', array(
-			'errors'  => $form->get_errors(),
-			'form_id' => $form->get_id()
-		) );
-	}
-	add_action('wp_enqueue_scripts', 'gillion_form_errors');
-endif;
-
-
-/**
- * Sync common Theme Settings and Customizer options db values
- * @internal
- */
-class gillion_Sync_Customizer_Options {
-    public static function init() {
-        add_action('customize_save_after', array(__CLASS__, '_action_after_customizer_save'));
-        add_action('fw_settings_form_saved', array(__CLASS__, '_action_after_settings_save'));
-        add_action('fw_settings_form_reset', array(__CLASS__, '_action_after_settings_save'));
-
-        /* Callback when lattest settings is not registered */
-        add_action('customize_save_after', array(__CLASS__, '_action_after_customizer_save_delay'));
-        add_action('customize_save_after_delay','gillion_Sync_Customizer_Options::_action_after_customizer_save', 5 );
-    }
-
-    /**
-     * If a customizer option also exists in settings options, copy its value to settings option value
-     */
-
-     public static function _action_after_customizer_save_delay(){
-         wp_schedule_single_event(time() + 0, 'customize_save_after_delay');
-     }
-
-
-    public static function _action_after_customizer_save()
-    {
-        $settings_options = fw_extract_only_options(fw()->theme->get_settings_options());
-        //error_log( print_r( $settings_options, true ) );
-
-        foreach (
-            array_intersect_key(
-                fw_extract_only_options(fw()->theme->get_customizer_options()),
-                $settings_options
-            )
-            as $option_id => $option
-        ) {
-            if ($option['type'] === $settings_options[$option_id]['type']) {
-                fw_set_db_settings_option(
-                    $option_id, fw_get_db_customizer_option($option_id)
-                );
-            }
-        }
-    }
-
-    /**
-     * If a settings option also exists in customizer options, copy its value to customizer option value
-     */
-    public static function _action_after_settings_save()
-    {
-        $customizer_options = fw_extract_only_options(fw()->theme->get_customizer_options());
-        //error_log( print_r($customizer_options, TRUE) );
-        foreach (
-            array_intersect_key(
-                fw_extract_only_options(fw()->theme->get_settings_options()),
-                $customizer_options
-            )
-            as $option_id => $option
-        ) {
-            if ($option['type'] === $customizer_options[$option_id]['type']) {
-                fw_set_db_customizer_option(
-                    $option_id, fw_get_db_settings_option($option_id)
-                );
-            }
-        }
-    }
-}
-gillion_Sync_Customizer_Options::init();

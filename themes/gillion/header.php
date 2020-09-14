@@ -29,9 +29,12 @@ if( gillion_page_layout() != 'full' && gillion_page_layout() != 'default default
 		<?php
 			/* Include page notice HTML */
 			get_template_part('inc/templates/notice' );
+
+			/* Include header top content template */
+			get_template_part('inc/headers/header-top-content' );
 		?>
 
-		<?php if( !in_array( get_post_type( get_the_ID() ), array( 'shufflehound_header', 'shufflehound_footer' ) ) ) : ?>
+		<?php if( !in_array( get_post_type( get_the_ID() ), array( 'shufflehound_header', 'shufflehound_footer', 'shufflehound_temp' ) ) ) : ?>
 			<?php if( gillion_post_option( gillion_page_id(), 'header', 'on' ) != 'off' ) : ?>
 				<header class="primary-mobile<?php echo gillion_header_mobile_style(); ?>">
 					<?php /* Include mobile header */

@@ -12,15 +12,21 @@ function gillion_load_more_posts() {
         $post_style = ( isset( $_POST['post_style'] ) && $_POST['post_style'] ) ? esc_attr( $_POST['post_style'] ) : 'masonry';
         $posts_per_page = ( isset( $_POST['per_page'] ) && $_POST['per_page'] ) ? esc_attr( $_POST['per_page'] ) : '6';
         $paged = ( isset( $_POST['paged'] ) && $_POST['paged'] > 0 ) ? intval( $_POST['paged'] ) : '1';
+        $offset = ( isset( $_POST['offset'] ) && $_POST['offset'] > 0 ) ? intval( $_POST['offset'] ) : '0';
 
-        $posts = new WP_Query( array(
+        $posts_args = array(
         	'post_type' => 'post',
         	'paged' => $paged,
         	'category__in' => $categories,
         	'posts_per_page' => $posts_per_page,
             'post_status' => 'publish',
-        ));
+        );
 
+        if( $offset ) :
+            $posts_args['offset'] = ( $paged - 1 ) * $posts_per_page + $offset;
+        endif;
+
+        $posts = new WP_Query( $posts_args );
         if( isset( $posts->found_posts ) && $posts->found_posts > 0 ) :
             set_query_var( 'style', $post_style );
             while ( $posts->have_posts() ) : $posts->the_post();

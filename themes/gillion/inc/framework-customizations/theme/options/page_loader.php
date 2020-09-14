@@ -10,8 +10,8 @@ $page_loader_options = array(
 		'desc'  => esc_html__('Choose page loader status', 'gillion'),
 		'choices' => array(
 			'off' => esc_html__( 'Off', 'gillion' ),
-			'on1' => esc_html__( 'On - In every page', 'gillion' ),
-			'on2' => esc_html__( 'On - Only first load', 'gillion' ),
+			'on1' => esc_html__( 'On - On every page', 'gillion' ),
+			'on2' => esc_html__( 'On - Only on first load', 'gillion' ),
 		),
 	),
 
@@ -21,8 +21,8 @@ $page_loader_options = array(
 		'label' => esc_html__('Page Loader Style', 'gillion'),
 		'desc'  => esc_html__('Choose page loader style', 'gillion'),
 		'choices' => array(
-			'cube-folding' => esc_html__( 'Cube Folding', 'gillion' ),
-			'cube-grid' => esc_html__( 'Cube Grid', 'gillion' ),
+			'cube-folding' => esc_html__( 'Cube folding', 'gillion' ),
+			'cube-grid' => esc_html__( 'Cube grid', 'gillion' ),
 			'spinner' => esc_html__( 'Dots', 'gillion' ),
 		),
 	),

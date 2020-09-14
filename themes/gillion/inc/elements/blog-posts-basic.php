@@ -6,7 +6,7 @@ Element: Blog Posts
 class vcBlogPosts extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_blog_posts', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcBlogPosts extends WPBakeryShortCode {
                 'base' => 'vcg_blog_posts',
                 'description' => __('Gillion basic blog posts', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -28,9 +28,9 @@ class vcBlogPosts extends WPBakeryShortCode {
                         'heading' => __( 'Posts Style', 'gillion' ),
                         'description' => __( 'Choose posts style', 'gillion' ),
                         'value' => array(
+                            esc_html__( 'Grid', 'gillion' ) => 'grid',
                             esc_html__( 'Masonry', 'gillion' ) => 'masonry',
                             esc_html__( 'Masonry Card', 'gillion' ) => 'masonry blog-style-masonry-card',
-                            esc_html__( 'Grid', 'gillion' ) => 'grid',
                             esc_html__( 'Left', 'gillion' ) => 'left-small',
                             esc_html__( 'Left (mini)', 'gillion' ) => 'left-mini',
                             esc_html__( 'Left (large)', 'gillion' ) => 'left',
@@ -179,6 +179,18 @@ class vcBlogPosts extends WPBakeryShortCode {
                         'group' => __( 'Styling', 'gillion' ),
                     ),
 
+                    array(
+                        'param_name' => 'page_blog_description',
+                        'heading' => __( 'Blog Posts Description', 'gillion' ),
+                        'value' => array(
+                            esc_html__('Default', 'gillion') => 'default',
+                            esc_html__('Off', 'gillion') => 'off',
+                        ),
+                        'std' => 'default',
+                        'type' => 'dropdown',
+                        'group' => __( 'Styling', 'gillion' ),
+                    ),
+
                 ),
             )
         );
@@ -203,6 +215,10 @@ class vcBlogPosts extends WPBakeryShortCode {
         $offset = ( isset( $atts['offset'] ) ) ? intval( $atts['offset'] ) : 0;
         $order  = ( isset( $atts['order2'] ) ) ? $atts['order2'] : 'desc';
         $order_by = ( isset( $atts['order_by'] ) ) ? $atts['order_by'] : 'date';
+        $page_blog_description = ( isset( $atts['page_blog_description'] ) ) ? $atts['page_blog_description'] : 'default';
+        $categories_ids = [];
+
+
         $rand = gillion_rand();
         ob_start();
 
@@ -232,14 +248,37 @@ class vcBlogPosts extends WPBakeryShortCode {
             $class2[] = 'blog-style-'.$style.'-element';
             $class2[] = ( $atts['columns'] > 0 ) ? 'blog-style-columns'.$atts['columns'] : '';
             $class2[] = ( $atts['lines'] == true ) ? 'blog-dividing-line-off' : '';
+            $class2[] = ( $page_blog_description == 'off' ) ? 'sh-posts-description-off' : '';
+
 
             if( $pagination == 'load_more' ) :
                 $posts = new WP_Query( array(
                     'post_type' => 'post',
+                    'category_name' => $atts['categories'],
                     'posts_per_page' => $limit,
                     'offset' => $offset,
                     'post_status' => 'publish',
                 ));
+
+                // Get categories IDs
+                $categories = explode( ',', $atts['categories'].',aaa' );
+                if( is_array( $categories ) ) :
+                    foreach( $categories  as $cat ) :
+
+                        $category_data = get_term_by( 'name', trim( $cat ), 'category' );
+                        if( isset( $category_data->term_id ) && $category_data->term_id > 0 ) :
+                            $categories_ids[] = $category_data->term_id;
+                        else :
+
+                            $category_data = get_term_by( 'slug', trim( $cat ), 'category' );
+                            if( isset( $category_data->term_id ) && $category_data->term_id > 0 ) :
+                                $categories_ids[] = $category_data->term_id;
+                            endif;
+
+                        endif;
+
+                    endforeach;
+                endif;
             elseif( count( $specific_posts ) > 0 ) :
                 $posts = new WP_Query( array(
                     'post_type' => 'post',
@@ -310,10 +349,11 @@ class vcBlogPosts extends WPBakeryShortCode {
 
                 <?php if( $pagination == 'load_more' ) : ?>
                     <div class="sh-load-more"
-    				data-categories=""
+    				data-categories="<?php echo esc_attr( implode( ',', $categories_ids ) ); ?>"
     				data-post-style="<?php echo esc_attr( $style ); ?>"
     				data-posts-per-page="<?php echo esc_attr( $limit ); ?>"
     				data-paged="2"
+                    data-offset="<?php echo esc_attr( $offset ); ?>"
                     data-id="<?php echo esc_attr( $id ); ?>">
     					<?php esc_html_e( 'Load more', 'gillion' ); ?>
     				</div>

@@ -8,6 +8,7 @@ $position = gillion_option( 'global_carousel_buttons_position', 'title' );
 
 $categories = ( isset( $atts['categories'] ) && $atts['categories'] ) ? array_filter( explode( "\n", $atts['categories'] ) ) : '';
 ?>
+
 <div class="sh-widget-poststab sh-widget-posts-categories">
 
     <!-- Nav tabs -->
@@ -88,7 +89,7 @@ $categories = ( isset( $atts['categories'] ) && $atts['categories'] ) ? array_fi
         								<?php gillion_post_meta_excerpt( 6 ); ?>
             						</div>
 
-            					<?php endwhile; ?>
+            					<?php endwhile; wp_reset_postdata(); ?>
 
             			<?php endif; ?>
                         </div>

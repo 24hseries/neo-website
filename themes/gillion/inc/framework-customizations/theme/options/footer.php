@@ -2,27 +2,6 @@
 	die( 'Forbidden' );
 }
 
-/* Get footers */
-$layout_choices = array(
-	'default' => esc_html__( 'Default (from theme settings)', 'jevelin' ),
-);
-
-$footers = new WP_Query( array(
-    'post_type' => 'shufflehound_footer',
-    'post_status' => 'publish',
-    'posts_per_page' => 20
-));
-if( $footers->have_posts() ) :
-    while( $footers->have_posts() ) : $footers->the_post();
-
-		$footer_id = get_the_ID();
-        $layout_choices[ $footer_id ] = get_the_title().' (from WPbakery page builder)';
-
-    endwhile;
-endif;
-wp_reset_postdata();
-
-
 $footer_options = array(
 
 	'footer_template' => array(
@@ -30,7 +9,7 @@ $footer_options = array(
 	    'value' => 'default',
 	    'label' => esc_html__('Footer Template', 'jevelin'),
 	    'desc'  => esc_html__('Select footer template', 'jevelin'),
-	    'choices' => $layout_choices
+	    'choices' => gillion_get_footers()
 	),
 
 
@@ -74,7 +53,7 @@ $footer_options = array(
 	'footer_parallax' => array(
 		'type' => 'switch',
 		'label' => esc_html__( 'Footer Parallax', 'gillion' ),
-		'desc' => esc_html__( 'Enable or disable whole footer to act as an parallax element', 'gillion' ),
+		'desc' => esc_html__( 'Enable or disable whole footer to act as a parallax element', 'gillion' ),
 		'value' => 'off',
 		'left-choice' => array(
 			'value' => 'off',
@@ -96,7 +75,7 @@ $footer_options = array(
 	'footer_instagram_widgets' => array(
 		'type' => 'switch',
 		'label' => esc_html__( 'Footer Instagram Section', 'gillion' ),
-		'desc' => esc_html__( 'Enable or disable footer instagram widgets section', 'gillion' ),
+		'desc' => esc_html__( 'Enable or disable footer Instagram widgets section', 'gillion' ),
 		'value' => 'on',
 		'left-choice' => array(
 			'value' => 'off',
@@ -119,7 +98,7 @@ $footer_options = array(
 		'type'  => 'html-full',
 		'value' => '',
 		'label' => false,
-		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Footer Copyright Settings', 'gillion').'</span></h3>',
+		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Copyright Footer Settings', 'gillion').'</span></h3>',
 	),
 
 	'copyright_bar' => array(
@@ -149,8 +128,8 @@ $footer_options = array(
 		'label' => esc_html__('Copyright Alignment', 'gillion'),
 		'desc'  => esc_html__('Choose main copyright alignment', 'gillion'),
 		'choices' => array(
-			'left' => esc_html__( 'Left (logo, copyrights in left and navigation in the right)', 'gillion' ),
-			'left2' => esc_html__( 'Left (logo in left and copyrights, navigation in the right)', 'gillion' ),
+			'left' => esc_html__( 'Left (logo, copyrights in left and navigation on the right)', 'gillion' ),
+			'left2' => esc_html__( 'Left (logo in left and copyrights, navigation on the right)', 'gillion' ),
 			'center' => esc_html__( 'Center (everything center)', 'gillion' ),
 		),
 		'inline' => false,
@@ -162,7 +141,7 @@ $footer_options = array(
 		'reinit' => true,
 		'size'   => 'large',
 		'label'  => esc_html__( 'Copyright Text', 'gillion' ),
-		'desc'   => esc_html__( 'Enter some description about copyright in your website', 'gillion' ).'
+		'desc'   => esc_html__( 'Enter some description about copyright for your website', 'gillion' ).'
 			<script>jQuery(document).ready(function ($) { setTimeout(function(){ $("#textarea_dynamic_id-tmce").trigger("click"); }, 1); });</script>',
 		'editor_height' => 110,
 	),
@@ -170,7 +149,7 @@ $footer_options = array(
 	'copyright_deveveloper' => array(
 		'type' => 'switch',
 		'label' => esc_html__( 'Developer Copyrights', 'gillion' ),
-		'desc' => esc_html__( 'Enable or disable theme developer copyrights', 'gillion' ),
+		'desc' => esc_html__( "Enable or disable theme developer's copyright", 'gillion' ),
 		'value' => true,
 		'left-choice' => array(
 			'value' => false,
@@ -179,6 +158,21 @@ $footer_options = array(
 		'right-choice' => array(
 			'value' => true,
 			'label' => esc_html__('On', 'gillion'),
+		),
+	),
+
+	'copyright_deveveloper_all' => array(
+		'type' => 'switch',
+		'label' => esc_html__( 'Invisible Developer Copyrights', 'jevelin' ),
+		'desc' => esc_html__( 'Enable or disable invisible developer copyrights. Say thanks by leaving invisible developer copyrights on', 'jevelin' ),
+		'value' => true,
+		'left-choice' => array(
+			'value' => false,
+			'label' => esc_html__('Off', 'jevelin'),
+		),
+		'right-choice' => array(
+			'value' => true,
+			'label' => esc_html__('On', 'jevelin'),
 		),
 	),
 

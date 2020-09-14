@@ -2,8 +2,14 @@
 	die( 'Forbidden' );
 }
 
-$options = array(
 
+// Check current framework
+if( gillion_framework() == 'redux' ) :
+	return false;
+endif;
+
+
+$options = array(
     'page_settings' => array(
         'title'   => esc_html__( 'Page Settings', 'gillion' ),
         'type'    => 'box',
@@ -104,7 +110,8 @@ $options = array(
                             'default' => esc_html__( 'Default (from theme options)', 'gillion' ),
 							'2' => esc_html__( 'Standard', 'gillion' ),
 							'1' => esc_html__( 'Menu Center', 'gillion' ),
-							'4' => esc_html__( 'Logo/menu center', 'gillion' ),
+							'4' => esc_html__( 'Logo/menu center (icons in menu area)', 'gillion' ),
+							'5' => esc_html__( 'Logo/menu center (icons in logo area)', 'gillion' ),
 							'3' => esc_html__( 'With Ad place', 'gillion' ),
                         ),
                     ),
@@ -125,8 +132,8 @@ $options = array(
                             'header_style' => array(
                                 'type'  => 'select',
                                 'value' => '1',
-                                'label' => esc_html__('Header and Titlebar Style', 'gillion'),
-                                'desc'  => esc_html__('Choose main header and titlebar style', 'gillion'),
+                                'label' => esc_html__('Above Content', 'gillion'),
+                                'desc'  => esc_html__('Enable or disable header above content', 'gillion'),
                                 'choices' => array(
                                     'default' => esc_html__( 'Default', 'gillion' ),
                                     'light' => esc_html__( 'Light Text Large', 'gillion' ),
@@ -571,6 +578,17 @@ $options = array(
 							'value' => 'on',
 							'label' => esc_html__('On', 'gillion'),
 						),
+					),
+
+					'page_blog_description' => array(
+						'type'  => 'radio',
+                        'value' => 'default',
+						'label' => esc_html__( 'Blog Posts Description', 'gillion' ),
+						'choices' => array(
+                            'default' => esc_html__( 'Default', 'gillion' ),
+                            'off' => esc_html__( 'Off', 'gillion' ),
+                        ),
+                        'inline' => false,
 					),
 
                 ),

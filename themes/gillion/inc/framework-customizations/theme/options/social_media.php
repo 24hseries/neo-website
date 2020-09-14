@@ -8,17 +8,15 @@ $social_options = array(
 		'value' => array(
 			'twitter' => true,
 			'facebook' => true,
-			'googleplus' => true,
 			'pinterest' => true,
 			'messenger' => true,
 		),
-		'label' => esc_html__('Social Share Icons', 'gillion'),
+		'label' => esc_html__('Post Social Share Icons', 'gillion'),
 		'desc'  => esc_html__('Select social share icons you want to see', 'gillion'),
 		'choices' => array(
 			'email' => esc_html__('Email', 'gillion'),
 			'twitter' => esc_html__('Twitter', 'gillion'),
 			'facebook' => esc_html__('Facebook', 'gillion'),
-			'googleplus' => esc_html__('Google Plus', 'gillion'),
 			'linkedin' => esc_html__('Linkedin', 'gillion'),
 			'pinterest' => esc_html__('Pinterest', 'gillion'),
 			'whatsapp' => esc_html__('Whatsapp', 'gillion'),
@@ -40,7 +38,7 @@ $social_options = array(
 	),
 
 	'social_newtab' => array(
-		'label' => esc_html__( 'Links In New Tab', 'gillion' ),
+		'label' => esc_html__( 'Links in new tab', 'gillion' ),
 		'desc'  => esc_html__( 'Enable or disable social media link opening in new tab', 'gillion' ),
 		'type'  => 'switch',
 		'value' => true,
@@ -64,15 +62,8 @@ $social_options = array(
 	'social_facebook' => array(
 		'type'  => 'text',
 		'value' => 'https://www.facebook.com/people/@/shufflehound',
-		'label' => esc_html__('Facebok URL', 'gillion'),
+		'label' => esc_html__('Facebook URL', 'gillion'),
 		'desc'  => esc_html__('Enter your custom link to show the Facebook icon. Leave blank to hide this icon', 'gillion'),
-	),
-
-	'social_googleplus' => array(
-		'type'  => 'text',
-		'value' => '',
-		'label' => esc_html__('Google+ URL', 'gillion'),
-		'desc'  => esc_html__('Enter your custom link to show the Google+ icon. Leave blank to hide this icon', 'gillion'),
 	),
 
 	'social_instagram' => array(
@@ -86,7 +77,7 @@ $social_options = array(
 		'type'  => 'text',
 		'value' => '',
 		'label' => esc_html__('Youtube URL', 'gillion'),
-		'desc'  => esc_html__('Enter your custom link to show the Yotube icon. Leave blank to hide this icon', 'gillion'),
+		'desc'  => esc_html__('Enter your custom link to show the YouTube icon. Leave blank to hide this icon', 'gillion'),
 	),
 
 	'social_pinterest' => array(
@@ -120,7 +111,7 @@ $social_options = array(
 	'social_skype' => array(
 		'type'  => 'text',
 		'value' => '',
-		'label' => esc_html__('Skype Nick', 'gillion'),
+		'label' => esc_html__('Skype Name', 'gillion'),
 		'desc'  => esc_html__('Enter your account name to show the Skype icon. Leave blank to hide this icon', 'gillion'),
 	),
 
@@ -134,8 +125,8 @@ $social_options = array(
 	'social_soundcloud' => array(
 		'type'  => 'text',
 		'value' => '',
-		'label' => esc_html__('Soundcloud', 'gillion'),
-		'desc'  => esc_html__('Enter your account name to show the Soundcloud icon. Leave blank to hide this icon', 'gillion'),
+		'label' => esc_html__('SoundCloud', 'gillion'),
+		'desc'  => esc_html__('Enter your account name to show the SoundCloud icon. Leave blank to hide this icon', 'gillion'),
 	),
 
 	'social_tumblr' => array(
@@ -148,14 +139,14 @@ $social_options = array(
 	'social_wordpress' => array(
 		'type'  => 'text',
 		'value' => '',
-		'label' => esc_html__('Wordpress URL', 'gillion'),
-		'desc'  => esc_html__('Enter your custom link to show the Wordpress icon. Leave blank to hide this icon', 'gillion'),
+		'label' => esc_html__('WordPress URL', 'gillion'),
+		'desc'  => esc_html__('Enter your custom link to show the WordPress icon. Leave blank to hide this icon', 'gillion'),
 	),
 
 	'social_custom' => array(
 		'type' => 'addable-popup',
 		'label' => esc_html__('Custom Social Media', 'gillion'),
-		'desc'  => esc_html__('Add custom icons not included in upper list for other social media links', 'gillion'),
+		'desc'  => esc_html__('Add custom icons not included in above list for other social media links', 'gillion'),
 		'template' => '{{- link }}',
 		'popup-title' => null,
 		'size' => 'small',
@@ -181,7 +172,7 @@ $social_options = array(
 
 $options = array(
 	'social' => array(
-		'title'   => esc_html__( 'Social Media', 'gillion' ),
+		'title'   => esc_html__( 'Social Media Icons', 'gillion' ),
 		'type'    => 'tab',
 		'options' => array(
 			'social-box' => array(

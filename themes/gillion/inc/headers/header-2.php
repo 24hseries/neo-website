@@ -3,19 +3,7 @@
 
 	if ( ! function_exists( 'gillion_nav_wrap' ) ) :
 		function gillion_nav_wrap() {
-			ob_start();
-		    	gillion_nav_wrap_readlater();
-		    $read_later = ob_get_clean();
-
-		    $wrap  = '<ul id="%1$s" class="%2$s">%3$s';
-			$wrap .= gillion_nav_wrap_sidemenu();
-			$wrap .= gillion_nav_wrap_search();
-			$wrap .= gillion_nav_wrap_share();
-			$wrap .= gillion_nav_wrap_login();
-			$wrap .= gillion_nav_wrap_cart();
-		    $wrap .= $read_later;
-			$wrap .= ( function_exists( 'gillion_purchase_button' ) ) ? gillion_purchase_button() : '';
-		    $wrap .= '</ul>';
+			$wrap = '%3$s';
 
 		    return $wrap;
 		}
@@ -46,23 +34,37 @@
 
 					<?php /* Header navigation */ ?>
 					<nav id="header-navigation" class="header-standard-position">
+
 						<?php if ( has_nav_menu( 'header' ) ) : ?>
-							<?php
-								global $blog_id;
-								$current_blog_id = $blog_id;
-								apply_filters( 'gillion_before_header_nav', $current_blog_id );
+							<div class="sh-nav-container">
+								<ul class="sh-nav">
+									<?php
+										global $blog_id;
+										$current_blog_id = $blog_id;
+										apply_filters( 'gillion_before_header_nav', $current_blog_id );
 
-								echo gillion_compress( wp_nav_menu( array(
-									'theme_location' => 'header',
-									'depth' => 4,
-									'container_class' => 'sh-nav-container',
-									'menu_class' => 'sh-nav',
-									'items_wrap' => gillion_nav_wrap(),
-									'echo' => false
-								)));
+										echo gillion_compress( wp_nav_menu( array(
+											'theme_location' => 'header',
+											'depth' => 4,
+											'container' => false,
+											'container_class' => false,
+											'menu_class' => false,
+											'items_wrap' => gillion_nav_wrap(),
+											'echo' => false
+										)));
 
-				 				apply_filters( 'gillion_after_header_nav', $current_blog_id );
-							?>
+						 				apply_filters( 'gillion_after_header_nav', $current_blog_id );
+									?>
+									<?php echo gillion_nav_wrap_sidemenu(); ?>
+									<?php echo gillion_nav_wrap_search(); ?>
+									<?php echo gillion_nav_wrap_share(); ?>
+									<?php echo gillion_nav_wrap_login(); ?>
+									<?php echo gillion_nav_wrap_cart(); ?>
+									<?php echo gillion_nav_wrap_readlater(); ?>
+									<?php echo ( function_exists( 'gillion_purchase_button' ) ) ? gillion_nav_wrap_readlater() : ''; ?>
+								</ul>
+							</div>
+
 						<?php else :
 							gillion_asign_menu();
 						endif; ?>

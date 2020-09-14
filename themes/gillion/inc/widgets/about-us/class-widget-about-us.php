@@ -1,5 +1,4 @@
 <?php if ( ! defined( 'ABSPATH' ) ) { die( 'Direct access forbidden.' ); }
-
 class Widget_About_Us extends WP_Widget {
 
     /**
@@ -58,6 +57,19 @@ class Widget_About_Us extends WP_Widget {
                 'images_only' => true,
             ),
 
+            'image_size' => array(
+                'type'  => 'radio',
+                'label' => esc_html__('Image Size', 'gillion'),
+                'choices' => array(
+                    'large' => esc_html__( 'Large', 'gillion' ),
+                    'gillion-portrait' => esc_html__( 'Portrait', 'gillion' ),
+                    'gillion-landscape-small' => esc_html__( 'Landscape', 'gillion' ),
+                    'gillion-square' => esc_html__( 'Square', 'gillion' ),
+                ),
+                'value' => 'large',
+                'inline' => false,
+            ),
+
             'url'   => array(
                 'type'  => 'text',
                 'label' => esc_html__( 'Image URL', 'gillion' ),
@@ -74,12 +86,6 @@ class Widget_About_Us extends WP_Widget {
                 'type'  => 'text',
                 'value' => '',
                 'label' => esc_html__('Facebok URL', 'gillion'),
-            ),
-
-            'social_googleplus' => array(
-                'type'  => 'text',
-                'value' => '',
-                'label' => esc_html__('Google+ URL', 'gillion'),
             ),
 
             'social_instagram' => array(
@@ -165,27 +171,42 @@ class Widget_About_Us extends WP_Widget {
     }
 
     function update( $new_instance, $old_instance ) {
-        return fw_get_options_values_from_input(
-            $this->options,
-            FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
-        );
+        // Unyson metaboxes
+        if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
+
+            return fw_get_options_values_from_input(
+                $this->options,
+                FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
+            );
+
+        // Shufflehound metaboxes
+        else :
+            return Shufflehound_Metaboxes::widget_update( $new_instance, $old_instance, $this->options );
+        endif;
     }
 
     function form( $values ) {
+        // Unyson metaboxes
+        if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
 
-        $prefix = $this->get_field_id($this->prefix);
-        $id = 'fw-widget-options-'. $prefix;
+            $prefix = $this->get_field_id($this->prefix);
+            $id = 'fw-widget-options-'. $prefix;
 
-        echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
-        echo fw()->backend->render_options($this->options, $values, array(
-            'id_prefix' => $prefix .'-',
-            'name_prefix' => $this->get_field_name($this->prefix),
-        ));
-        echo '</div>';
-        $this->print_widget_javascript($id);
+            echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
+            echo fw()->backend->render_options($this->options, $values, array(
+                'id_prefix' => $prefix .'-',
+                'name_prefix' => $this->get_field_name($this->prefix),
+            ));
+            echo '</div>';
+            $this->print_widget_javascript($id);
+
+        // Shufflehound metaboxes
+        else :
+            $name_prefix = substr( $this->get_field_name(''), 0, -2 );
+            echo Shufflehound_Metaboxes::widget( $this->options, $values, $name_prefix );
+        endif;
 
         return $values;
-
     }
 
     private function print_widget_javascript($id) {

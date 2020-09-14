@@ -6,7 +6,7 @@ Element: Blog Posts Categories
 class vcTextBlock extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_textblock', array( $this, '_html' ) );
     }
 
@@ -38,7 +38,7 @@ class vcTextBlock extends WPBakeryShortCode {
                 'base' => 'vcg_textblock',
                 'description' => __('A block of text with WYSIWYG editor', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -173,7 +173,7 @@ class vcTextBlock extends WPBakeryShortCode {
 
     public function _html( $atts, $content ) {
         $atts = ( isset( $atts ) && is_array( $atts ) ) ? $atts : array();
-        
+
         $text_font = ( isset( $atts['text_font'] ) ) ? $atts['text_font'] : '';
         $text_weight = ( isset( $atts['text_weight'] ) ) ? $atts['text_weight'] : '400';
         $heading_weight = ( isset( $atts['heading_weight'] ) ) ? $atts['heading_weight'] : '700';
@@ -184,7 +184,8 @@ class vcTextBlock extends WPBakeryShortCode {
 
         $id = 'vcg-text-block-'.gillion_rand();
         $css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
-        $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $css_class = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
 
         $class = array();
         $class[] = $id;

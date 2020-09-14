@@ -3,7 +3,7 @@ header('Content-type: application/json');
 header('Access-Control-Allow-Origin: *');
  
 // Set your CSV feed
-$feed = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSkD-ftabQ6nkfvFxsT5B-t0eTziArvryWBqBBxKNPU_89sgyA3cxYrs6YEJbbR_AlSCR-rD1GCk8to/pub?gid=2129415139&single=true&output=csv";
+$feed = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQYNRY2kdn6DuKrrZTg5vZrqTLEXLwofIKjAaEqnP21JLAcWRXvhvImD91DvBHZ75cgIP2_ztZ2wJW3/pub?gid=322623071&single=true&output=csv";
  
 // Arrays we'll use later
 $keys = array();
@@ -36,14 +36,7 @@ $labels = array_shift($data);
 foreach ($labels as $label) {
   $keys[] = $label;
 }
- 
-// Add Ids, just in case we want them later
-$keys[] = 'id';
- 
-for ($i = 0; $i < $count; $i++) {
-  $data[$i][] = $i;
-}
- 
+
 // Bring it all together
 for ($j = 0; $j < $count; $j++) {
   $d = array_combine($keys, $data[$j]);

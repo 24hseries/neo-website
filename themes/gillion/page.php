@@ -52,7 +52,7 @@ get_header(); ?>
 			?>
 
 		</div>
-		<?php if( isset($layout_sidebar) && $layout_sidebar ) : ?>
+		<?php if( isset( $layout_sidebar ) && $layout_sidebar ) : ?>
 			<div id="sidebar" class="<?php echo esc_attr( $layout_sidebar ); ?>">
 				<?php get_sidebar(); ?>
 			</div>

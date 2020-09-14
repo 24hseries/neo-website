@@ -12,7 +12,7 @@ $lightbox_options = array(
 			'none' => esc_html__( 'None', 'gillion' ),
 			'elastic' => esc_html__( 'Elastic', 'gillion' ),
 			'fade' => esc_html__( 'Fade', 'gillion' ),
-			'fadeInline' => esc_html__( 'Fade Inline', 'gillion' ),
+			'fadeInline' => esc_html__( 'Fade inline', 'gillion' ),
 		),
 	),
 

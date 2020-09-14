@@ -23,10 +23,17 @@ class Widget_Pinterest extends WP_Widget {
 
             'board_url' => array(
                 'type' => 'text',
-                'label' => esc_html__('Pinterest board URL', 'gillion'),
+                'label' => esc_html__('Pinterest (board, user profile or pin) URL', 'gillion'),
                 'help' => esc_html__('For example: https://www.pinterest.com/pinterest/official-news/', 'gillion'),
+                'desc' => esc_html__( 'For more information about how this feature works and its preview, please visit' ) . ' <a href="https://developers.pinterest.com/tools/widget-builder/?type=profile" target="_blank">this link</a>',
             ),
 
+            'height' => array(
+                'type' => 'text',
+                'label' => esc_html__('Pinterest Content Height', 'gillion'),
+                'desc' => esc_html__( 'Enter content height (in px)' ),
+
+            ),
 
         );
         $this->prefix = 'pinterest';
@@ -51,24 +58,40 @@ class Widget_Pinterest extends WP_Widget {
     }
 
     function update( $new_instance, $old_instance ) {
-        return fw_get_options_values_from_input(
-            $this->options,
-            FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
-        );
+        // Unyson metaboxes
+        if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
+
+            return fw_get_options_values_from_input(
+                $this->options,
+                FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
+            );
+
+        // Shufflehound metaboxes
+        else :
+            return Shufflehound_Metaboxes::widget_update( $new_instance, $old_instance, $this->options );
+        endif;
     }
 
     function form( $values ) {
+        // Unyson metaboxes
+        if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
 
-        $prefix = $this->get_field_id($this->prefix);
-        $id = 'fw-widget-options-'. $prefix;
+            $prefix = $this->get_field_id($this->prefix);
+            $id = 'fw-widget-options-'. $prefix;
 
-        echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
-        echo fw()->backend->render_options($this->options, $values, array(
-            'id_prefix' => $prefix .'-',
-            'name_prefix' => $this->get_field_name($this->prefix),
-        ));
-        echo '</div>';
-        $this->print_widget_javascript($id);
+            echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
+            echo fw()->backend->render_options($this->options, $values, array(
+                'id_prefix' => $prefix .'-',
+                'name_prefix' => $this->get_field_name($this->prefix),
+            ));
+            echo '</div>';
+            $this->print_widget_javascript($id);
+
+        // Shufflehound metaboxes
+        else :
+            $name_prefix = substr( $this->get_field_name(''), 0, -2 );
+            echo Shufflehound_Metaboxes::widget( $this->options, $values, $name_prefix );
+        endif;
 
         return $values;
     }

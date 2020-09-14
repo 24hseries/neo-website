@@ -10,6 +10,7 @@ else :
 endif;
 
 $position = gillion_option( 'global_carousel_buttons_position', 'title' );
+$per_slide = ( isset( $atts['per_slide'] ) && $atts['per_slide'] > 0 ) ? intval( $atts['per_slide'] ) : 3;
 ?>
 <?php echo wp_kses_post( $before_widget ); ?>
 
@@ -78,7 +79,7 @@ $position = gillion_option( 'global_carousel_buttons_position', 'title' );
     						</div>
                         <?php endif; ?>
 
-						<?php if( $i%3==0 && $i != $posts->post_count ) : $j = 0; ?>
+						<?php if( $i%$per_slide==0 && $i != $posts->post_count ) : $j = 0; ?>
 						</div><div class="sh-widget-posts-slider-group">
 						<?php endif; ?>
 
@@ -146,4 +147,4 @@ $position = gillion_option( 'global_carousel_buttons_position', 'title' );
         <div class="widget-slide-arrows sh-carousel-buttons-styling"></div>
     <?php endif; ?>
 
-<?php echo wp_kses_post( $after_widget ); ?>
+<?php echo wp_kses_post( $after_widget ); wp_reset_postdata(); ?>

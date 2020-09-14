@@ -30,7 +30,7 @@ $options = array(
 		'icon'	  => 'fa fa-phone',
 		'options' => array(
 			'ad-box' => array(
-				'title'   => esc_html__( 'Ads / Banners', 'gillion' ),
+				'title'   => esc_html__( 'Ads/Banners', 'gillion' ),
 				'type'    => 'box',
 				'options' => $header_options
 			),

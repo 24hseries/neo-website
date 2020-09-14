@@ -6,7 +6,7 @@ Element: Button
 class vcImageGallery extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_image_gallery', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcImageGallery extends WPBakeryShortCode {
                 'base' => 'vcg_image_gallery',
                 'description' => __('Responsive image gallery', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                //'icon' => get_template_directory_uri().'/assets/img/vc-icon.png',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -91,19 +91,20 @@ class vcImageGallery extends WPBakeryShortCode {
 
     public function _html( $atts, $content ) {
         $atts = ( isset( $atts ) && is_array( $atts ) ) ? $atts : array();
-        
+
         /* Get Values */
         $id = 'vcg-button-'.gillion_rand();
         $images = ( isset( $atts['images'] ) ) ? explode( ',', $atts['images'] ) : array();
         $images_size = ( isset( $atts['images_size'] ) ) ? $atts['images_size'] : 'large';
         $dots = ( isset( $atts['dots'] ) && $atts['dots'] ) ? 'true' : 'false';
         $autoplay = ( isset( $atts['autoplay'] ) && $atts['autoplay'] ) ? 'true' : 'false';
-        $vc_css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
+        $css = ( isset( $atts['css'] ) ) ? $atts['css'] : 'none';
 
         /* Set Classes and Styles */
         $class = array();
         $class[] = $id;
-        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $vc_css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
         ob_start();
         ?>
 

@@ -9,8 +9,8 @@ class Widget_Social_V2 extends WP_Widget {
     private $prefix;
     function __construct() {
 
-        $widget_ops = array( 'description' => esc_html__( 'Show your social networks', 'gillion' ) );
-        parent::__construct( false, esc_html__( 'Shufflehound Social', 'gillion' ), $widget_ops );
+        $widget_ops = array( 'description' => esc_html__( 'Show you social network icons', 'gillion' ) );
+        parent::__construct( false, esc_html__( 'Shufflehound Social Icons', 'gillion' ), $widget_ops );
         $this->options = array(
 
             'id' => array( 'type' => 'unique' ),
@@ -48,12 +48,6 @@ class Widget_Social_V2 extends WP_Widget {
                 'label' => esc_html__('Facebok URL', 'gillion'),
             ),
 
-            'social_googleplus' => array(
-                'type'  => 'text',
-                'value' => '',
-                'label' => esc_html__('Google+ URL', 'gillion'),
-            ),
-
             'social_instagram' => array(
                 'type'  => 'text',
                 'value' => '',
@@ -82,14 +76,6 @@ class Widget_Social_V2 extends WP_Widget {
                 'limit' => 10,
                 'popup-options' => array(
 
-                    'icon' => array(
-                        'value' => '',
-                        'type'  => 'icon',
-                        'label' => esc_html__('Icon', 'gillion'),
-                        'desc'   => esc_html__( 'Select Icon', 'gillion' ),
-                        'set' => 'gillion-icons'
-                    ),
-
                     'title' => array(
                         'type'  => 'text',
                         'value' => '',
@@ -100,6 +86,15 @@ class Widget_Social_V2 extends WP_Widget {
                         'type'  => 'text',
                         'label' => esc_html__('Enter URL', 'gillion'),
                         'desc'  => esc_html__('Enter your custom link to show the icon', 'gillion'),
+                    ),
+
+                    'icon' => array(
+                        'value' => '',
+                        'type'  => 'icon',
+                        'title' => esc_html__('Icon (enter icon class for Font Awesome, Line Icons or Themify)', 'gillion'), // Shufflehound metaboxes
+                        'label' => esc_html__('Icon', 'gillion'),
+                        'desc'   => esc_html__( 'Select Icon', 'gillion' ),
+                        'set' => 'gillion-icons'
                     ),
 
                 ),
@@ -128,24 +123,40 @@ class Widget_Social_V2 extends WP_Widget {
     }
 
     function update( $new_instance, $old_instance ) {
-        return fw_get_options_values_from_input(
-            $this->options,
-            FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
-        );
+        // Unyson metaboxes
+        if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
+
+            return fw_get_options_values_from_input(
+                $this->options,
+                FW_Request::POST(fw_html_attr_name_to_array_multi_key($this->get_field_name($this->prefix)), array())
+            );
+
+        // Shufflehound metaboxes
+        else :
+            return Shufflehound_Metaboxes::widget_update( $new_instance, $old_instance, $this->options );
+        endif;
     }
 
     function form( $values ) {
+        // Unyson metaboxes
+        if( defined( 'FW' ) && gillion_framework() == 'unyson' ) :
 
-        $prefix = $this->get_field_id($this->prefix);
-        $id = 'fw-widget-options-'. $prefix;
+            $prefix = $this->get_field_id($this->prefix);
+            $id = 'fw-widget-options-'. $prefix;
 
-        echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
-        echo fw()->backend->render_options($this->options, $values, array(
-            'id_prefix' => $prefix .'-',
-            'name_prefix' => $this->get_field_name($this->prefix),
-        ));
-        echo '</div>';
-        $this->print_widget_javascript($id);
+            echo '<div class="fw-force-xs fw-theme-admin-widget-wrap" id="'. esc_attr($id) .'">';
+            echo fw()->backend->render_options($this->options, $values, array(
+                'id_prefix' => $prefix .'-',
+                'name_prefix' => $this->get_field_name($this->prefix),
+            ));
+            echo '</div>';
+            $this->print_widget_javascript($id);
+
+        // Shufflehound metaboxes
+        else :
+            $name_prefix = substr( $this->get_field_name(''), 0, -2 );
+            echo Shufflehound_Metaboxes::widget( $this->options, $values, $name_prefix );
+        endif;
 
         return $values;
     }

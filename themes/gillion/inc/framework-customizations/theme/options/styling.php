@@ -12,14 +12,14 @@ $styling_options = array(
 
 	'accent_color' => array(
 		'type'  => 'rgba-color-picker',
-		'value' => '#d79c74',
+		'value' => '#f63a4c',
 		'label' => esc_html__('Accent Color', 'gillion'),
 		'desc'  => esc_html__('Select page accent color', 'gillion'),
 	),
 
 	'accent_hover_color' => array(
 		'type'  => 'rgba-color-picker',
-		'value' => '#cf783f',
+		'value' => '#dd3562',
 		'label' => esc_html__('Accent Hover Color', 'gillion'),
 		'desc'  => esc_html__('Select page accent color on hover', 'gillion'),
 	),
@@ -184,8 +184,37 @@ $styling_options = array(
 	'post_title_font' => array(
 		'type'  => 'select',
 		'value' => 'heading',
-		'label' => esc_html__('Post Title', 'gillion'),
+		'label' => esc_html__('Post Title Font', 'gillion'),
 		'desc'  => esc_html__('Choose post title font', 'gillion'),
+		'choices' => array(
+			'heading' => esc_html__( 'Heading (default)', 'gillion' ),
+			'body' => esc_html__( 'Body', 'gillion' ),
+			'meta' => esc_html__( 'Meta Categories', 'gillion' ),
+			'additional' => esc_html__( 'Additional Font', 'gillion' ),
+		),
+		'attr'  => array( 'style' => 'width: 162px' ),
+	),
+
+	'meta_font' => array(
+		'type'  => 'select',
+		'value' => 'default',
+		'label' => esc_html__('Post Meta Font', 'gillion'),
+		'desc'  => esc_html__('Choose post meta font for author, comments count, read time etc', 'gillion'),
+		'choices' => array(
+			'default' => esc_html__( 'Default', 'gillion' ),
+			'heading' => esc_html__( 'Heading', 'gillion' ),
+			'body' => esc_html__( 'Body', 'gillion' ),
+			'meta' => esc_html__( 'Meta Categories', 'gillion' ),
+			'additional' => esc_html__( 'Additional Font', 'gillion' ),
+		),
+		'attr'  => array( 'style' => 'width: 162px' ),
+	),
+
+	'widget_title_font' => array(
+		'type'  => 'select',
+		'value' => 'heading',
+		'label' => esc_html__('Widget Title Font', 'gillion'),
+		'desc'  => esc_html__('Choose widget title font', 'gillion'),
 		'choices' => array(
 			'heading' => esc_html__( 'Heading (default)', 'gillion' ),
 			'body' => esc_html__( 'Body', 'gillion' ),
@@ -295,17 +324,20 @@ $styling_options = array(
 		'desc'  => esc_html__('Choose custom font weight for widget and other secondary page titles', 'gillion'),
 		'choices' => array(
 			'default' => esc_html__( 'Default', 'gillion' ),
+			'300' => esc_html__( 'Light', 'gillion' ),
 			'400' => esc_html__( 'Regular', 'gillion' ),
+			'500' => esc_html__( 'Medium', 'gillion' ),
 			'700' => esc_html__( 'Bold', 'gillion' ),
-			'900' => esc_html__( 'Extra Bold', 'gillion' ),
+			'800' => esc_html__( 'Extra Bold', 'gillion' ),
+			'900' => esc_html__( 'Black', 'gillion' ),
 		),
 		'attr'  => array( 'style' => 'width: 162px' ),
 	),
 
 	'styling_headings_line' => array(
 		'type' => 'switch',
-		'label' => esc_html__( 'Headings Vertical Accemt Line', 'gillion' ),
-		'desc' => esc_html__( 'Enable or disable headings vertical accemt line', 'gillion' ),
+		'label' => esc_html__( 'Headings Vertical Accent Line', 'gillion' ),
+		'desc' => esc_html__( 'Enable or disable headings vertical accent line', 'gillion' ),
 		'value' => 'on',
 		'left-choice' => array(
 			'value' => 'off',
@@ -351,6 +383,17 @@ $styling_options = array(
 		'desc'  => esc_html__('Select post page content font size (pixels)', 'gillion'),
 	),
 
+	'meta_size' => array(
+		'type'  => 'slider',
+		'value' => 11,
+		'properties' => array(
+			'min' => 8,
+			'max' => 16,
+		),
+		'label' => esc_html__( 'Post Meta Size', 'gillion' ),
+		'desc'  => esc_html__( 'Select post meta informaation font size (pixels)', 'gillion' ),
+	),
+
 
 	'title_styling_header' => array(
 		'type'  => 'html-full',
@@ -387,40 +430,6 @@ $styling_options = array(
 	),
 
 
-	'title_styling_top_bar' => array(
-		'type'  => 'html-full',
-		'value' => '',
-		'label' => false,
-		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Header Top Bar', 'gillion').'</span></h3>',
-	),
-
-	'header_top_background_color' => array(
-		'type'  => 'rgba-color-picker',
-		'value' => '#313131',
-		'label' => esc_html__('Background Color', 'gillion'),
-		'desc'  => esc_html__('Select top bar background color', 'gillion'),
-	),
-
-	'header_top_background_image' => array(
-		'label' => esc_html__( 'Background Image', 'gillion' ),
-		'desc'  => esc_html__( 'Upload a topbar background image', 'gillion' ),
-		'type'  => 'upload'
-	),
-
-	'header_top_color' => array(
-		'type'  => 'color-picker',
-		'value' => '#fff',
-		'label' => esc_html__('Text Color', 'gillion'),
-		'desc'  => esc_html__('Select top bar color', 'gillion'),
-	),
-
-	'header_top_hover_color' => array(
-		'type'  => 'color-picker',
-		'value' => '#b1b1b1',
-		'label' => esc_html__('Text Hover Color', 'gillion'),
-		'desc'  => esc_html__('Select top bar hover color', 'gillion'),
-	),
-
 
 	'title_styling_nav' => array(
 		'type'  => 'html-full',
@@ -434,7 +443,7 @@ $styling_options = array(
 		'value' => '12px',
 		'attr'  => array( 'style' => 'max-width: 70px' ),
 		'label' => esc_html__('Font Size', 'gillion'),
-		'desc'  => wp_kses( __( 'Enter your navigation size (with <b>px</b>)', 'gillion' ), gillion_allowed_html() ),
+		'desc'  => wp_kses( __( 'Enter your navigation size (in px)', 'gillion' ), gillion_allowed_html() ),
 	),
 
 	'header_uppercase' => array(
@@ -514,7 +523,7 @@ $styling_options = array(
 		'value' => '13px',
 		'attr'  => array( 'style' => 'max-width: 70px' ),
 		'label' => esc_html__('Font Size', 'gillion'),
-		'desc'  => wp_kses( __( 'Enter your navigation size (with <b>px</b>)', 'gillion' ), gillion_allowed_html() ),
+		'desc'  => wp_kses( __( 'Enter your navigation size (in px)', 'gillion' ), gillion_allowed_html() ),
 	),
 
 	'header_mobile_uppercase' => array(
@@ -536,7 +545,7 @@ $styling_options = array(
 		'type'  => 'html-full',
 		'value' => '',
 		'label' => false,
-		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Dropdown / Menu', 'gillion').'</span></h3>',
+		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Dropdown/Menu', 'gillion').'</span></h3>',
 	),
 
 	'menu_background_color' => array(
@@ -544,6 +553,14 @@ $styling_options = array(
 		'value' => '#ffffff',
 		'label' => esc_html__('Background Color', 'gillion'),
 		'desc'  => esc_html__('Select menu background color', 'gillion'),
+	),
+
+	'menu_font_size' => array(
+		'type'  => 'text',
+		'value' => '13px',
+		'attr'  => array( 'style' => 'max-width: 70px' ),
+		'label' => esc_html__('Font Size', 'gillion'),
+		'desc'  => wp_kses( __( 'Enter your menu font size (in px)', 'gillion' ), gillion_allowed_html() ),
 	),
 
 	'menu_link_color' => array(
@@ -609,22 +626,22 @@ $styling_options = array(
 
 	'footer_background_image' => array(
 		'label' => esc_html__( 'Background Image', 'gillion' ),
-		'desc'  => esc_html__( 'Upload a footer widgets background image. Note: Image will appear only when background color transparancy will be set', 'gillion' ),
+		'desc'  => esc_html__( 'Upload a footer widgets background image. Note: Image will appear only when background color transparency will be set', 'gillion' ),
 		'type'  => 'upload'
 	),
 
 	'footer_widgets_bottom_border_color' => array(
 		'type'  => 'rgba-color-picker',
 		'value' => '',
-		'label' => esc_html__('Footer Widgets Top Border Color', 'gillion'),
-		'desc'  => esc_html__('Select footer top border color', 'gillion'),
+		'label' => esc_html__('Widgets Footer Top Border Color', 'gillion'),
+		'desc'  => esc_html__("Select footer's top border color", 'gillion'),
 	),
 
 	'footer_bottom_border_color' => array(
 		'type'  => 'rgba-color-picker',
 		'value' => '#2c2c2c',
-		'label' => esc_html__('Footer Copyrights Top Border Color', 'gillion'),
-		'desc'  => esc_html__('Select footer top border color', 'gillion'),
+		'label' => esc_html__('Copyright Footer Top Border Color', 'gillion'),
+		'desc'  => esc_html__("Select footer's top border color", 'gillion'),
 	),
 
 
@@ -632,7 +649,7 @@ $styling_options = array(
 		'type'  => 'html-full',
 		'value' => '',
 		'label' => false,
-		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Footer Widgets', 'gillion').'</span></h3>',
+		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Widgets Footer', 'gillion').'</span></h3>',
 	),
 
 	'footer_background_color' => array(
@@ -676,7 +693,7 @@ $styling_options = array(
 
 	'footer_hover_color' => array(
 		'type'  => 'color-picker',
-		'value' => '#d79c74',
+		'value' => '#f63a4c',
 		'label' => esc_html__('Hover Color', 'gillion'),
 		'desc'  => esc_html__('Select footer color on hover', 'gillion'),
 	),
@@ -714,7 +731,7 @@ $styling_options = array(
 		'type'  => 'html-full',
 		'value' => '',
 		'label' => false,
-		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Footer Copyright', 'gillion').'</span></h3>',
+		'html'  => '<h3 class="hndle sh-custom-group-divder"><span>'.esc_html__('Copyright Footer', 'gillion').'</span></h3>',
 	),
 
 	'copyright_background_color' => array(

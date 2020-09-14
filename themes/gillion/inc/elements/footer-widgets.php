@@ -6,7 +6,7 @@ Element: Footer Widgets
 class vcj_footer_widgets extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcj_footer_widgets', array( $this, '_html' ) );
     }
 
@@ -20,7 +20,7 @@ class vcj_footer_widgets extends WPBakeryShortCode {
                 'base' => 'vcj_footer_widgets',
                 'description' => __('Add widgets in WPbakery based footer', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
-                'icon' => get_template_directory_uri().'/img/VC_ES_icon.svg',
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array (
@@ -204,7 +204,8 @@ class vcj_footer_widgets extends WPBakeryShortCode {
         $element_class = array();
         $element_class[] = $id;
         $element_class[] = 'sh-footer-builder-widgets-'.$columns.'columns';
-        $element_class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $element_class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
 
 
         // Preset
@@ -262,9 +263,9 @@ class vcj_footer_widgets extends WPBakeryShortCode {
         wp_reset_postdata();
 
         $the_sidebars = wp_get_sidebars_widgets();
-        echo count( $the_sidebars[ $source ] );
+        //echo count( $the_sidebars[ $source ] );
 
-        echo '///aaaa'.var_dump( $source );
+        //echo '/'.var_dump( $source );
         ob_start(); ?>
 
             <style media="screen">
@@ -305,6 +306,7 @@ class vcj_footer_widgets extends WPBakeryShortCode {
 
                 #<?php echo esc_attr( $id ); ?>,
                 #<?php echo esc_attr( $id ); ?> .post-meta,
+                #<?php echo esc_attr( $id ); ?> .post-meta span,
                 #<?php echo esc_attr( $id ); ?> .sh-recent-posts-widgets-item-meta a {
             		color: <?php echo esc_attr( $colors->text_color ); ?>!important;
             	}
@@ -371,6 +373,16 @@ class vcj_footer_widgets extends WPBakeryShortCode {
 
                 .sh-footer-builder-widgets-5columns > div {
                     width: 20%;
+                }
+
+                @media (max-width: 900px) {
+                    .sh-footer-builder-widgets > div {
+                        width: 100%;
+                    }
+
+                    .sh-footer-builder-widgets > div:not(:last-child) {
+                        margin-bottom: 40px;
+                    }
                 }
             </style>
 

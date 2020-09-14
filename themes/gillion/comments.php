@@ -2,7 +2,7 @@
 /**
  * Comments
  */
-if ( post_password_required() || ( defined('FW') && gillion_option( 'page_comments', false ) == false ) ) { return; }
+if ( post_password_required() || ( gillion_framework_active() && gillion_option( 'page_comments', false ) == false ) ) { return; }
 ?>
 
 <div class="sh-comments">

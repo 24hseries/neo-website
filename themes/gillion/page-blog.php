@@ -9,12 +9,29 @@ endif;
 
 $pagination_type = gillion_post_option( get_the_ID(), 'page_blog_pagination_type', 'default' );
 $categories_query = array();
-if( count(gillion_post_option( get_the_ID(), 'page_blog_category' )) > 0 ) :
-	$categories_query = gillion_post_option( get_the_ID(), 'page_blog_category' );
+
+$page_blog_category = gillion_post_option( get_the_ID(), 'page_blog_category' );
+if( is_array( $page_blog_category ) && count( $page_blog_category ) ) :
+	$categories_query = $page_blog_category;
+elseif( $page_blog_category ) :
+	$categories_query = [];
+	$categories_query_data = explode( PHP_EOL, $page_blog_category );
+
+	foreach( $categories_query_data as $categories_query_item ) :
+		$term = get_term_by( 'slug', $categories_query_item, 'category');
+		if( !empty( $term->term_id ) ) :
+			$categories_query[] = $term->term_id;
+		else :
+			$term = get_term_by( 'name', $categories_query_item, 'category');
+			if( !empty( $term->term_id ) ) :
+				$categories_query[] = $term->term_id;
+			endif;
+		endif;
+	endforeach;
 endif;
 
-$page = (get_query_var('page')) ? get_query_var('page') : 1;
-$page = (get_query_var('paged')) ? get_query_var('paged') : $page;
+$page = ( get_query_var( 'page' ) ) ? get_query_var( 'page' ) : 1;
+$page = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : $page;
 
 $featured = ( gillion_post_option( get_the_ID(), 'page_blog_featured', false ) == true ) ? 1 : 0;
 $post_per_page = ( get_option( 'posts_per_page' ) ) ? get_option( 'posts_per_page' ) : 12;
@@ -52,7 +69,7 @@ $offset_option = gillion_post_option( get_the_ID(), 'page_blog_offset', '0' );
 /* Load posts */
 if( $offset_option > 0 ) :
 	$offset_option = intval( $offset_option ) + ( ( intval( $page ) - 1 ) * intval( $post_per_page ) );
-	$posts = new WP_Query( array(
+	$blog_posts = new WP_Query( array(
 		'post_type' => 'post',
 		'paged' => $page,
 		'category__in' => $categories_query,
@@ -62,7 +79,7 @@ if( $offset_option > 0 ) :
 		'offset' => $offset_option,
 	));
 else :
-	$posts = new WP_Query( array(
+	$blog_posts = new WP_Query( array(
 		'post_type' => 'post',
 		'paged' => $page,
 		'category__in' => $categories_query,
@@ -78,6 +95,7 @@ if( isset($layout_sidebar) && $layout_sidebar ) :
 	$class2[] = 'content-with-'.esc_attr( $layout_sidebar );
 endif;
 
+
 $pageination = gillion_post_option( get_the_ID(), 'page_blog_pagination_alignment', 'left' );
 if( $pageination == 'left' ) :
 	$class2[] = 'sh-pagination-left';
@@ -85,6 +103,12 @@ elseif( $pageination == 'center' ) :
 	$class2[] = 'sh-pagination-center';
 elseif( $pageination == 'right' ) :
 	$class2[] = 'sh-pagination-right';
+endif;
+
+
+$page_blog_description = gillion_post_option( get_the_ID(), 'page_blog_description', 'default' );
+if( $page_blog_description == 'off' ) :
+	$class2[] = 'sh-posts-description-off';
 endif;
 ?>
 
@@ -104,11 +128,11 @@ endif;
 				<?php endif; ?>
 
 				<?php /* Featured */
-				if( $posts->have_posts() && $featured ) :
+				if( $blog_posts->have_posts() && $featured ) :
 					$featured_style = gillion_post_option( get_the_ID(), 'page_blog_featured_style', 'large' );
 				?>
 					<div class="blog-list-featured blog-style-<?php echo esc_attr( $featured_style ); ?>">
-						<?php while ( $posts->have_posts() ) : $posts->the_post(); $i++; ?>
+						<?php while ( $blog_posts->have_posts() ) : $blog_posts->the_post(); $i++; ?>
 
 							<?php
 								if( $i == 1 ) :
@@ -130,11 +154,11 @@ endif;
 				<?php /* Standard Posts */ ?>
 				<div class="<?php echo esc_attr( implode( " ", $class ) ); ?>">
 					<?php
-						if( $posts->have_posts() ) :
+						if( $blog_posts->have_posts() ) :
 							$i = 0;
 							set_query_var( 'style', gillion_post_option( get_queried_object_id(), 'page-blog-style' ) );
 
-							while ( $posts->have_posts() ) : $posts->the_post(); $i++;
+							while ( $blog_posts->have_posts() ) : $blog_posts->the_post(); $i++;
 
 								if( ( $featured && $i != 1 ) || !$featured ) :
 									if( get_post_format() ) :
@@ -155,14 +179,15 @@ endif;
 				</div>
 
 				<?php if( $pagination_type == 'default' ) :
-					gillion_pagination( $posts );
+					gillion_pagination( $blog_posts );
 				elseif( ( $pagination_type == 'button' || $pagination_type == 'infinite' ) &&
-				isset( $posts->found_posts ) && $posts->found_posts > $post_per_page ) : ?>
+				isset( $blog_posts->found_posts ) && $blog_posts->found_posts > $post_per_page ) : ?>
 
 					<div class="sh-load-more<?php echo ( $pagination_type == 'infinite' ) ? ' infinite' : ''; ?>"
 					data-categories="<?php echo implode( ',', $categories_query ); ?>"
 					data-post-style="<?php echo gillion_post_option( get_queried_object_id(), 'page-blog-style' ); ?>"
 					data-posts-per-page="<?php echo esc_attr( $post_per_page ); ?>"
+					data-offset="<?php echo esc_attr( $offset_option ); ?>"
 					data-paged="2"
 					data-id="blog-page-list">
 						<?php

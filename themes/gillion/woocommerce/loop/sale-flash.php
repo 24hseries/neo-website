@@ -23,7 +23,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $post, $product;
 
 if ( $product->is_in_stock() && $product->is_on_sale() ) {
-	$percentage_val = round( ( ( $product->get_regular_price() - $product->get_sale_price() ) / $product->get_regular_price() ) * 100 );
+	if( $product->is_type( 'variable' ) ) :
+		$regular_price = $product->get_variation_regular_price();
+		$sale_price = $product->get_variation_sale_price();
+	else :
+		$regular_price = $product->get_regular_price();
+		$sale_price = $product->get_sale_price();
+	endif;
+
+	$percentage_val = round( ( ( $regular_price - $sale_price ) / $regular_price ) * 100 );
 	$percentage = ( $percentage_val > 0 && $percentage_val >= gillion_option( 'wc_sale_percentage', 0 ) && gillion_option( 'wc_sale_percentage', 0 ) > 0 ) ? ' - '.$percentage_val.'%' : '';
 	echo apply_filters( 'woocommerce_sale_flash', '<div class="product-tag-container"><span class="product-tag-button onsale">' . esc_html__( 'Sale', 'gillion' ) . $percentage . '</span></div>', $post, $product );
 } else if( ! $product->is_in_stock() ) {

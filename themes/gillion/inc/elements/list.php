@@ -6,7 +6,7 @@ Element: Button
 class vcList extends WPBakeryShortCode {
 
     function __construct() {
-        add_action( 'init', array( $this, '_mapping' ) );
+        add_action( 'init', array( $this, '_mapping' ), 12 );
         add_shortcode( 'vcg_list', array( $this, '_html' ) );
     }
 
@@ -20,6 +20,7 @@ class vcList extends WPBakeryShortCode {
                 'base' => 'vcg_list',
                 'description' => __('Simple list with simple options', 'gillion'),
                 'category' => __('Gillion Elements', 'gillion'),
+                'icon' => get_template_directory_uri().'/img/builder-icon.png',
                 'params' => array(
 
                     array(
@@ -91,7 +92,8 @@ class vcList extends WPBakeryShortCode {
         $element_class = array();
         $element_class[] = $id;
         $element_class[] = $class;
-        $element_class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $this->settings['base'], $atts );
+        $settings_base = !empty( $this->settings['base'] ) ? $this->settings['base'] : '';
+        $element_class[] = apply_filters( VC_SHORTCODE_CUSTOM_CSS_FILTER_TAG, vc_shortcode_custom_css_class( $css, ' ' ), $settings_base, $atts );
         ob_start(); ?>
 
             <div class="vcg-list">

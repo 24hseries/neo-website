@@ -113,4 +113,4 @@ $title_style = gillion_option( 'global_title', 'style1' ); ?>
 	</div>
 </div>
 
-<?php echo wp_kses_post( $after_widget ); ?>
+<?php echo wp_kses_post( $after_widget ); wp_reset_postdata(); ?>
