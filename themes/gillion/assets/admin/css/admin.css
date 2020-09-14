@@ -1,0 +1,66 @@
+/*
+** General styling
+*/
+#redux-connect-message.redux-banner-container {
+    display: none;
+}
+
+body.post-new-php #setting-error-tgmpa,
+body.post-php #setting-error-tgmpa {
+    display: none!important;
+}
+
+.notice.fw-brz-dismiss {
+    display: none!important;
+}
+
+div[class^="wpb_vcg_"].wpb_content_element .wpb_vc_param_value {
+    display: none!important;
+}
+
+.widget-inside .fw-backend-option-type-multi-picker .fw-backend-option {
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+}
+
+.fw-extensions-list .not-compatible,
+#fw-extensions-list-available .toggle-not-compat-ext-btn-wrapper {
+    display: none!important;
+}
+
+.sh-demo-install-descr {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+#fw-options-box-post-format-gallery,
+#fw-options-box-post-format-quote,
+#fw-options-box-post-format-link,
+#fw-options-box-post-format-video,
+#fw-options-box-post-format-audio,
+.mega-menu-column-new-row {
+    display: none;
+}
+
+.fw-options-box-page-builder-box,
+.fw-options-box-page-builder-box * {
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility:hidden;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+#setting-error-tgmpa {
+    display: block!important;
+}
+
+#sh_post_thumbs {
+    width: 100px;
+    max-width: 100px;
+}
+
+.sh_post_thumbs img {
+    width: 100px;
+    height: auto;
+}
